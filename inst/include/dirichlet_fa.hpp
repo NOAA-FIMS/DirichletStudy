@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include "../functional_analysis.hpp"
-#include "include/dirichlet.hpp"
+#include "dirichlet.hpp"
 #include "../util/string_util.hpp"
 
 template <typename T>
