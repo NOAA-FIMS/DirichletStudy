@@ -15,10 +15,17 @@ public:
         SATURATED
     };
 
+    std::shared_ptr<FunctorBase<T> > functor;
+
     DirichletCompositionType type = DirichletCompositionType::DEFAULT;
 
     DirichletComposition()
     {
+    }
+
+    void setFunctor(std::shared_ptr<FunctorBase<T> > functor)
+    {
+        this->functor = functor;
     }
 
     virtual void Initialize()
