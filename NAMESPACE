@@ -1,3 +1,5 @@
-useDynLib(DirichletStudy, .registration=TRUE)
+import(Rcpp)
 importFrom(Rcpp, evalCpp)
+useDynLib(DirichletStudy, .registration=TRUE)
 exportPattern("^[[:alpha:]]+")
+export(DirichletStudyInterface)

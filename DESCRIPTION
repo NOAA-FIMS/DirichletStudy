@@ -3,8 +3,9 @@ Type: Package
 Title: Concise Summary of What the Package Does
 Version: 1.0
 Date: 2025-07-03
-Authors@R: person("Your", "Name", role = c("aut", "cre"), email = "your@email.com")
+Authors@R: person("Matthew", "Supernaw", role = c("aut", "cre"), email = "matthew.supernaw@noaa.gov")
 Description: A tool to help choose the best likelihood for your composition data.
 License: Permissive
 Imports: Rcpp (>= 1.0.14)
 LinkingTo: Rcpp
+RcppModules: ds

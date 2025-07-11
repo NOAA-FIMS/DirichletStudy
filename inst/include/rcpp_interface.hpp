@@ -44,18 +44,6 @@ private:
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
 };
-RCPP_EXPOSED_CLASS(DirichletStudyInterface)
-
-RCPP_MODULE(dirichletstudy) {
-    using namespace Rcpp;
-
-    class_<DirichletStudyInterface("DirichletStudyInterface")
-        .constructor()
-        .method("setCompositionData", &DirichletStudyInterface::setCompositionData)
-        .method("setSimplexData", &DirichletStudyInterface::setSimplexData)
-        .method("runAnalysis", &DirichletStudyInterface::runAnalysis)
-        .method("getResults", &DirichletStudyInterface::getResults);
-}
 
 
 
