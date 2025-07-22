@@ -29,14 +29,14 @@ if (length(alpha_input) == 0) {
 set.seed(123)
 samples <- rdirichlet(n, alpha)
 samples_df <- as.data.frame(samples)
-colnames(samples_df) <- c("A", "B", "C")
+colnames(samples_df) <- c("R", "J", "A")
 
 # Save samples to CSV
 write.csv(samples_df, file = "dirichlet_samples.csv", row.names = FALSE)
 cat("Saved samples to 'dirichlet_samples.csv'\n")
 
 # Plot samples on ternary diagram
-ggtern(data = samples_df, aes(x = A, y = B, z = C)) +
+ggtern(data = samples_df, aes(x = R, y = J, z = A)) +
   geom_point(alpha = 0.5, size = 0.5) +
-  theme_bw() +
-  labs(title = "Dirichlet Samples on 2D Simplex", T = "A", L = "B", R = "C")
+  theme_bw(base_size=7) +
+  labs(title = "Age Composition of Observed Fishery Samples", T = "Recruit", L = "Juvenile", R = "Adult")
