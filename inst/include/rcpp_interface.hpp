@@ -27,6 +27,16 @@ public:
 
     bool runAnalysis()
     {
+
+        Dirichlet_Default<double> dirichlet_default;
+        dirichlet_default.Initialize();
+
+        Diririchlet_Fisch<double> dirichlet_fisch;
+        dirichlet_fisch.Initialize();
+
+        Dirichlet_Linear<double> dirichlet_linear;
+        dirichlet_linear.Initialize();
+
         // Placeholder for analysis logic
         // This would typically involve calling the DirichletComposition methods
         // and processing the data.
