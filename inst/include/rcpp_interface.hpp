@@ -3,7 +3,6 @@
 
 #include <Rcpp.h>
 
-
 class DirichletStudyInterface
 {
 public:
@@ -29,17 +28,22 @@ public:
     {
 
         Dirichlet_Default<double> dirichlet_default;
-        dirichlet_default.Initialize();
+        // set input values and by pass the Initialize method
+        // dirichlet_default.Initialize();
+        // dirichlet_default.Evaluate();
 
-        Diririchlet_Fisch<double> dirichlet_fisch;
-        dirichlet_fisch.Initialize();
+        Dirichlet_Fisch<double> dirichlet_fisch;
+        // set input values and by pass the Initialize method
+        // set theta values
+        // dirichlet_fisch.Initialize();
+        // dirichlet_fisch.Evaluate();
 
         Dirichlet_Linear<double> dirichlet_linear;
-        dirichlet_linear.Initialize();
-
-        // Placeholder for analysis logic
-        // This would typically involve calling the DirichletComposition methods
-        // and processing the data.
+        // set input values and by pass the Initialize method
+        // set theta values
+        //  dirichlet_linear.Initialize();
+        // dirichlet_linear.Evaluate();
+        // Assuming the analysis is successful, we can return true.
         return true; // Indicating success
     }
 
@@ -54,7 +58,5 @@ private:
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
 };
-
-
 
 #endif // RCPP_INTERFACE_HPP
