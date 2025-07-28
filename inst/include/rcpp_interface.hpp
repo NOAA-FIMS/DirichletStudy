@@ -58,13 +58,11 @@ public:
 private:
 
 
-    void prepare_inputs(DirichletStudyBase<double> &study)
+    void prepare_inputs(DirichletStudyBase<double> &study, Rcpp::NumericMatrix &simplex_data)
     {
         // This function would prepare the inputs for the Dirichlet study
-        // For example, it could set the parameters based on the simplex data
-        // and other necessary configurations.
     }
-    
+
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
 };
