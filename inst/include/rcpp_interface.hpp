@@ -4,10 +4,13 @@
 #include <Rcpp.h>
 #include "dirichlet_fa.hpp"
 
-
 class DirichletStudyInterfaceBase
 {
 public:
+    static uint32_t next_id;
+    uint32_t id;
+    static std::map<uint32_t, DirichletStudyInterfaceBase *> instances;
+
     virtual void setCompositionData(const Rcpp::NumericMatrix &data) = 0;
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data) = 0;
     virtual bool runAnalysis() = 0;
@@ -16,16 +19,21 @@ public:
     virtual ~DirichletStudyInterfaceBase() {}
 };
 
+std::map<uint32_t, DirichletStudyInterfaceBase *> DirichletStudyInterfaceBase::instances;
 
 class DirichletDefaultInterface : public DirichletStudyInterfaceBase
 {
 public:
+    Dirichlet_Default<double> dirichlet_default;
+
     DirichletDefaultInterface()
     {
-    }           
+        this->id = next_id++;
+        instances[this->id] = this;
+    }
     virtual ~DirichletDefaultInterface()
     {
-    }   
+    }
     void setCompositionData(const Rcpp::NumericMatrix &data) override
     {
         this->data = data;
@@ -46,6 +54,7 @@ public:
         // This would typically return the results of the analysis.
         return Rcpp::List::create(Rcpp::Named("status") = "success");
     }
+
 private:
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
@@ -54,12 +63,16 @@ private:
 class DirichletLinearInterface : public DirichletStudyInterfaceBase
 {
 public:
+    Dirichlet_Linear<double> dirichlet_linear;
+
     DirichletLinearInterface()
     {
-    }       
+        this->id = next_id++;
+        instances[this->id] = this;
+    }
     virtual ~DirichletLinearInterface()
     {
-    }   
+    }
 
     void setCompositionData(const Rcpp::NumericMatrix &data) override
     {
@@ -77,10 +90,11 @@ public:
     }
     Rcpp::List getResults() override
     {
-        // Placeholder for returning results        
+        // Placeholder for returning results
         // This would typically return the results of the analysis.
         return Rcpp::List::create(Rcpp::Named("status") = "success");
     }
+
 private:
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
@@ -89,12 +103,17 @@ private:
 class DirichletFischInterface : public DirichletStudyInterfaceBase
 {
 public:
+    Dirichlet_Fisch<double> dirichlet_fisch;
+
     DirichletFischInterface()
     {
-    }       
+        this->id = next_id++;
+        instances[this->id] = this;
+    }
+
     virtual ~DirichletFischInterface()
     {
-    }       
+    }
     void setCompositionData(const Rcpp::NumericMatrix &data) override
     {
         this->data = data;
@@ -111,26 +130,37 @@ public:
     }
     Rcpp::List getResults() override
     {
-        // Placeholder for returning results        
+        // Placeholder for returning results
         // This would typically return the results of the analysis.
         return Rcpp::List::create(Rcpp::Named("status") = "success");
     }
+
 private:
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
 };
 
-
-
 class DirichletStudyInterface
 {
 public:
+    std::vector<DirichletStudyInterfaceBase *> studies;
+
     DirichletStudyInterface()
     {
     }
 
     virtual ~DirichletStudyInterface()
     {
+    }
+
+    void addStudy(DirichletStudyInterfaceBase *study)
+    {
+        studies.push_back(study);
+    }
+
+    void clearStudies()
+    {
+        studies.clear();
     }
 
     void setCompositionData(const Rcpp::NumericMatrix &data)
@@ -175,8 +205,6 @@ public:
     }
 
 private:
-
-
     void prepare_inputs(DirichletStudyInterfaceBase &study, Rcpp::NumericMatrix &simplex_data)
     {
         // This function would prepare the inputs for the Dirichlet study
