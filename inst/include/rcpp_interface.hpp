@@ -143,17 +143,21 @@ private:
 class DirichletStudyInterface
 {
 public:
-    std::vector<DirichletStudyInterfaceBase *> studies;
+    std::vector<uint32_t> studies;
 
     DirichletStudyInterface()
     {
+    }
+
+    DirichletStudyInterface(const DirichletStudyInterface &other){
+        this->studies = other.studies;
     }
 
     virtual ~DirichletStudyInterface()
     {
     }
 
-    void addStudy(DirichletStudyInterfaceBase *study)
+    void addStudy(uint32_t study)
     {
         studies.push_back(study);
     }
