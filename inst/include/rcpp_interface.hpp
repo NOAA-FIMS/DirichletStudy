@@ -15,6 +15,10 @@ public:
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data) = 0;
     virtual bool runAnalysis() = 0;
     virtual Rcpp::List getResults() = 0;
+    uint32_t getId() const
+    {
+        return id;
+    }
 
     virtual ~DirichletStudyInterfaceBase() {}
 };
@@ -26,7 +30,7 @@ class DirichletDefaultInterface : public DirichletStudyInterfaceBase
 public:
     Dirichlet_Default<double> dirichlet_default;
 
-    DirichletDefaultInterface()
+    DirichletDefaultInterface():DirichletStudyInterfaceBase
     {
         this->id = next_id++;
         instances[this->id] = this;
@@ -42,6 +46,12 @@ public:
     {
         this->simplex_data = simplex_data;
     }
+
+    uint32_t getId() const override
+    {
+        return this->id;
+    }
+
     bool runAnalysis() override
     {
         // Placeholder for running the analysis
@@ -65,13 +75,18 @@ class DirichletLinearInterface : public DirichletStudyInterfaceBase
 public:
     Dirichlet_Linear<double> dirichlet_linear;
 
-    DirichletLinearInterface()
+    DirichletLinearInterface():DirichletStudyInterfaceBase
     {
         this->id = next_id++;
         instances[this->id] = this;
     }
     virtual ~DirichletLinearInterface()
     {
+    }
+
+    uint32_t getId() const override
+    {
+        return this->id;
     }
 
     void setCompositionData(const Rcpp::NumericMatrix &data) override
@@ -105,7 +120,7 @@ class DirichletFischInterface : public DirichletStudyInterfaceBase
 public:
     Dirichlet_Fisch<double> dirichlet_fisch;
 
-    DirichletFischInterface()
+    DirichletFischInterface():DirichletStudyInterfaceBase
     {
         this->id = next_id++;
         instances[this->id] = this;
@@ -114,6 +129,12 @@ public:
     virtual ~DirichletFischInterface()
     {
     }
+
+    uint32_t getId() const override
+    {
+        return this->id;
+    }
+    
     void setCompositionData(const Rcpp::NumericMatrix &data) override
     {
         this->data = data;
@@ -149,7 +170,8 @@ public:
     {
     }
 
-    DirichletStudyInterface(const DirichletStudyInterface &other){
+    DirichletStudyInterface(const DirichletStudyInterface &other)
+    {
         this->studies = other.studies;
     }
 
