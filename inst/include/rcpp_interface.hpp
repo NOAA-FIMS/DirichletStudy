@@ -2,6 +2,8 @@
 #define RCPP_INTERFACE_HPP
 
 #include <Rcpp.h>
+#include "dirichlet_fa.hpp"
+
 
 class DirichletStudyInterfaceBase
 {
@@ -175,7 +177,7 @@ public:
 private:
 
 
-    void prepare_inputs(DirichletStudyBase<double> &study, Rcpp::NumericMatrix &simplex_data)
+    void prepare_inputs(DirichletStudyInterfaceBase &study, Rcpp::NumericMatrix &simplex_data)
     {
         // This function would prepare the inputs for the Dirichlet study
     }

@@ -3,9 +3,9 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include "../functional_analysis.hpp"
+#include "functional_analysis.hpp"
 #include "dirichlet.hpp"
-#include "../util/string_util.hpp"
+#include "util/string_util.hpp"
 
 template <typename T>
 struct simplex_data
