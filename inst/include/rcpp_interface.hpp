@@ -43,6 +43,7 @@ public:
         // set theta values
         //  dirichlet_linear.Initialize();
         // dirichlet_linear.Evaluate();
+
         // Assuming the analysis is successful, we can return true.
         return true; // Indicating success
     }
@@ -55,6 +56,15 @@ public:
     }
 
 private:
+
+
+    void prepare_inputs(DirichletStudyBase<double> &study)
+    {
+        // This function would prepare the inputs for the Dirichlet study
+        // For example, it could set the parameters based on the simplex data
+        // and other necessary configurations.
+    }
+    
     Rcpp::NumericMatrix data;
     Rcpp::NumericMatrix simplex_data;
 };
