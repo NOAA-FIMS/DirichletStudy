@@ -4,33 +4,39 @@
 #include <Rcpp.h>
 #include "dirichlet_fa.hpp"
 
-class DirichletStudyInterfaceBase
+class DirichletStudyComponentBase
 {
 public:
     static uint32_t next_id;
     uint32_t id;
-    static std::map<uint32_t, DirichletStudyInterfaceBase *> instances;
+    static std::map<uint32_t, DirichletStudyComponentBase *> instances;
 
     virtual void setCompositionData(const Rcpp::NumericMatrix &data) = 0;
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data) = 0;
     virtual bool runAnalysis() = 0;
     virtual Rcpp::List getResults() = 0;
+    void test()
+    {
+        std::cout << "test" << std::endl;
+    }
+
     uint32_t getId() const
     {
         return id;
     }
 
-    virtual ~DirichletStudyInterfaceBase() {}
+    virtual ~DirichletStudyComponentBase() {}
 };
 
-std::map<uint32_t, DirichletStudyInterfaceBase *> DirichletStudyInterfaceBase::instances;
+std::map<uint32_t, DirichletStudyComponentBase *> DirichletStudyComponentBase::instances;
+uint32_t DirichletStudyComponentBase::next_id = 1;
 
-class DirichletDefaultInterface : public DirichletStudyInterfaceBase
+class DirichletDefaultInterface : public DirichletStudyComponentBase
 {
 public:
     Dirichlet_Default<double> dirichlet_default;
 
-    DirichletDefaultInterface():DirichletStudyInterfaceBase
+    DirichletDefaultInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
         instances[this->id] = this;
@@ -47,7 +53,12 @@ public:
         this->simplex_data = simplex_data;
     }
 
-    uint32_t getId() const override
+    virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data)
+    {
+        this->simplex_data = simplex_data;
+    }
+
+    uint32_t getId() const
     {
         return this->id;
     }
@@ -70,12 +81,13 @@ private:
     Rcpp::NumericMatrix simplex_data;
 };
 
-class DirichletLinearInterface : public DirichletStudyInterfaceBase
+class DirichletLinearInterface : public DirichletStudyComponentBase
 {
 public:
     Dirichlet_Linear<double> dirichlet_linear;
+    double theta = 1.0;
 
-    DirichletLinearInterface():DirichletStudyInterfaceBase
+    DirichletLinearInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
         instances[this->id] = this;
@@ -84,16 +96,16 @@ public:
     {
     }
 
-    uint32_t getId() const override
+    uint32_t getId() const
     {
         return this->id;
     }
 
-    void setCompositionData(const Rcpp::NumericMatrix &data) override
+    void setCompositionData(const Rcpp::NumericMatrix &data)
     {
         this->data = data;
     }
-    void setSimplexData(const Rcpp::NumericMatrix &simplex_data) override
+    virtual setSimplexData(const Rcpp::NumericMatrix &simplex_data)
     {
         this->simplex_data = simplex_data;
     }
@@ -115,12 +127,13 @@ private:
     Rcpp::NumericMatrix simplex_data;
 };
 
-class DirichletFischInterface : public DirichletStudyInterfaceBase
+class DirichletFischInterface : public DirichletStudyComponentBase
 {
 public:
     Dirichlet_Fisch<double> dirichlet_fisch;
+    double theta = 1.0;
 
-    DirichletFischInterface():DirichletStudyInterfaceBase
+    DirichletFischInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
         instances[this->id] = this;
@@ -130,16 +143,16 @@ public:
     {
     }
 
-    uint32_t getId() const override
+    uint32_t getId() const
     {
         return this->id;
     }
-    
-    void setCompositionData(const Rcpp::NumericMatrix &data) override
+
+    virtual void setCompositionData(const Rcpp::NumericMatrix &data)
     {
         this->data = data;
     }
-    void setSimplexData(const Rcpp::NumericMatrix &simplex_data) override
+    virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data)
     {
         this->simplex_data = simplex_data;
     }
@@ -231,7 +244,7 @@ public:
     }
 
 private:
-    void prepare_inputs(DirichletStudyInterfaceBase &study, Rcpp::NumericMatrix &simplex_data)
+    void prepare_inputs(DirichletStudyComponentBase &study, Rcpp::NumericMatrix &simplex_data)
     {
         // This function would prepare the inputs for the Dirichlet study
     }

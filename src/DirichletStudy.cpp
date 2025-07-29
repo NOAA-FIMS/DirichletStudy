@@ -13,27 +13,34 @@ RCPP_MODULE(ds)
         .method("setSimplexData", &DirichletStudyInterface::setSimplexData)
         .method("runAnalysis", &DirichletStudyInterface::runAnalysis)
         .method("getResults", &DirichletStudyInterface::getResults)
-       // .method("addStudy", &DirichletStudyInterface::addStudy)
+        .method("addStudy", &DirichletStudyInterface::addStudy)
         .method("clearStudies", &DirichletStudyInterface::clearStudies);
 
-    Rcpp::class_<DirichletLinearInterface>("DirichletLinearInterface")
-        .constructor()
-        .method("setCompositionData", &DirichletLinearInterface::setCompositionData)
-        .method("setSimplexData", &DirichletLinearInterface::setSimplexData)
-        .method("runAnalysis", &DirichletLinearInterface::runAnalysis)
-        .method("getResults", &DirichletLinearInterface::getResults);
 
     Rcpp::class_<DirichletDefaultInterface>("DirichletDefaultInterface")
         .constructor()
         .method("setCompositionData", &DirichletDefaultInterface::setCompositionData)
         .method("setSimplexData", &DirichletDefaultInterface::setSimplexData)
         .method("runAnalysis", &DirichletDefaultInterface::runAnalysis)
-        .method("getResults", &DirichletDefaultInterface::getResults);
+        .method("getResults", &DirichletDefaultInterface::getResults)
+        .method("getId", &DirichletDefaultInterface::getId);
+
+
+    Rcpp::class_<DirichletLinearInterface>("DirichletLinearInterface")
+        .constructor()
+        .method("setCompositionData", &DirichletLinearInterface::setCompositionData)
+        .method("setSimplexData", &DirichletLinearInterface::setSimplexData)
+        .method("runAnalysis", &DirichletLinearInterface::runAnalysis)
+        .method("getResults", &DirichletLinearInterface::getResults)
+        .method("getId", &DirichletLinearInterface::getId)
+        .field("theta", &DirichletLinearInterface::theta);
 
     Rcpp::class_<DirichletFischInterface>("DirichletFischInterface")
         .constructor()
         .method("setCompositionData", &DirichletFischInterface::setCompositionData)
         .method("setSimplexData", &DirichletFischInterface::setSimplexData)
         .method("runAnalysis", &DirichletFischInterface::runAnalysis)
-        .method("getResults", &DirichletFischInterface::getResults);
+        .method("getResults", &DirichletFischInterface::getResults)
+        .method("getId", &DirichletFischInterface::getId)
+        .field("theta", &DirichletFischInterface::theta);
 }
