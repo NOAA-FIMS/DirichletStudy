@@ -36,17 +36,21 @@ dirichlet_samples <- gamma_samples / row_sums
 samples_df <- as.data.frame(dirichlet_samples)
 colnames(samples_df) <- c("A", "B", "C")
 
+print("creating study")
 # Create instance of DirichletStudy
 dirichlet_study <- new(DirichletStudyInterface)
 
 # Add studies components to DirichletStudy
 dirichlet_default <- new(DirichletDefaultInterface)
+dirichlet_default$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_default$getId())
 
 dirichlet_linear <- new(DirichletLinearInterface)
+dirichlet_linear$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_linear$getId())
 
 dirichlet_fisch <- new(DirichletFischInterface)
+dirichlet_fisch$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_fisch$getId())
 
-dirichlet_study$runAnalysis()
+print(dirichlet_study$runAnalysis())

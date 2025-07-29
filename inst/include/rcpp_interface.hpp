@@ -48,10 +48,6 @@ public:
     {
         this->data = data;
     }
-    void setSimplexData(const Rcpp::NumericMatrix &simplex_data) override
-    {
-        this->simplex_data = simplex_data;
-    }
 
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data)
     {
@@ -105,7 +101,7 @@ public:
     {
         this->data = data;
     }
-    virtual setSimplexData(const Rcpp::NumericMatrix &simplex_data)
+    virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data)
     {
         this->simplex_data = simplex_data;
     }
