@@ -1,2 +1,2 @@
 CXX_STD = CXX11
-CXX11STD = -std=c++11 -w
+CPPFLAGS += -w
