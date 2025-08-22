@@ -1,11 +1,38 @@
 # operating_model.R
+# beta version 0.1
 # Age-structured operating model with plus-group and constant fully-selected F
 # Reads parameters from a CSV file with columns: parameter,value,comment
 # Required parameters (see om_parameters.csv): Y, A, Linf, K, t0, lw_a, lw_b,
 # mat_slope, mat_a50, M, pfem, R0, h, fish_sel_slope, fish_sel_a50, sur_sel_slope, sur_sel_a50,
-# F_full, q_survey (optional in this script)
+# F_full, q_survey
+# Jon Brodziak, jon.brodziak@noaa.gov
+
+library(gtools)
+
+# Set seed
+set.seed(777)
 
 # --- Utilities ----
+# Hardwire sampling parameters for beta version
+# Create an example with 1 Dirichlet-multinomial sample per period
+N <- 200
+alpha0 <- 20
+n_sim <- 100
+
+# Multinomial sampler
+simulate_multinom <- function() {
+  multinom_sample <- rmultinom(1, size = N, prob = true_proportion)
+  as.numeric(multinom_sample)
+}
+
+# Dirichlet-multinomial sampler
+simulate_dmultinom <- function(true_proportion) {
+  theta <- as.numeric(rdirichlet(1, alpha0 * true_proportion))
+  dm_sample <- rmultinom(1, size = N, prob = theta)
+  as.numeric(dm_sample)
+}
+
+# Logistic maturity and selectivity
 logistic <- function(x, a50, slope) 1 / (1 + exp(-slope * (x - a50)))
 
 # Survivors per recruit l_a given age-specific total mortality Z_a
@@ -107,10 +134,13 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
   # Store numbers at age at start of each year t (columns 1..Y)
   N <- matrix(0.0, nrow = A, ncol = Y)
   Z <- matrix(0.0, nrow = A, ncol = Y)
-  C <- matrix(0.0, nrow = A, ncol = Y)                     # fishery catch at age
-  P_fish <- matrix(0.0, nrow = A, ncol = Y)    # Proportion of fishery catch at age
-  P_survey <- matrix(0.0, nrow = A, ncol = Y)    # Proportion of survey catch at age
-  S <- matrix(0.0, nrow = A, ncol = Y)                     # survey catch at age
+  C <- matrix(0.0, nrow = A, ncol = Y)          # fishery catch at age
+  S <- matrix(0.0, nrow = A, ncol = Y)          # survey catch at age
+  P_fish <- matrix(0.0, nrow = A, ncol = Y)     # Proportion of fishery catch at age
+  P_survey <- matrix(0.0, nrow = A, ncol = Y)   # Proportion of survey catch at age
+  N_obs_fish <- matrix(0.0, nrow = A, ncol = Y)
+  N_obs_survey <- matrix(0.0, nrow = A, ncol = Y)
+                   
   SSB <- numeric(Y)
   Catch_weight <- numeric(Y)              # Catch weight
   Survey_index_numbers <- numeric(Y)      # Survey index in numbers
@@ -154,9 +184,15 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
     TotC[t] <- sum(C[, t])
     if (TotC[t] > 0) P_fish[, t] <- C[, t] / TotC[t]
     
+    # Simulate observed Dirichlet-multinomial sample
+    N_obs_fish[,t] <- simulate_dmultinom(P_fish[, t])
+    
     # 8.5 Proportion of survey catch at age    
     TotS[t] <- sum(S[, t])
     if (TotS[t] > 0) P_survey[, t] <- S[, t] / TotS[t] 
+    
+    # Simulate observed Dirichlet-multinomial sample
+    N_obs_survey[,t] <- simulate_dm(P_survey[, t])
 
     # 4.1 Expected recruitment at time t+1 (Beverton-Holt)
     R[t + 1] <- rec_exp(SSB[t])
@@ -191,8 +227,9 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
     dynamics = list(R = R, Z_at_age = Z, N_at_age = N, C_at_age = C,
                     Catch_weight = Catch_weight, S_at_age = S, SSB = SSB, 
                     TotN = TotN, TotB = TotB, Survey_N = Survey_index_numbers,
-                    Survey_W = Survey_index_weight, Prop_C_at_age = P_fish, 
-                    Prop_S_at_age = P_survey)
+                    Survey_W = Survey_index_weight, Prop_C_at_age = P_fish,
+                    N_obs_fish = N_obs_fish, Prop_S_at_age = P_survey, 
+                    N_obs_survey = N_obs_survey)
   )
 }
 
@@ -214,3 +251,4 @@ print_om_summary <- function(om) {
 # om <- run_operating_model("om_parameters.csv")
 # print_om_summary(om)
 # str(om$dynamics, max.level = 1)
+# om
