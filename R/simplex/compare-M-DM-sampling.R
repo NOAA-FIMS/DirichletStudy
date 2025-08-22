@@ -48,12 +48,23 @@ df_true$Method <- "True"
 # Combine all
 df_plot <- bind_rows(df_all, df_true)
 
-# Plot
-ggtern(df_plot, aes(x = Recruits, y = Juveniles, z = Adults, color = Method)) +
-  geom_point(size = 0.4, alpha = 0.6) +
-  scale_color_manual(values = c("True" = "black", "Multinomial" = "blue", "Dirichlet-Multinomial" = "red")) +
+# Plot: map shape to Method, draw samples, then overlay a larger star for True
+ternplot <- ggtern(df_plot, aes(x = Recruits, y = Juveniles, z = Adults,
+                                color = Method, shape = Method)) +
+  # samples (exclude the True row)
+  geom_point(data = dplyr::filter(df_plot, Method != "True"),
+             size = 0.5, alpha = 0.6) +
+  # big star for the true composition
+  geom_point(data = dplyr::filter(df_plot, Method == "True"),
+             size = 5, alpha = 1) +
+  scale_color_manual(values = c("True" = "black",
+                                "Multinomial" = "blue",
+                                "Dirichlet-Multinomial" = "red")) +
+  scale_shape_manual(values = c("True" = 8,                 
+                                "Multinomial" = 16,         # ● filled circle
+                                "Dirichlet-Multinomial" = 16)) +
   labs(title = "Age Composition with Sampling Error",
-       subtitle = paste(n_sim, "samples with N =", N,"fish"),
+       subtitle = paste(n_sim, "samples with N =", N, "fish"),
        T = "Recruit", L = "Juv", R = "Adult") +
   theme_bw() +
   theme(
@@ -61,3 +72,8 @@ ggtern(df_plot, aes(x = Recruits, y = Juveniles, z = Adults, color = Method)) +
     tern.axis.title.L = element_text(size = rel(0.75)),
     tern.axis.title.R = element_text(size = rel(0.75))
   )
+
+print(ternplot)
+
+ggsave(filename = "M vs DM sampling.png", plot = ternplot, width = 7, height = 6.5, dpi = 300)
+invisible(ternplot)
