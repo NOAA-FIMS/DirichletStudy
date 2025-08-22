@@ -2,7 +2,7 @@
 # Age-structured operating model with plus-group and constant fully-selected F
 # Reads parameters from a CSV file with columns: parameter,value,comment
 # Required parameters (see om_parameters.csv): Y, A, Linf, K, t0, lw_a, lw_b,
-# mat_slope, mat_a50, M, pfem, R0, h, fs_slope, fs_a50, ss_slope, ss_a50,
+# mat_slope, mat_a50, M, pfem, R0, h, fish_sel_slope, fish_sel_a50, sur_sel_slope, sur_sel_a50,
 # F_full, q_survey (optional in this script)
 
 # --- Utilities ----
@@ -61,8 +61,8 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
   mat_slope <- p$mat_slope; mat_a50 <- p$mat_a50
   M <- p$M; pfem <- p$pfem
   R0 <- p$R0; h <- p$h
-  fs_slope <- p$fs_slope; fs_a50 <- p$fs_a50
-  ss_slope <- p$ss_slope; ss_a50 <- p$ss_a50
+  fish_sel_slope <- p$fish_sel_slope; fish_sel_a50 <- p$fish_sel_a50
+  sur_sel_slope <- p$sur_sel_slope; sur_sel_a50 <- p$sur_sel_a50
   F_full <- p$F_full
   q_survey <- if (!is.null(p$q_survey)) p$q_survey else NA_real_
 
@@ -75,8 +75,8 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
   mat_at_age <- logistic(ages, mat_a50, mat_slope)       # 1.3 maturity ogive
 
   # --- Selectivity at age (logistic) ---
-  sel_fish <- logistic(ages, fs_a50, fs_slope)
-  sel_survey <- logistic(ages, ss_a50, ss_slope)
+  sel_fish <- logistic(ages, fish_sel_a50, fish_sel_slope)
+  sel_survey <- logistic(ages, sur_sel_a50, sur_sel_slope)
 
   # --- Unfished per-recruit quantities (2.1) ---
   Z0 <- rep(M, A)
@@ -107,8 +107,18 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
   # Store numbers at age at start of each year t (columns 1..Y)
   N <- matrix(0.0, nrow = A, ncol = Y)
   Z <- matrix(0.0, nrow = A, ncol = Y)
-  C <- matrix(0.0, nrow = A, ncol = Y)                     # catch in numbers
-  SSB <- numeric(Y); TotN <- numeric(Y); TotB <- numeric(Y)
+  C <- matrix(0.0, nrow = A, ncol = Y)                     # fishery catch at age
+  P_fish <- matrix(0.0, nrow = A, ncol = Y)    # Proportion of fishery catch at age
+  P_survey <- matrix(0.0, nrow = A, ncol = Y)    # Proportion of survey catch at age
+  S <- matrix(0.0, nrow = A, ncol = Y)                     # survey catch at age
+  SSB <- numeric(Y)
+  Catch_weight <- numeric(Y)              # Catch weight
+  Survey_index_numbers <- numeric(Y)      # Survey index in numbers
+  Survey_index_weight <- numeric(Y)       # Survey index in weight
+  TotN <- numeric(Y)
+  TotB <- numeric(Y)
+  TotC <- numeric(Y)
+  TotS <- numeric(Y)
   R <- numeric(Y + 1)                                      # recruitment from t=1..Y+1
 
   N[, 1] <- N_init
@@ -118,8 +128,20 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
     # 4.2 Total mortality (constant over years here but stored for clarity)
     Z[, t] <- ZF
 
-    # 5.2 Catch numbers at age a and time t
+    # 5.2 Fishery catch numbers at age a and time t
     C[, t] <- catch_numbers(N[, t], F_full, sel_fish, Z[, t])
+    
+    # 5.3 Catch weight at time t
+    Catch_weight[t] <- sum(C[, t] * W_at_age)
+    
+    # 6.3 Survey catch numbers at age
+    S[, t] <- N[, t] * sel_survey * q_survey
+    
+    # 6.4 Survey numbers index
+    Survey_index_numbers[t] <- sum(S[, t])
+    
+    # 6.4 Survey weight index
+    Survey_index_weight[t] <- sum(S[, t] * W_at_age)
 
     # 4.5 Spawning biomass at time t
     SSB[t] <- pfem * sum(N[, t] * mat_at_age * W_at_age)
@@ -127,6 +149,14 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
     # 4.6–4.7 Totals
     TotN[t] <- sum(N[, t])
     TotB[t] <- sum(N[, t] * W_at_age)
+
+    # 8.2 Proportion of fishery catch at age    
+    TotC[t] <- sum(C[, t])
+    if (TotC[t] > 0) P_fish[, t] <- C[, t] / TotC[t]
+    
+    # 8.5 Proportion of survey catch at age    
+    TotS[t] <- sum(S[, t])
+    if (TotS[t] > 0) P_survey[, t] <- S[, t] / TotS[t] 
 
     # 4.1 Expected recruitment at time t+1 (Beverton-Holt)
     R[t + 1] <- rec_exp(SSB[t])
@@ -149,22 +179,20 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
     }
   }
 
-  # Optional survey index time series (numbers at start of each year)
-  SurveyIndex <- if (!is.na(q_survey)) {
-    sapply(1:Y, function(t) q_survey * sum(N[, t] * sel_survey))
-  } else {
-    rep(NA_real_, Y)
-  }
-
   list(
     input_parameters = p,
     ages = ages, years = years,
-    life_history = list(L_at_age = L_at_age, W_at_age = W_at_age, mat_at_age = mat_at_age),
+    life_history = list(L_at_age = L_at_age, W_at_age = W_at_age, 
+                        mat_at_age = mat_at_age),
     selectivity = list(fishery = sel_fish, survey = sel_survey),
-    per_recruit = list(phi0 = phi0, SSB0 = SSB0, phiF = phiF, Req = Req, lF = lF),
+    per_recruit = list(phi0 = phi0, SSB0 = SSB0, phiF = phiF, 
+                       Req = Req, lF = lF),
     initial_state = list(N_at_age = N_init, SSB = SSB_init),
     dynamics = list(R = R, Z_at_age = Z, N_at_age = N, C_at_age = C,
-                    SSB = SSB, TotN = TotN, TotB = TotB, SurveyIndex = SurveyIndex)
+                    Catch_weight = Catch_weight, S_at_age = S, SSB = SSB, 
+                    TotN = TotN, TotB = TotB, Survey_N = Survey_index_numbers,
+                    Survey_W = Survey_index_weight, Prop_C_at_age = P_fish, 
+                    Prop_S_at_age = P_survey)
   )
 }
 
@@ -172,8 +200,8 @@ run_operating_model <- function(param_csv = "om_parameters.csv") {
 print_om_summary <- function(om) {
   cat("Operating Model Summary\n")
   cat(sprintf("  Years (Y): %d | Ages (A): %d\n", length(om$years), length(om$ages)))
-  cat(sprintf("  Unfished SSB per recruit (phi0): %.4f\n", om$per_recruit$phi0))
   cat(sprintf("  SSB0 (unfished): %.4f\n", om$per_recruit$SSB0))
+  cat(sprintf("  Unfished SSB per recruit (phi0): %.4f\n", om$per_recruit$phi0))
   cat(sprintf("  SBR(F): %.4f\n", om$per_recruit$phiF))
   cat(sprintf("  Equilibrium recruitment Req(F): %.4f\n", om$per_recruit$Req))
   cat(sprintf("  Initial SSB: %.4f\n", om$initial_state$SSB))

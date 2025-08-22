@@ -1,0 +1,25 @@
+parameter,value,comment
+Y,30,Number of years to simulate
+A,15,Number of ages (age classes)
+Linf,100,Asymptotic mean length (VBGF Linf)
+K,0.15,Brody growth coefficient (VBGF K)
+t0,-1,Age at zero mean length (VBGF t0)
+lw_a,2.50E-05,Length-weight intercept (a in W=a*L^b)
+lw_b,3,Length-weight exponent (b in W=a*L^b)
+mat_slope,2,Slope of logistic maturity ogive
+mat_a50,2.5,Age at 50% maturity
+M,0.2,Instantaneous natural mortality
+pfem,0.5,Proportion female in population
+R0,1000000,Unfished recruitment (age-1 fish per year)
+h,0.75,Stock-recruit steepness (Beverton-Holt)
+fish_sel_slope,1,Fishery selectivity slope (logistic)
+fish_sel_a50,2.5,Fishery selectivity age at 50% selection
+sur_sel_slope,1.5,Survey selectivity slope (logistic)
+sur_sel_a50,1.5,Survey selectivity age at 50% selection
+F_full,0.2,Fully selected fishing mortality (annual)
+nSamp_fish,200,Fishery age-comp sample size (numbers)
+nSamp_survey,100,Survey age-comp sample size (numbers)
+q_survey,3.00E-07,Survey catchability coefficient
+sigmaR,0.2,SD of log recruitment deviations
+sigmaF,0.2,SD of log fishing mortality deviations
+cv_survey,0.2,Coefficient of variation of the survey index
