@@ -1,2 +1,2 @@
 CXX_STD = CXX11
-CPPFLAGS += -w
+CPPFLAGS += -w -WALL

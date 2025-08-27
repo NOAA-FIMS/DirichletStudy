@@ -159,6 +159,8 @@ public:
         parameter_set_min.resize(this->parameters.size());
         parameter_set_max.resize(this->parameters.size());
 
+        std::cout << this->parameters.size() << " parameters registered for analysis.\n";
+
         Variable::tape.recording = false;
         std::cout << "Running functional analysis for " << this->name << "...\n";
         double progress = 0;

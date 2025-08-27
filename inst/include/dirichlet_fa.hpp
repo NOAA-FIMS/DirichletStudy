@@ -202,8 +202,9 @@ public:
 
         for (size_t i = 0; i < x.size(); ++i)
         {
+            std::cout << "Initializing parameter p" << i << std::endl;
             this->p[i].SetName("p" + std::to_string(i));
-            // this->p[i].SetBounds(0.00001, 0.9999999);
+             this->p[i].SetBounds(0.00001, 0.9999999);
             this->RegisterParameter(this->p[i], 0.1);
         }
     }
@@ -243,12 +244,14 @@ public:
 
         this->theta.SetName("theta");
         this->theta.SetBounds(0.00001, 5.0);
-        this->RegisterParameter(this->theta, 0.01);
+       // this->RegisterParameter(this->theta, 0.01);
 
         for (size_t i = 0; i < x.size(); ++i)
         {
+            std::cout << "Initializing parameter p" << i << std::endl;
+
             this->p[i].SetName("p" + std::to_string(i));
-            // this->p[i].SetBounds(0.00001, 0.9999999);
+             this->p[i].SetBounds(0.00001, 0.9999999);
             this->RegisterParameter(this->p[i], 0.1);
         }
     }
@@ -284,12 +287,14 @@ public:
 
         this->theta.SetName("theta");
         this->theta.SetBounds(0.00001, 5.0);
-        this->RegisterParameter(this->theta, 0.01);
+       // this->RegisterParameter(this->theta, 0.01);
 
         for (size_t i = 0; i < x.size(); ++i)
         {
+            std::cout << "Initializing parameter p" << i << std::endl;
+
             this->p[i].SetName("p" + std::to_string(i));
-            // this->p[i].SetBounds(0.00001, 0.999999);
+           this->p[i].SetBounds(0.00001, 0.999999);
             this->RegisterParameter(this->p[i], 0.1);
         }
     }
@@ -326,12 +331,12 @@ public:
 
         this->theta.SetName("theta");
         this->theta.SetBounds(0.00001, 5.0);
-        this->RegisterParameter(this->theta, 0.01);
+       // this->RegisterParameter(this->theta, 0.01);
 
         for (size_t i = 0; i < x.size(); ++i)
         {
             this->p[i].SetName("p" + std::to_string(i));
-            // this->p[i].SetBounds(0.00001, 0.999999);
+            this->p[i].SetBounds(0.00001, 1.0);
             this->RegisterParameter(this->p[i], 0.1);
         }
     }
@@ -369,12 +374,12 @@ public:
 
         this->beta.SetName("beta");
         // this->beta.SetBounds(0.00001, 5.0);
-        this->RegisterParameter(this->beta, 0.01);
+      //  this->RegisterParameter(this->beta, 0.01);
 
         for (size_t i = 0; i < x.size(); ++i)
         {
             this->p[i].SetName("p" + std::to_string(i));
-            this->p[i].SetBounds(0.00001, 0.999999);
+            this->p[i].SetBounds(0.00001, 1.0);
             this->RegisterParameter(this->p[i], 0.1);
         }
     }

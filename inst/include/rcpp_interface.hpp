@@ -12,24 +12,30 @@ public:
     uint32_t id;
     static std::map<uint32_t, DirichletStudyComponentBase *> instances;
 
+    DirichletStudyComponentBase() {}
+    DirichletStudyComponentBase(const DirichletStudyComponentBase &other) 
+    : id(other.id),data(other.data),simplex_data(other.simplex_data) {}
+
     virtual void setCompositionData(const Rcpp::NumericMatrix &data) = 0;
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data) = 0;
     virtual bool runAnalysis() = 0;
     virtual Rcpp::List getResults() = 0;
     virtual void makeInputValues()
     {
-        //     std::cout << "Making input values..." << std::endl;
-        //     this->fa_input_values.clear();
-        //    for(size_t i = 0; i < this->setSimplexData.rows(); i++)
-        //     {
-        //         std::vector<double> input_row;
-        //         for(size_t j = 0; j < this->setSimplexData.cols(); j++)
-        //         {
-        //             input_row.push_back(this->setSimplexData(i, j));
-        //         }
-        //         this->fa_input_values.push_back(input_row);
-        //     }
-        //     std::cout << "input_values size: " << this->fa_input_values.size() << "\n";
+        std::cout << "Making input values..." << std::endl;
+        this->fa_input_values.clear();
+        for (size_t i = 0; i < this->simplex_data.rows(); i++)
+        {
+            std::cout << "Row " << i << ": ";
+            std::vector<double> input_row;
+            for (size_t j = 0; j < this->simplex_data.cols(); j++)
+            {
+                std::cout << "Col " << j << ": " << this->simplex_data(i, j) << std::endl;
+                input_row.push_back(this->simplex_data(i, j));
+            }
+            this->fa_input_values.push_back(input_row);
+        }
+        std::cout << "input_values size: " << this->fa_input_values.size() << "\n";
     }
 
     void test()
@@ -43,6 +49,9 @@ public:
     }
 
     virtual ~DirichletStudyComponentBase() {}
+
+    Rcpp::NumericMatrix data;
+    Rcpp::NumericMatrix simplex_data;
 };
 
 std::map<uint32_t, DirichletStudyComponentBase *> DirichletStudyComponentBase::instances;
@@ -94,21 +103,26 @@ public:
     }
 
 private:
-    Rcpp::NumericMatrix data;
-    Rcpp::NumericMatrix simplex_data;
 };
 
 class DirichletLinearInterface : public DirichletStudyComponentBase
 {
 public:
-    Dirichlet_Linear<double> dirichlet_linear;
+    std::shared_ptr<Dirichlet_Linear<double>> dirichlet_linear;
     double theta = 1.0;
 
     DirichletLinearInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
+        this->dirichlet_linear = std::make_shared<Dirichlet_Linear<double>>();
         instances[this->id] = this;
     }
+    DirichletLinearInterface(const DirichletLinearInterface &other)
+        : DirichletStudyComponentBase(other),
+          dirichlet_linear(other.dirichlet_linear)
+    {
+    }
+
     virtual ~DirichletLinearInterface()
     {
     }
@@ -129,10 +143,12 @@ public:
     bool runAnalysis() override
     {
         this->makeInputValues();
-        // dirichlet_linear.input_values = this->fa_input_values;
-        dirichlet_linear.theta = this->theta;
-        dirichlet_linear.Initialize();
-        dirichlet_linear.Evaluate();
+        dirichlet_linear->input_values = this->fa_input_values;
+        dirichlet_linear->theta = this->theta;
+        dirichlet_linear->build_parameter_sets = false;
+        dirichlet_linear->Initialize();
+        dirichlet_linear->Analyze();
+        dirichlet_linear->Finalize();
         // Placeholder for running the analysis
         // This would typically call the Dirichlet_Linear class methods.
         return true; // Indicating success
@@ -145,20 +161,24 @@ public:
     }
 
 private:
-    Rcpp::NumericMatrix data;
-    Rcpp::NumericMatrix simplex_data;
 };
 
 class DirichletFischInterface : public DirichletStudyComponentBase
 {
 public:
-    Dirichlet_Fisch<double> dirichlet_fisch;
+    std::shared_ptr<Dirichlet_Fisch<double>> dirichlet_fisch;
     double theta = 1.0;
 
     DirichletFischInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
+        this->dirichlet_fisch = std::make_shared<Dirichlet_Fisch<double>>();
         instances[this->id] = this;
+    }
+    DirichletFischInterface(const DirichletFischInterface &other)
+        : DirichletStudyComponentBase(other),
+          dirichlet_fisch(other.dirichlet_fisch)
+    {
     }
 
     virtual ~DirichletFischInterface()
@@ -181,10 +201,12 @@ public:
     bool runAnalysis() override
     {
         this->makeInputValues();
-        // dirichlet_fisch.input_values = this->fa_input_values;
-        dirichlet_fisch.theta = this->theta;
-        dirichlet_fisch.Initialize();
-        dirichlet_fisch.Evaluate();
+        dirichlet_fisch->input_values = this->fa_input_values;
+        dirichlet_fisch->theta = this->theta;
+        dirichlet_fisch->build_parameter_sets = false;
+        dirichlet_fisch->Initialize();
+        dirichlet_fisch->Analyze();
+        dirichlet_fisch->Finalize();
         // Placeholder for running the analysis
         // This would typically call the Dirichlet_Fisch class methods.
         return true; // Indicating success
@@ -197,8 +219,6 @@ public:
     }
 
 private:
-    Rcpp::NumericMatrix data;
-    Rcpp::NumericMatrix simplex_data;
 };
 
 class DirichletStudyInterface

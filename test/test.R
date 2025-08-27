@@ -14,7 +14,7 @@ n <- as.integer(readline(prompt = "Enter the number of Dirichlet samples to draw
 
 # Ask for Dirichlet alpha parameters
 cat("Enter 3 Dirichlet alpha parameters separated by space (default = 1 1 1): ")
-alpha_input <- scan(what = numeric(), nmax = 3, quiet = TRUE)
+alpha_input <- scan(what = numeric(), nmax = 3, quiet = FALSE)
 
 # Use default alpha = 1 if user enters nothing
 if (length(alpha_input) == 0) {
@@ -40,10 +40,7 @@ print("creating study")
 # Create instance of DirichletStudy
 dirichlet_study <- new(DirichletStudyInterface)
 
-# Add studies components to DirichletStudy
-dirichlet_default <- new(DirichletDefaultInterface)
-dirichlet_default$setSimplexData(dirichlet_samples)
-dirichlet_study$addStudy(dirichlet_default$getId())
+print(dirichlet_samples)
 
 dirichlet_linear <- new(DirichletLinearInterface)
 dirichlet_linear$setSimplexData(dirichlet_samples)
