@@ -2,62 +2,62 @@ Name: dirichlet_linear
 Description:
 Functional analysis of the Linear Dirichlet distribution.
 
-Run time(seconds): 1
-Number of parameter sets: 100000
+Run time(seconds): 0
+Number of parameter sets: 200
 Number of parameters per set: 3
 Parameter Range: 
 p0             1e-05  -   1   
 p1             1e-05  -   1   
 p2             1e-05  -   1   
-Min function value: -6.45424e+14
-Max function value: -4.17806
+Min function value: -31.9645
+Max function value: -5.61945
 Parameter Set for Min function value: 
-p0	3.45245e-18
-p1	0.380614
-p2	0.619386
+p0	0.00108069
+p1	0.0455575
+p2	0.953362
 Parameter Set for Max function value: 
-p0	0.334355
-p1	0.492927
-p2	0.172718
+p0	0.351634
+p1	0.31641
+p2	0.331957
 Infinitesimal Step: 
 p0	0.1
 p1	0.1
 p2	0.1
 Function is Continuous: TRUE
-Function Stochasticity: 314.321
-Derivative Stochasticity of "p0": 316.22,	[ 8.7603 : 1.86946e+32 ]
-Derivative Stochasticity of "p1": 256.903,	[ 12.3324 : 6.23744e+16 ]
-Derivative Stochasticity of "p2": 307.069,	[ 4.69669 : 7.7274e+10 ]
+Function Stochasticity: 1.27403
+Derivative Stochasticity of "p0": 4.02049,	[ 18.3527 : 5220.57 ]
+Derivative Stochasticity of "p1": 4.52464,	[ 18.7971 : 120.76 ]
+Derivative Stochasticity of "p2": 7.24381,	[ 4.91233 : 12.742 ]
 
 Covariance:
 lower bounds:
--2.350690e-05    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -1.576288e-04    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -2.179446e-01    
+-2.843136e-04    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -3.234367e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -5.725211e-02    
 
 central bounds:
--2.515607e-02    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -6.754642e-04    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -8.472648e-02    
+-1.540330e-04    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.024604e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.337729e-01    
 
 upper bounds:
--1.356434e-02    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -1.439641e-03    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -1.136751e-01    
+-5.598258e-03    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -2.606658e-03    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.411145e-01    
 
 
 Correlation:
 lower bounds:
--4.254070e+04    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -6.344020e+03    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -4.588321e+00    
+-3.517243e+03    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -3.091795e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.746660e+01    
 
 central bounds:
--3.975184e+01    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -1.480463e+03    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -1.180269e+01    
+-6.492115e+03    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -9.759871e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -7.475357e+00    
 
 upper bounds:
--7.372274e+01    -0.000000e+00    -0.000000e+00    
--0.000000e+00    -6.946179e+02    -0.000000e+00    
--0.000000e+00    -0.000000e+00    -8.797000e+00    
+-1.786270e+02    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -3.836330e+02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -7.086445e+00    
