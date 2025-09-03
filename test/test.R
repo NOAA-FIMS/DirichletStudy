@@ -1,3 +1,13 @@
+# file = test.R
+# test.R applies the functional analysis tool to a set
+# of random proportions vectors sampled from a Dirichlet
+# multinomial distribution using the manual approach
+# with gamma distributions setting the Dirichlet probabilities. 
+# The user needs to specify:
+# (1) the dimension (K) of the proportion vectors
+# (2) the sample size (n) of Dirichlet multinomial proportion vectors to generate
+# (3) the concentration parameters of the Dirichlet multinomial distribution
+
 library(DirichletStudy)
 
 # Load required package
@@ -30,7 +40,36 @@ for (i in 1:K) {
   gamma_samples[, i] <- rgamma(n, shape = alpha[i], rate = 1)
 }
 row_sums <- rowSums(gamma_samples)
-dirichlet_samples <- gamma_samples / row_sums
+P <- gamma_samples / row_sums
+
+# Returns an M x K matrix of Dirichlet multinomial counts
+dirichlet_multinomial_counts <- t(vapply(
+  1:n,
+  function(i) as.vector(rmultinom(n = 1, size = if (length(n) == 1) n else n[i],
+                                  prob = P[i, ])),
+  numeric(K)
+))
+
+# Normalize Dirichlet multinomial counts to proportion vectors
+dirichlet_multinomial_proportions <- dirichlet_multinomial_counts / if (length(n) == 1) n else n
+
+# quick sanity check:
+# stopifnot(all(abs(rowSums(dirichlet_multinomial_proportions) - 1) < 1e-12))
+
+# Save Dirichlet probabilities, Dirichlet multinomial counts and proportions
+DM_samples <- list(
+  dirichlet_probabilities = P,   # Dirichlet samples you already had
+  dirichlet_multinomial_counts = dirichlet_multinomial_counts, # Dirichlet–multinomial counts
+  dirichlet_multinomial_proportions  = dirichlet_multinomial_proportions   # normalized DM proportions (what you asked for)
+)
+
+# Optionally write to disk
+# write.csv(dirichlet_multinomial_proportions,  "dm_props.csv",  row.names = FALSE)
+# write.csv(dirichlet_multinomial_counts, "dm_counts.csv", row.names = FALSE)
+
+dirichlet_samples <- dirichlet_multinomial_proportions
+
+
 
 # Convert to data frame
 samples_df <- as.data.frame(dirichlet_samples)
