@@ -1,4 +1,11 @@
-# Load required package
+# file = mk-simplex-dirichlet-rgamma.R
+# mk-simplex-dirichlet-rgamma.R creates
+# random proportions vectors sampled from a Dirichlet
+# multinomial distribution using the manual approach
+# with gamma distributions for setting the Dirichlet probabilities.
+# Dirichlet multinomial proportions are plotted
+# and output to file=dirichlet_samples.csv
+
 if (!requireNamespace("ggtern", quietly = TRUE)) {
   install.packages("ggtern")
 }
@@ -28,7 +35,31 @@ for (i in 1:K) {
   gamma_samples[, i] <- rgamma(n, shape = alpha[i], rate = 1)
 }
 row_sums <- rowSums(gamma_samples)
-dirichlet_samples <- gamma_samples / row_sums
+P <- gamma_samples / row_sums
+
+# Return an n x K matrix of Dirichlet multinomial counts
+dirichlet_multinomial_counts <- t(vapply(
+  1:n,
+  function(i) as.vector(rmultinom(n = 1, size = if (length(n) == 1) n else n[i],
+                                  prob = P[i, ])),
+  numeric(K)
+))
+
+# Normalize Dirichlet multinomial counts to proportion vectors
+dirichlet_multinomial_proportions <- dirichlet_multinomial_counts / if (length(n) == 1) n else n
+
+# Save Dirichlet probabilities, Dirichlet multinomial counts and proportions
+DM_samples <- list(
+  dirichlet_probabilities = P,   # Dirichlet samples you already had
+  dirichlet_multinomial_counts = dirichlet_multinomial_counts, # Dirichlet–multinomial counts
+  dirichlet_multinomial_proportions  = dirichlet_multinomial_proportions   # normalized DM proportions (what you asked for)
+)
+
+# Optionally write to disk
+# write.csv(dirichlet_multinomial_proportions,  "dm_props.csv",  row.names = FALSE)
+# write.csv(dirichlet_multinomial_counts, "dm_counts.csv", row.names = FALSE)
+
+dirichlet_samples <- dirichlet_multinomial_proportions
 
 # Convert to data frame
 samples_df <- as.data.frame(dirichlet_samples)
@@ -39,7 +70,8 @@ write.csv(samples_df, file = "dirichlet_samples.csv", row.names = FALSE)
 cat("Saved samples to 'dirichlet_samples.csv'\n")
 
 # Plot with ggtern
-ggtern(data = samples_df, aes(x = A, y = B, z = C)) +
+ternary_plot <- ggtern(data = samples_df, aes(x = A, y = B, z = C)) +
   geom_point(alpha = 0.5, size = 0.5) +
   theme_bw() +
-  labs(title = "Dirichlet Samples on 2D Simplex", T = "A", L = "B", R = "C")
+  labs(title = "Dirichlet Multinomial Samples on 2D Simplex", T = "A", L = "B", R = "C")
+print(ternary_plot)
