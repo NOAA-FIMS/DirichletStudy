@@ -1,3 +1,73 @@
+# file=compare-M-DM-sampling.R
+# compare-M-DM-sampling.R produces a ternary plot
+# comparing multinomial and dirichlet multinomial
+# proportion sampling with observation error for
+# for a user-input proportion vector comprised
+# of recruits, juvenile, and adult fish
+
+read_positive_number <- function(prompt, default) {
+  repeat {
+    ans <- readline(paste0(prompt, " [", default, "]: "))
+    val <- if (nzchar(ans)) suppressWarnings(as.numeric(ans)) else as.numeric(default)
+    if (is.finite(val) && val > 0) return(val)
+    cat("Please enter a positive number.\n")
+  }
+}
+
+parse_true_pi <- function(default_str = "0.3,0.5,0.2") {
+  repeat {
+    ans <- readline(paste0(
+      "Enter true_pi as 3 comma-separated values ",
+      "[", default_str, "]: "
+    ))
+    x <- if (nzchar(ans)) ans else default_str
+    x <- gsub("\\s", "", x)
+    parts <- strsplit(x, ",", fixed = TRUE)[[1]]
+    
+    # must be three parts
+    if (length(parts) != 3L) {
+      cat("Please enter exactly 3 values.\n")
+      next
+    }
+    
+    # extract values and (optional) names
+    vals <- suppressWarnings(sapply(parts, function(p) {
+      if (grepl("=", p, fixed = TRUE)) as.numeric(sub(".*=", "", p)) else as.numeric(p)
+    }))
+    if (any(is.na(vals))) {
+      cat("All entries must be numeric (after '=' if using names).\n")
+      next
+    }
+    if (any(vals < 0)) {
+      cat("Values must be nonnegative.\n")
+      next
+    }
+    nms <- sapply(parts, function(p) {
+      if (grepl("=", p, fixed = TRUE)) sub("=.*", "", p) else NA_character_
+    })
+    if (all(is.na(nms))) nms <- c("Recruits","Juveniles","Adults")
+    
+    # normalize to sum 1 if necessary
+    s <- sum(vals)
+    if (s <= 0) {
+      cat("At least one value must be > 0.\n")
+      next
+    }
+    if (abs(s - 1) > 1e-10) {
+      message(sprintf("Note: normalizing true_pi to sum to 1 (current sum = %.6f).", s))
+      vals <- vals / s
+    }
+    names(vals) <- nms
+    return(vals)
+  }
+}
+
+# ---- Gather inputs interactively ----
+true_pi <- parse_true_pi("0.3,0.5,0.2")
+alpha   <- read_positive_number("Enter alpha (Dirichlet concentration)", 20)
+N       <- read_positive_number("Enter N (sample size per draw)", 200)
+n_sim   <- read_positive_number("Enter n_sim (number of simulated samples)", 100)
+
 # Load required packages
 library(gtools)     # for rdirichlet
 library(ggtern)     # for ternary plots
@@ -5,14 +75,9 @@ library(tibble)
 library(dplyr)
 
 # Set seed
-set.seed(123)
+set.seed(3451)
 
-# Define true proportions
-true_pi <- c(Recruits = 0.3, Juveniles = 0.5, Adults = 0.2)
-age_classes <- names(true_pi)
-N <- 200
-alpha <- 20
-n_sim <- 100
+age_classes <- c("Recruits", "Juveniles", "Adults")
 
 # Function to simulate one sample
 simulate_multinom <- function() {
@@ -65,7 +130,7 @@ ternplot <- ggtern(df_plot, aes(x = Recruits, y = Juveniles, z = Adults,
                                 "Dirichlet-Multinomial" = 16)) +
   labs(title = "Age Composition with Sampling Error",
        subtitle = paste(n_sim, "samples with N =", N, "fish"),
-       T = "Recruit", L = "Juv", R = "Adult") +
+       T = "Juvenile", L = "Recruit", R = "Adult") +
   theme_bw() +
   theme(
     tern.axis.title.T = element_text(size = rel(0.75)),
