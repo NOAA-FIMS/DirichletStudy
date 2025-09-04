@@ -61,17 +61,16 @@ DM_samples <- list(
 
 dirichlet_samples <- dirichlet_multinomial_proportions
 
-# Convert to data frame
-samples_df <- as.data.frame(dirichlet_samples)
-colnames(samples_df) <- c("A", "B", "C")
+dirichlet_samples_df <- as.data.frame(dirichlet_samples)
+colnames(dirichlet_samples_df) <- c("R", "J", "A")
 
-# Save to CSV
-write.csv(samples_df, file = "dirichlet_samples.csv", row.names = FALSE)
+# Save samples to CSV
+write.csv(dirichlet_samples_df, file = "dirichlet_samples.csv", row.names = FALSE)
 cat("Saved samples to 'dirichlet_samples.csv'\n")
 
-# Plot with ggtern
-ternary_plot <- ggtern(data = samples_df, aes(x = A, y = B, z = C)) +
+# Plot samples on ternary diagram
+ternary_plot <- ggtern(data = dirichlet_samples_df, aes(x = R, y = J, z = A)) +
   geom_point(alpha = 0.5, size = 0.5) +
-  theme_bw() +
-  labs(title = "Dirichlet Multinomial Samples on 2D Simplex", T = "A", L = "B", R = "C")
+  theme_bw(base_size=7) +
+  labs(title = "Age Composition of Observed Fishery Samples", T = "Juvenile", L = "Recruit", R = "Adult")
 print(ternary_plot)
