@@ -1,8 +1,8 @@
-# file = test_manual_DM.R
-# test_manual_DM.R applies the functional analysis tool to a set
+# file = test_DM_rgamma.R
+# test_DM_rgamma.R applies the functional analysis tool to a set
 # of random proportions vectors sampled from a Dirichlet
 # multinomial distribution using the manual approach
-# with gamma distributions for setting the Dirichlet probabilities. 
+# with gamma distributions setting the Dirichlet probabilities. 
 # The user needs to specify:
 # (1) the dimension (K) of the proportion vectors
 # (2) the sample size (n) of Dirichlet multinomial proportion vectors to generate
@@ -10,6 +10,7 @@
 
 library(DirichletStudy)
 
+# Load required package
 if (!requireNamespace("ggtern", quietly = TRUE)) {
   install.packages("ggtern")
 }
@@ -55,6 +56,9 @@ dirichlet_multinomial_counts <- t(vapply(
 # Normalize Dirichlet multinomial counts to proportion vectors
 dirichlet_multinomial_proportions <- dirichlet_multinomial_counts / if (length(n) == 1) n else n
 
+# quick sanity check:
+# stopifnot(all(abs(rowSums(dirichlet_multinomial_proportions) - 1) < 1e-12))
+
 # Save Dirichlet probabilities, Dirichlet multinomial counts and proportions
 DM_samples <- list(
   dirichlet_probabilities = P,   # Dirichlet samples you already had
@@ -70,7 +74,7 @@ dirichlet_samples <- dirichlet_multinomial_proportions
 
 # Convert to data frame
 samples_df <- as.data.frame(dirichlet_samples)
-colnames(samples_df) <- c("R", "J", "A")
+colnames(samples_df) <- c("A", "B", "C")
 
 print("creating study")
 # Create instance of DirichletStudy
