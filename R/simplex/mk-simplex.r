@@ -1,4 +1,9 @@
-# mk-simplex.r: Create open (0<Pj<1) or closed (0<=Pj<=1) proportion simplex from K-part compositions of N
+# file=mk-simplex.r 
+# mk-simplex.r creates an open (0<Pj<1) or closed (0<=Pj<=1) 
+# proportion simplex from K-part compositions of N
+# Simplex proportions are plotted
+# and output to file=simplex-closed-N-K.csv
+# or simplex-open-N-K.csv
 
 # Load required package
 if (!requireNamespace("ggtern", quietly = TRUE)) install.packages("ggtern")
@@ -30,7 +35,7 @@ if (choice == "open") {
 # Generate compositions
 compositions <- nexcom(N, K)
 comp_df <- as.data.frame(compositions)
-colnames(comp_df) <- paste0("P.", seq_len(K))
+colnames(comp_df) <- c("R", "J", "A")
 cat(sprintf("Generated %d K-compositions of %d\n", nrow(comp_df), N))
 
 # Normalize to proportions
@@ -41,6 +46,15 @@ if (choice == "open") {
 } else {
   prop_df <- comp_df / N
   filename <- sprintf("simplex-closed_N%d_K%d.csv", N, K)
+}
+
+if (K == 3) {
+  # Plot samples on ternary diagram
+  ternary_plot <- ggtern(data = comp_df, aes(x = R, y = J, z = A)) +
+    geom_point(alpha = 0.5, size = 0.5) +
+    theme_bw(base_size=7) +
+    labs(title = "Age Composition of Observed Fishery Samples", T = "Juvenile", L = "Recruit", R = "Adult")
+  print(ternary_plot)
 }
 
 # Output to CSV
