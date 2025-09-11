@@ -1,0 +1,39 @@
+(1)
+G     <- 10L
+Nmin  <- 20
+Nmax  <- 20000
+nmesh <- nrow(mesh)
+
+set.seed(26267)
+N_vec <- matrix(
+  round(exp(runif(nmesh * G, log(Nmin), log(Nmax)))),
+  nrow = nmesh, ncol = G, byrow = TRUE
+)
+
+(2)
+- run_one <- function(p_true) {
++ run_one <- function(p_true, N_row) {
+
+(3)
+## simulation loop
+- for (g in 1:G) {
+-   a0g <- theta_true * N_vec[g]
+-   alpha <- a0g * p_true
+-   phi <- rgamma(K, shape = alpha); phi <- phi / sum(phi)
+-   X[g, ] <- as.vector(rmultinom(1, size = N_vec[g], prob = phi))
+- }
++ for (g in 1:G) {
++   a0g <- theta_true * N_row[g]
++   alpha <- a0g * p_true
++   phi <- rgamma(K, shape = alpha); phi <- phi / sum(phi)
++   X[g, ] <- as.vector(rmultinom(1, size = N_row[g], prob = phi))
++ }
+
+(4)
+- res_mat <- t(apply(mesh, 1, run_one))
++ res_mat <- do.call(
++   rbind,
++   lapply(seq_len(nmesh), function(i) run_one(p_true = mesh[i, ], N_row = N_vec[i, ]))
++ )
+
+
