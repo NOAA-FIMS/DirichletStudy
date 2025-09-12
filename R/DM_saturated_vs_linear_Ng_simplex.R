@@ -1,10 +1,8 @@
-## file= WORK_DM_saturated_vs_linear_Ng_simplex.R
+## file = DM_saturated_vs_linear_Ng_simplex.R
 ## DM curvature/accuracy comparison over a K=3 simplex mesh
 ## Outputs:
 ##  - CSV: "dm_rmse_simplex_mesh.csv"
 ##  - Plots: "rmse_ii_ternary.png", "rmse_iii_ternary.png"
-
-set.seed(26267)
 
 ## ---- packages --------------------------------------------------------------
 if (!requireNamespace("ggtern", quietly = TRUE)) install.packages("ggtern")
@@ -75,6 +73,8 @@ G <- 10L
 theta_true <- 0.2
 Nmin  <- 25
 Nmax  <- 250
+
+set.seed(26267)
 
 ## ---- mesh of p_true --------------------------------------------------------
 mesh <- mk_simplex(h = 0.05, interior = TRUE)  # exclude boundaries to keep α0 p_k > 0
@@ -177,13 +177,13 @@ rmse_max <- max(out$rmse_ii, out$rmse_iii, na.rm = TRUE)
 
 p_ii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_ii)) +
   geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = "(ii) RMSE over simplex (K=3, G=10, θ=0.2)", colour = "RMSE") +
+  labs(title = "(ii) RMSE over simplex (K=3, G=10, θ=0.2, α0=beta)", colour = "RMSE") +
   scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
   theme_bw()
 
 p_iii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_iii)) +
   geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = "(iii) RMSE over simplex (K=3, G=10, θ=0.2, α0=θN)") +
+  labs(title = "(iii) RMSE over simplex (K=3, G=10, θ=0.2, α0=θ*N)", colour = "RMSE") +
   scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
   theme_bw()
 
