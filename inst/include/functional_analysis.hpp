@@ -101,7 +101,7 @@ public:
     std::vector<std::vector<T>> lower_bound_correlation;
     std::vector<std::vector<T>> upper_bound_correlation;
     std::vector<std::vector<T>> central_bound_correlation;
-
+    std::vector<std::vector<T>> derivatives_matrix;
     std::vector<T> mean_parameter_values;
 
     bool write_values = true;
@@ -158,7 +158,6 @@ public:
 
         parameter_set_min.resize(this->parameters.size());
         parameter_set_max.resize(this->parameters.size());
-
         std::cout << this->parameters.size() << " parameters registered for analysis.\n";
 
         Variable::tape.recording = false;
@@ -221,6 +220,7 @@ public:
         {
             this->mean_parameter_values[i] /= static_cast<T>(this->parameter_sets.size());
         }
+        this->derivatives_matrix.resize(this->parameter_sets.size(), std::vector<T>(0));
 
         Variable::tape.recording = true;
         std::cout << "Running Infinitesimal Analysis..." << std::endl;
@@ -275,6 +275,7 @@ public:
             {
 
                 this->derivatives[this->parameters[p]->info->id].push_back(Variable::tape.Value(this->parameters[p]->info->id));
+                this->derivatives_matrix[i].push_back(Variable::tape.Value(this->parameters[p]->info->id));
             }
         }
         this->Progress(1.0);
@@ -439,7 +440,7 @@ public:
             this->WriteValues();
         }
 
-        this->ClearData();
+        // this->ClearData();
     }
 
     void WriteValues()

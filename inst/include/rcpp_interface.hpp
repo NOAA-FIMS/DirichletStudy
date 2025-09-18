@@ -13,8 +13,8 @@ public:
     static std::map<uint32_t, DirichletStudyComponentBase *> instances;
 
     DirichletStudyComponentBase() {}
-    DirichletStudyComponentBase(const DirichletStudyComponentBase &other) 
-    : id(other.id),data(other.data),simplex_data(other.simplex_data) {}
+    DirichletStudyComponentBase(const DirichletStudyComponentBase &other)
+        : id(other.id), data(other.data), simplex_data(other.simplex_data) {}
 
     virtual void setCompositionData(const Rcpp::NumericMatrix &data) = 0;
     virtual void setSimplexData(const Rcpp::NumericMatrix &simplex_data) = 0;
@@ -46,6 +46,45 @@ public:
     uint32_t getId() const
     {
         return id;
+    }
+
+    virtual Rcpp::List getResults() const
+    {
+        return Rcpp::List::create(Rcpp::Named("id") = id);
+    }
+
+    Rcpp::NumericMatrix ToRcppMatrix(const std::vector<std::vector<double>> &data) const
+    {
+        if (data.empty())
+        {
+            return Rcpp::NumericMatrix();
+        }
+        size_t nrows = data.size();
+        size_t ncols = data[0].size();
+        Rcpp::NumericMatrix mat(nrows, ncols);
+        for (size_t i = 0; i < nrows; ++i)
+        {
+            for (size_t j = 0; j < ncols; ++j)
+            {
+                mat(i, j) = data[i][j];
+            }
+        }
+        return mat;
+    }
+
+    Rcpp::NumericVector ToRcppVector(const std::vector<double> &data) const
+    {
+        if(data.empty())
+        {
+            std::cout << "Data is empty, returning empty NumericVector." << std::endl;
+            return Rcpp::NumericVector();
+        }
+        Rcpp::NumericVector vec(data.size());
+        for (size_t i = 0; i < data.size(); ++i)
+        {
+            vec[i] = data[i];
+        }
+        return vec;
     }
 
     virtual ~DirichletStudyComponentBase() {}
@@ -95,11 +134,40 @@ public:
         // This would typically call the Dirichlet_Default class methods.
         return true; // Indicating success
     }
-    Rcpp::List getResults() override
+    virtual Rcpp::List getResults() override
     {
+        std::vector<double> derivative_stochasticity;
+        typename std::map<uint32_t, double>::iterator it;
+        for (it = dirichlet_linear->stochasticity_of_derivatives.begin(); it != dirichlet_linear->stochasticity_of_derivatives.end(); ++it)
+        {
+            double stochasticity = it->second;
+            derivative_stochasticity.push_back(it->second);
+
+            
+        }
+
+        std::cout<<"dirichlet_linear->values size: "<<dirichlet_linear->values.size()<<"\n";
+
         // Placeholder for returning results
         // This would typically return the results of the analysis.
-        return Rcpp::List::create(Rcpp::Named("status") = "success");
+        return Rcpp::List::create(
+            Rcpp::Named("LowerBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->lower_bound_covariance),
+            Rcpp::Named("UpperBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->upper_bound_covariance),
+            Rcpp::Named("CentralBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->central_bound_covariance),
+            Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->lower_bound_correlation),
+            Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->upper_bound_correlation),
+            Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->central_bound_correlation),
+            Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_linear->mean_parameter_values),
+            Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_linear->derivatives_matrix),
+            Rcpp::Named("Name") = dirichlet_linear->name,
+            Rcpp::Named("MinValue") = dirichlet_linear->min_value,
+            Rcpp::Named("MaxValue") = dirichlet_linear->max_value,
+            Rcpp::Named("is_continuous") = dirichlet_linear->is_continuous,
+            Rcpp::Named("input_values") = this->ToRcppMatrix(dirichlet_linear->input_values),
+            Rcpp::Named("values") = this->ToRcppVector(dirichlet_linear->values),
+            Rcpp::Named("stochasticity") = dirichlet_linear->stochasticity,
+            Rcpp::Named("derivative_stochasticity") = this->ToRcppVector(derivative_stochasticity)
+        );
     }
 
 private:
@@ -153,11 +221,40 @@ public:
         // This would typically call the Dirichlet_Linear class methods.
         return true; // Indicating success
     }
-    Rcpp::List getResults() override
+    virtual Rcpp::List getResults() override
     {
+        std::vector<double> derivative_stochasticity;
+        typename std::map<uint32_t, double>::iterator it;
+        for (it = dirichlet_linear->stochasticity_of_derivatives.begin(); it != dirichlet_linear->stochasticity_of_derivatives.end(); ++it)
+        {
+            double stochasticity = it->second;
+            derivative_stochasticity.push_back(it->second);
+
+            
+        }
+
+        std::cout<<"dirichlet_linear->values size: "<<dirichlet_linear->values.size()<<"\n";
+
         // Placeholder for returning results
         // This would typically return the results of the analysis.
-        return Rcpp::List::create(Rcpp::Named("status") = "success");
+        return Rcpp::List::create(
+            Rcpp::Named("LowerBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->lower_bound_covariance),
+            Rcpp::Named("UpperBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->upper_bound_covariance),
+            Rcpp::Named("CentralBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->central_bound_covariance),
+            Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->lower_bound_correlation),
+            Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->upper_bound_correlation),
+            Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->central_bound_correlation),
+            Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_linear->mean_parameter_values),
+            Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_linear->derivatives_matrix),
+            Rcpp::Named("Name") = dirichlet_linear->name,
+            Rcpp::Named("MinValue") = dirichlet_linear->min_value,
+            Rcpp::Named("MaxValue") = dirichlet_linear->max_value,
+            Rcpp::Named("is_continuous") = dirichlet_linear->is_continuous,
+            Rcpp::Named("input_values") = this->ToRcppMatrix(dirichlet_linear->input_values),
+            Rcpp::Named("values") = this->ToRcppVector(dirichlet_linear->values),
+            Rcpp::Named("stochasticity") = dirichlet_linear->stochasticity,
+            Rcpp::Named("derivative_stochasticity") = this->ToRcppVector(derivative_stochasticity)
+        );
     }
 
 private:
@@ -211,11 +308,40 @@ public:
         // This would typically call the Dirichlet_Fisch class methods.
         return true; // Indicating success
     }
-    Rcpp::List getResults() override
+     virtual Rcpp::List getResults() override
     {
+        std::vector<double> derivative_stochasticity;
+        typename std::map<uint32_t, double>::iterator it;
+        for (it = dirichlet_linear->stochasticity_of_derivatives.begin(); it != dirichlet_linear->stochasticity_of_derivatives.end(); ++it)
+        {
+            double stochasticity = it->second;
+            derivative_stochasticity.push_back(it->second);
+
+            
+        }
+
+        std::cout<<"dirichlet_linear->values size: "<<dirichlet_linear->values.size()<<"\n";
+
         // Placeholder for returning results
         // This would typically return the results of the analysis.
-        return Rcpp::List::create(Rcpp::Named("status") = "success");
+        return Rcpp::List::create(
+            Rcpp::Named("LowerBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->lower_bound_covariance),
+            Rcpp::Named("UpperBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->upper_bound_covariance),
+            Rcpp::Named("CentralBoundsCovariance") = this->ToRcppMatrix(dirichlet_linear->central_bound_covariance),
+            Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->lower_bound_correlation),
+            Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->upper_bound_correlation),
+            Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->central_bound_correlation),
+            Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_linear->mean_parameter_values),
+            Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_linear->derivatives_matrix),
+            Rcpp::Named("Name") = dirichlet_linear->name,
+            Rcpp::Named("MinValue") = dirichlet_linear->min_value,
+            Rcpp::Named("MaxValue") = dirichlet_linear->max_value,
+            Rcpp::Named("is_continuous") = dirichlet_linear->is_continuous,
+            Rcpp::Named("input_values") = this->ToRcppMatrix(dirichlet_linear->input_values),
+            Rcpp::Named("values") = this->ToRcppVector(dirichlet_linear->values),
+            Rcpp::Named("stochasticity") = dirichlet_linear->stochasticity,
+            Rcpp::Named("derivative_stochasticity") = this->ToRcppVector(derivative_stochasticity)
+        );
     }
 
 private:

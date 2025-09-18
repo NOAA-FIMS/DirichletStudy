@@ -10,11 +10,11 @@
 
 library(DirichletStudy)
 
-# Load required package
-if (!requireNamespace("ggtern", quietly = TRUE)) {
-  install.packages("ggtern")
-}
-library(ggtern)  # for ternary plot
+# # Load required package
+# if (!requireNamespace("ggtern", quietly = TRUE)) {
+#   install.packages("ggtern")
+# }
+# library(ggtern)  # for ternary plot
 
 # Prompt user for number of categories (K), number of samples (n), and alpha parameters
 K <- as.integer(readline(prompt = "Enter the number of categories K (must be 3 for plotting): "))
@@ -90,3 +90,6 @@ dirichlet_fisch$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_fisch$getId())
 
 print(dirichlet_study$runAnalysis())
+
+dirichlet_linear_results <- dirichlet_linear$getResults()
+dirichlet_linear_results$DerivativesMatrix

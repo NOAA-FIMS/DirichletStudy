@@ -33,6 +33,7 @@ RCPP_MODULE(ds)
         .method("runAnalysis", &DirichletLinearInterface::runAnalysis)
         .method("getResults", &DirichletLinearInterface::getResults)
         .method("getId", &DirichletLinearInterface::getId)
+        .method("getResults", &DirichletLinearInterface::getResults)
         .field("theta", &DirichletLinearInterface::theta);
 
     Rcpp::class_<DirichletFischInterface>("DirichletFischInterface")
