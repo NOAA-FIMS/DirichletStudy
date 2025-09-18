@@ -36,12 +36,12 @@ RCPP_MODULE(ds)
         .method("getResults", &DirichletLinearInterface::getResults)
         .field("theta", &DirichletLinearInterface::theta);
 
-    Rcpp::class_<DirichletFischInterface>("DirichletFischInterface")
+    Rcpp::class_<DirichletSaturatedInterface>("DirichletSaturatedInterface")
         .constructor()
-        .method("setCompositionData", &DirichletFischInterface::setCompositionData)
-        .method("setSimplexData", &DirichletFischInterface::setSimplexData)
-        .method("runAnalysis", &DirichletFischInterface::runAnalysis)
-        .method("getResults", &DirichletFischInterface::getResults)
-        .method("getId", &DirichletFischInterface::getId)
-        .field("theta", &DirichletFischInterface::theta);
+        .method("setCompositionData", &DirichletSaturatedInterface::setCompositionData)
+        .method("setSimplexData", &DirichletSaturatedInterface::setSimplexData)
+        .method("runAnalysis", &DirichletSaturatedInterface::runAnalysis)
+        .method("getResults", &DirichletSaturatedInterface::getResults)
+        .method("getId", &DirichletSaturatedInterface::getId)
+        .field("theta", &DirichletSaturatedInterface::theta);
 }

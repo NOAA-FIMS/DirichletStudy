@@ -85,9 +85,9 @@ dirichlet_linear <- new(DirichletLinearInterface)
 dirichlet_linear$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_linear$getId())
 
-dirichlet_fisch <- new(DirichletFischInterface)
-dirichlet_fisch$setSimplexData(dirichlet_samples)
-dirichlet_study$addStudy(dirichlet_fisch$getId())
+dirichlet_saturated <- new(DirichletSaturatedInterface)
+dirichlet_saturated$setSimplexData(dirichlet_samples)
+dirichlet_study$addStudy(dirichlet_saturated$getId())
 
 print(dirichlet_study$runAnalysis())
 

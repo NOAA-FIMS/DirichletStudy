@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     dirichlet_thorson.Analyze();
     dirichlet_thorson.Finalize();
 
-    Dirichlet_Fisch<double> dirichlet_fisch(file);
+    Dirichlet_Saturated<double> dirichlet_fisch(file);
     if (write_values)
     {
         dirichlet_fisch.write_values = true;
