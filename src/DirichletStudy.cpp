@@ -42,6 +42,6 @@ RCPP_MODULE(ds)
         .method("setSimplexData", &DirichletSaturatedInterface::setSimplexData)
         .method("runAnalysis", &DirichletSaturatedInterface::runAnalysis)
         .method("getResults", &DirichletSaturatedInterface::getResults)
-        .method("getId", &DirichletSaturatedInterface::getId)
-        .field("theta", &DirichletSaturatedInterface::theta);
+        .method("getId", &DirichletSaturatedInterface::getId);
+        // .field("theta", &DirichletSaturatedInterface::theta);
 }
