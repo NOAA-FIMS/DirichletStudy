@@ -98,9 +98,18 @@ public:
     std::vector<std::vector<T>> upper_bound_covariance;
     std::vector<std::vector<T>> central_bound_covariance;
 
+    std::vector<std::vector<T>> lower_bound_derivative_covariance;
+    std::vector<std::vector<T>> upper_bound_derivative_covariance;
+    std::vector<std::vector<T>> central_bound_derivative_covariance;
+
     std::vector<std::vector<T>> lower_bound_correlation;
     std::vector<std::vector<T>> upper_bound_correlation;
     std::vector<std::vector<T>> central_bound_correlation;
+
+    std::vector<std::vector<T>> lower_bound_derivative_correlation;
+    std::vector<std::vector<T>> upper_bound_derivative_correlation;
+    std::vector<std::vector<T>> central_bound_derivative_correlation;
+
     std::vector<std::vector<T>> derivatives_matrix;
     std::vector<T> mean_parameter_values;
 
@@ -319,15 +328,19 @@ public:
 
         // covariance
         this->lower_bound_covariance = this->CovarianceMatrix(this->parameter_sets[0]);
+        this->lower_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[0]);
         this->central_bound_covariance = this->CovarianceMatrix(this->parameter_sets[static_cast<size_t>(this->parameter_sets.size() / 2.0)]);
+        this->central_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[static_cast<size_t>(this->parameter_sets.size() / 2.0)]);
         this->upper_bound_covariance = this->CovarianceMatrix(this->parameter_sets[static_cast<size_t>(this->parameter_sets.size() - 1)]);
-
+        this->upper_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[static_cast<size_t>(this->parameter_sets.size() - 1)]);
         std::cout << "done.\nComputing Correlation..." << std::flush;
         // correlations
         this->lower_bound_correlation = this->CorrelationMatrix(this->lower_bound_covariance);
+        this->lower_bound_derivative_correlation = this->CorrelationMatrix(this->lower_bound_derivative_covariance);
         this->central_bound_correlation = this->CorrelationMatrix(this->central_bound_covariance);
+        this->central_bound_derivative_correlation = this->CorrelationMatrix(this->central_bound_derivative_covariance);
         this->upper_bound_correlation = this->CorrelationMatrix(this->upper_bound_covariance);
-
+        this->upper_bound_derivative_correlation = this->CorrelationMatrix(this->upper_bound_derivative_covariance);
         this->end_time = std::chrono::system_clock::now();
         this->runtime = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
         std::cout << "done.\n";

@@ -91,5 +91,5 @@ dirichlet_study$addStudy(dirichlet_saturated$getId())
 
 print(dirichlet_study$runAnalysis())
 
-dirichlet_linear_results <- dirichlet_linear$getResults()
-dirichlet_linear_results$DerivativesMatrix
+dirichlet_linear_results <- dirichlet_saturated$getResults()
+dirichlet_linear_results$CentralBoundsDeriviativeCorrelation

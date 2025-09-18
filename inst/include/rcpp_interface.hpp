@@ -102,13 +102,13 @@ uint32_t DirichletStudyComponentBase::next_id = 1;
 class DirichletDefaultInterface : public DirichletStudyComponentBase
 {
 public:
-    std::shared_ptr<Dirichlet_Default<double> > dirichlet_default;
+    std::shared_ptr<Dirichlet_Default<double>> dirichlet_default;
 
     DirichletDefaultInterface() : DirichletStudyComponentBase()
     {
         this->id = next_id++;
         instances[this->id] = this;
-        this->dirichlet_default = std::make_shared<Dirichlet_Default<double> >();
+        this->dirichlet_default = std::make_shared<Dirichlet_Default<double>>();
     }
     virtual ~DirichletDefaultInterface()
     {
@@ -148,7 +148,6 @@ public:
             derivative_stochasticity.push_back(it->second);
         }
 
-
         // Placeholder for returning results
         // This would typically return the results of the analysis.
         return Rcpp::List::create(
@@ -158,6 +157,14 @@ public:
             Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_default->lower_bound_correlation),
             Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_default->upper_bound_correlation),
             Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_default->central_bound_correlation),
+            
+            Rcpp::Named("LowerBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_default->lower_bound_derivative_covariance),
+            Rcpp::Named("UpperBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_default->upper_bound_derivative_covariance),
+            Rcpp::Named("CentralBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_default->central_bound_derivative_covariance),
+            Rcpp::Named("LowerBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_default->lower_bound_derivative_correlation),
+            Rcpp::Named("UpperBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_default->upper_bound_derivative_correlation),
+            Rcpp::Named("CentralBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_default->central_bound_derivative_correlation),
+
             Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_default->mean_parameter_values),
             Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_default->derivatives_matrix),
             Rcpp::Named("Name") = dirichlet_default->name,
@@ -235,7 +242,6 @@ public:
             derivative_stochasticity.push_back(it->second);
         }
 
-
         // Placeholder for returning results
         // This would typically return the results of the analysis.
         return Rcpp::List::create(
@@ -245,6 +251,14 @@ public:
             Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->lower_bound_correlation),
             Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->upper_bound_correlation),
             Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_linear->central_bound_correlation),
+
+            Rcpp::Named("LowerBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_linear->lower_bound_derivative_covariance),
+            Rcpp::Named("UpperBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_linear->upper_bound_derivative_covariance),
+            Rcpp::Named("CentralBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_linear->central_bound_derivative_covariance),
+            Rcpp::Named("LowerBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_linear->lower_bound_derivative_correlation),
+            Rcpp::Named("UpperBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_linear->upper_bound_derivative_correlation),
+            Rcpp::Named("CentralBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_linear->central_bound_derivative_correlation),
+
             Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_linear->mean_parameter_values),
             Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_linear->derivatives_matrix),
             Rcpp::Named("Name") = dirichlet_linear->name,
@@ -268,7 +282,7 @@ class DirichletSaturatedInterface : public DirichletStudyComponentBase
 {
 public:
     std::shared_ptr<Dirichlet_Saturated<double>> dirichlet_saturated;
-    double theta = 1.0;
+    double beta = 1.0;
 
     DirichletSaturatedInterface() : DirichletStudyComponentBase()
     {
@@ -303,7 +317,7 @@ public:
     {
         this->makeInputValues();
         dirichlet_saturated->input_values = this->fa_input_values;
-        // dirichlet_saturated->theta = this->theta;
+        dirichlet_saturated->beta = this->beta;
         dirichlet_saturated->build_parameter_sets = false;
         dirichlet_saturated->Initialize();
         dirichlet_saturated->Analyze();
@@ -322,7 +336,6 @@ public:
             derivative_stochasticity.push_back(it->second);
         }
 
-
         // Placeholder for returning results
         // This would typically return the results of the analysis.
         return Rcpp::List::create(
@@ -332,6 +345,14 @@ public:
             Rcpp::Named("LowerBoundsCorrelation") = this->ToRcppMatrix(dirichlet_saturated->lower_bound_correlation),
             Rcpp::Named("UpperBoundsCorrelation") = this->ToRcppMatrix(dirichlet_saturated->upper_bound_correlation),
             Rcpp::Named("CentralBoundsCorrelation") = this->ToRcppMatrix(dirichlet_saturated->central_bound_correlation),
+            
+            Rcpp::Named("LowerBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_saturated->lower_bound_derivative_covariance),
+            Rcpp::Named("UpperBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_saturated->upper_bound_derivative_covariance),
+            Rcpp::Named("CentralBoundsDeriviativeCovariance") = this->ToRcppMatrix(dirichlet_saturated->central_bound_derivative_covariance),
+            Rcpp::Named("LowerBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_saturated->lower_bound_derivative_correlation),
+            Rcpp::Named("UpperBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_saturated->upper_bound_derivative_correlation),
+            Rcpp::Named("CentralBoundsDeriviativeCorrelation") = this->ToRcppMatrix(dirichlet_saturated->central_bound_derivative_correlation),
+
             Rcpp::Named("MeanParameterValues") = this->ToRcppVector(dirichlet_saturated->mean_parameter_values),
             Rcpp::Named("DerivativesMatrix") = this->ToRcppMatrix(dirichlet_saturated->derivatives_matrix),
             Rcpp::Named("Name") = dirichlet_saturated->name,
