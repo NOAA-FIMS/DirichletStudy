@@ -11,7 +11,7 @@
 ## (iii) linear constraint on input sample size theta
 ##
 ## Output files:
-##  - CSV: "dm_rmse_simplex_mesh.csv"
+##  - CSV: "DM_rmse_All_3_simplex.csv"
 ##  - Plots: 
 ##    "rmse_i_ternary.png","rmse_ii_ternary.png", "rmse_iii_ternary.png"
 ##
