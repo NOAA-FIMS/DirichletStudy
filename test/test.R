@@ -10,11 +10,11 @@
 
 library(DirichletStudy)
 
-# Load required package
-if (!requireNamespace("ggtern", quietly = TRUE)) {
-  install.packages("ggtern")
-}
-library(ggtern)  # for ternary plot
+# # Load required package
+# if (!requireNamespace("ggtern", quietly = TRUE)) {
+#   install.packages("ggtern")
+# }
+# library(ggtern)  # for ternary plot
 
 # Prompt user for number of categories (K), number of samples (n), and alpha parameters
 K <- as.integer(readline(prompt = "Enter the number of categories K (must be 3 for plotting): "))
@@ -85,8 +85,11 @@ dirichlet_linear <- new(DirichletLinearInterface)
 dirichlet_linear$setSimplexData(dirichlet_samples)
 dirichlet_study$addStudy(dirichlet_linear$getId())
 
-dirichlet_fisch <- new(DirichletFischInterface)
-dirichlet_fisch$setSimplexData(dirichlet_samples)
-dirichlet_study$addStudy(dirichlet_fisch$getId())
+dirichlet_saturated <- new(DirichletSaturatedInterface)
+dirichlet_saturated$setSimplexData(dirichlet_samples)
+dirichlet_study$addStudy(dirichlet_saturated$getId())
 
 print(dirichlet_study$runAnalysis())
+
+dirichlet_linear_results <- dirichlet_saturated$getResults()
+dirichlet_linear_results$CentralBoundsDeriviativeCorrelation

@@ -98,10 +98,19 @@ public:
     std::vector<std::vector<T>> upper_bound_covariance;
     std::vector<std::vector<T>> central_bound_covariance;
 
+    std::vector<std::vector<T>> lower_bound_derivative_covariance;
+    std::vector<std::vector<T>> upper_bound_derivative_covariance;
+    std::vector<std::vector<T>> central_bound_derivative_covariance;
+
     std::vector<std::vector<T>> lower_bound_correlation;
     std::vector<std::vector<T>> upper_bound_correlation;
     std::vector<std::vector<T>> central_bound_correlation;
 
+    std::vector<std::vector<T>> lower_bound_derivative_correlation;
+    std::vector<std::vector<T>> upper_bound_derivative_correlation;
+    std::vector<std::vector<T>> central_bound_derivative_correlation;
+
+    std::vector<std::vector<T>> derivatives_matrix;
     std::vector<T> mean_parameter_values;
 
     bool write_values = true;
@@ -158,7 +167,6 @@ public:
 
         parameter_set_min.resize(this->parameters.size());
         parameter_set_max.resize(this->parameters.size());
-
         std::cout << this->parameters.size() << " parameters registered for analysis.\n";
 
         Variable::tape.recording = false;
@@ -221,6 +229,7 @@ public:
         {
             this->mean_parameter_values[i] /= static_cast<T>(this->parameter_sets.size());
         }
+        this->derivatives_matrix.resize(this->parameter_sets.size(), std::vector<T>(0));
 
         Variable::tape.recording = true;
         std::cout << "Running Infinitesimal Analysis..." << std::endl;
@@ -275,6 +284,7 @@ public:
             {
 
                 this->derivatives[this->parameters[p]->info->id].push_back(Variable::tape.Value(this->parameters[p]->info->id));
+                this->derivatives_matrix[i].push_back(Variable::tape.Value(this->parameters[p]->info->id));
             }
         }
         this->Progress(1.0);
@@ -318,15 +328,19 @@ public:
 
         // covariance
         this->lower_bound_covariance = this->CovarianceMatrix(this->parameter_sets[0]);
+        this->lower_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[0]);
         this->central_bound_covariance = this->CovarianceMatrix(this->parameter_sets[static_cast<size_t>(this->parameter_sets.size() / 2.0)]);
+        this->central_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[static_cast<size_t>(this->parameter_sets.size() / 2.0)]);
         this->upper_bound_covariance = this->CovarianceMatrix(this->parameter_sets[static_cast<size_t>(this->parameter_sets.size() - 1)]);
-
+        this->upper_bound_derivative_covariance = this->CovarianceMatrix(this->derivatives_matrix[static_cast<size_t>(this->parameter_sets.size() - 1)]);
         std::cout << "done.\nComputing Correlation..." << std::flush;
         // correlations
         this->lower_bound_correlation = this->CorrelationMatrix(this->lower_bound_covariance);
+        this->lower_bound_derivative_correlation = this->CorrelationMatrix(this->lower_bound_derivative_covariance);
         this->central_bound_correlation = this->CorrelationMatrix(this->central_bound_covariance);
+        this->central_bound_derivative_correlation = this->CorrelationMatrix(this->central_bound_derivative_covariance);
         this->upper_bound_correlation = this->CorrelationMatrix(this->upper_bound_covariance);
-
+        this->upper_bound_derivative_correlation = this->CorrelationMatrix(this->upper_bound_derivative_covariance);
         this->end_time = std::chrono::system_clock::now();
         this->runtime = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
         std::cout << "done.\n";
@@ -439,7 +453,7 @@ public:
             this->WriteValues();
         }
 
-        this->ClearData();
+        // this->ClearData();
     }
 
     void WriteValues()
