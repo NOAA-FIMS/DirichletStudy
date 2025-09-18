@@ -35,16 +35,24 @@
 ## effect, with estimated marginal means for pairwise contrasts.
 
 ## ---- packages --------------------------------------------------------------
-if (!requireNamespace("ggtern", quietly = TRUE)) install.packages("ggtern")
-suppressPackageStartupMessages({
-  library(ggplot2)
-  library(ggtern)
-  library(patchwork)
-  library(lme4)
-  library(lmerTest)
-  library(emmeans)
-  library(glue)
-})
+suppressWarnings(suppressPackageStartupMessages(
+  library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)
+))
+suppressWarnings(suppressPackageStartupMessages(
+  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)
+))
+suppressWarnings(suppressPackageStartupMessages(
+  library(patchwork, quietly = TRUE, warn.conflicts = FALSE)
+))
+suppressWarnings(suppressPackageStartupMessages(
+  library(lme4, quietly = TRUE, warn.conflicts = FALSE)
+))
+suppressWarnings(suppressPackageStartupMessages(
+  library(lmerTest, quietly = TRUE, warn.conflicts = FALSE)
+))
+suppressWarnings(suppressPackageStartupMessages(
+  library(emmeans, quietly = TRUE, warn.conflicts = FALSE)
+))
 
 ## ---- simplex mesh (mk_simplex.r style) ------------------------------------
 mk_simplex <- function(h = 0.05, interior = TRUE) {
@@ -116,6 +124,12 @@ score_param_iii <- function(X, p, theta) {
 }
 
 rmse <- function(a, b) sqrt(mean((a - b)^2))
+
+logfile <- "DM_rmse_All_3_simplex.lst"
+## sink(logfile, split = TRUE)
+## sink(logfile, split = TRUE)
+sink(logfile, split = TRUE, type = "output")
+
 
 ## ---- simulation settings ---------------------------------------------------
 K <- 3
@@ -243,7 +257,7 @@ out$N_sizes <- N_str
 names(out) <- c("p1","p2","p3","rmse_i","rmse_ii","rmse_iii","Sample size by group")
 
 ## ---- write CSV -------------------------------------------------------------
-csv_path <- "dm_rmse_simplex_mesh.csv"
+csv_path <- "DM_rmse_All_3_simplex.csv"
 write.csv(out, csv_path, row.names = FALSE)
 message("Wrote: ", csv_path)
 
@@ -343,3 +357,5 @@ print(Rho_2_3)
 m <- lmer(rmse ~ method + (1 | id), data = df)
 print(anova(m))                               # overall method effect)
 print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
+
+on.exit(sink(), add = TRUE) 
