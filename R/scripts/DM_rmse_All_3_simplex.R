@@ -3,59 +3,53 @@
 ## Accuracy measure is the root mean square error of the
 ## estimated DM proportion based on a set of G independent
 ## samples from a single population with observed sample sizes
-## drawn from a loguniform(nmin, nmax) distribution
+## drawn from a log-uniform(nmin, nmax) distribution
 ## 
 ## The three Dirichlet multinomial forms are
 ## (i)   unconstrained concentration vector alpha
 ## (ii)  constrained total concentration alpha0
 ## (iii) linear constraint on input sample size theta
 ##
+## Input file:
+##  - txt: "DM_rmse_All_3_simplex.inp"
 ## Output files:
 ##  - CSV: "DM_rmse_All_3_simplex.csv"
-##  - Plots: 
-##    "rmse_i_ternary.png","rmse_ii_ternary.png", "rmse_iii_ternary.png"
+##  - Plots: "rmse_i_ternary.png","rmse_ii_ternary.png", "rmse_iii_ternary.png"
+##  - List: "DM_rmse_All_3_simplex.lst"
 ##
 ## Output to console tests of whether significant differences exist
-## Friedman test:** Tests whether the three RMSE distributions differ 
+## Friedman test: Tests whether the three RMSE distributions differ 
 ## overall across matched simplex points using a nonparametric 
 ## repeated-measures ANOVA.
-## Kendall’s W:** Quantifies the effect size from the Friedman test, 
+## Kendall’s W: Quantifies the effect size from the Friedman test, 
 ## indicating how consistently one method outperforms others across the grid (0–1 scale).
-## Pairwise Wilcoxon signed-rank (Holm-adjusted):** Pinpoints which 
+## Pairwise Wilcoxon signed-rank (Holm-adjusted): Pinpoints which 
 ## method pairs have significant RMSE differences while respecting the 
 ## within-point pairing and controlling familywise error.
-## Hodges–Lehmann median difference with 95% CI:** Estimates the 
+## Hodges–Lehmann median difference with 95% CI: Estimates the 
 ## typical magnitude and direction of RMSE change between each pair 
 ## of methods with robust confidence intervals.
-## Percent-change summaries (median, IQR):** Expresses practical 
+## Percent-change summaries (median, IQR): Expresses practical 
 ## impact as relative RMSE improvement/worsening between methods 
 ## across simplex points.
-## Mixed-effects model (optional parametric check):** Confirms results 
+## Mixed-effects model (optional parametric check): Confirms results 
 ## by modeling method as a fixed effect and simplex point as a random 
 ## effect, with estimated marginal means for pairwise contrasts.
 
 ## ---- packages --------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(
-  library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)
-))
+  library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
-  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)
-))
+  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
-  library(patchwork, quietly = TRUE, warn.conflicts = FALSE)
-))
+  library(lme4, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
-  library(lme4, quietly = TRUE, warn.conflicts = FALSE)
-))
+  library(lmerTest, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
-  library(lmerTest, quietly = TRUE, warn.conflicts = FALSE)
-))
-suppressWarnings(suppressPackageStartupMessages(
-  library(emmeans, quietly = TRUE, warn.conflicts = FALSE)
-))
+  library(emmeans, quietly = TRUE, warn.conflicts = FALSE)))
 
 ## ---- simplex mesh (mk_simplex.r style) ------------------------------------
-mk_simplex <- function(h = 0.05, interior = TRUE) {
+mk_simplex <- function(h, interior = TRUE) {
   M <- round(1 / h)
   out <- vector("list", (M + 1) * (M + 2) / 2)
   k <- 0L
@@ -132,13 +126,45 @@ sink(logfile, split = TRUE, type = "output")
 
 
 ## ---- simulation settings ---------------------------------------------------
-K <- 3
-G <- 4L
-theta_true <- 0.2
-Nmin  <- 25
-Nmax  <- 250
+# ---- Read parameters from DM_rmse_All_3_simplex.inp ----
+inp_path <- "DM_rmse_All_3_simplex.inp"
 
-set.seed(644)
+if (!file.exists(inp_path)) {
+  stop(sprintf("Input file '%s' not found. Create it first.", inp_path))
+}
+
+# Parse key=value pairs, ignore comments and blank lines
+tbl <- read.table(
+  file = inp_path,
+  sep = "=",
+  comment.char = "#",
+  strip.white = TRUE,
+  blank.lines.skip = TRUE,
+  col.names = c("key", "value"),
+  colClasses = c("character", "character")
+)
+
+kv <- setNames(tbl$value, tbl$key)
+
+# Set typed parameters
+K          <- as.integer(kv[["K"]])
+G          <- as.integer(kv[["G"]])
+h          <- as.numeric(kv[["h"]])
+theta_true <- as.numeric(kv[["theta_true"]])
+Nmin       <- as.integer(kv[["Nmin"]])
+Nmax       <- as.integer(kv[["Nmax"]])
+nsamples       <- as.integer(kv[["nsamples"]])
+random.seed       <- as.integer(kv[["random.seed"]])
+
+# basic validation
+if (any(is.na(c(K, G, h, theta_true, Nmin, Nmax, nsamples, random.seed)))) {
+  stop("One or more required parameters are missing or not numeric in the .inp file.")
+}
+if (Nmin > Nmax) stop("Nmin must be <= Nmax.")
+
+params <- list(K, G, h, theta_true, Nmin, Nmax, nsamples, random.seed)
+
+set.seed(random.seed)
 
 ## ---- mesh of p_true --------------------------------------------------------
 mesh <- mk_simplex(h = 0.02, interior = TRUE)  # exclude boundaries to keep α0 p_k > 0
@@ -262,7 +288,7 @@ write.csv(out, csv_path, row.names = FALSE)
 message("Wrote: ", csv_path)
 
 ## ---- ternary plots ---------------------------------------------------------
-
+if (K == 3) {
 rmse_min <- min(out$rmse_i,out$rmse_ii, out$rmse_iii, na.rm = TRUE)
 rmse_max <- max(out$rmse_i,out$rmse_ii, out$rmse_iii, na.rm = TRUE)
 
@@ -291,6 +317,8 @@ ggsave("rmse_iii_ternary.png", p_iii, width = 6, height = 5, dpi = 300)
 print(p_i)
 print(p_ii)
 print(p_iii)
+
+}
 
 n <- length(out$rmse_i)
 stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n)
