@@ -1,84 +1,108 @@
+$K
+[1] 3
+
+$G
+[1] 10
+
+$h
+[1] 0.025
+
+$theta_true
+[1] 0.3
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 500
+
+$nsamples
+[1] 1
+
+$random.seed
+[1] 1097
+
 
 	Friedman rank sum test
 
 data:  rmse and method and id
-Friedman chi-squared = 161.52, df = 2, p-value < 2.2e-16
+Friedman chi-squared = 127.11, df = 2, p-value < 2.2e-16
 
-Kendall's W ≈ 0.069
+Kendall's W ≈ 0.074
 
 	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
 
 data:  df$rmse and df$method 
 
-    i      ii    
-ii  <2e-16 -     
-iii <2e-16 <2e-16
+    i       ii     
+ii  9.0e-12 -      
+iii 1.9e-10 < 2e-16
 
 P value adjustment method: holm 
 
 	Wilcoxon signed rank test with continuity correction
 
 data:  wide$rmse.ii and wide$rmse.i
-V = 444957, p-value < 2.2e-16
+V = 236067, p-value = 4.479e-12
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- 0.003753472 0.005969333
+ 0.002707443 0.004783839
 sample estimates:
 (pseudo)median 
-   0.004848598 
+   0.003746727 
 
 
 	Wilcoxon signed rank test with continuity correction
 
 data:  wide$rmse.iii and wide$rmse.i
-V = 248825, p-value < 2.2e-16
+V = 139061, p-value = 1.914e-10
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- -0.002145446 -0.001321800
+ -0.0015693957 -0.0008268358
 sample estimates:
 (pseudo)median 
-  -0.001735245 
+  -0.001213425 
 
 
 	Wilcoxon signed rank test with continuity correction
 
 data:  wide$rmse.iii and wide$rmse.ii
-V = 180969, p-value < 2.2e-16
+V = 96192, p-value < 2.2e-16
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- -0.008200698 -0.006189769
+ -0.006536340 -0.004759809
 sample estimates:
 (pseudo)median 
-  -0.007197709 
+  -0.005638966 
 
          pct_ii_i  pct_iii_i pct_iii_ii
-median   25.74468  -6.742635  -27.21167
-IQR     132.04486  43.342072   75.37623
-q25.25% -29.06437 -28.529211  -54.74748
-q75.75% 102.98049  14.812861   20.62875
-[1] 0.2476148
-[1] -0.2433443
-[1] -0.4132029
+median   22.73357  -5.642886  -22.79813
+IQR     132.19204  38.864890   67.58040
+q25.25% -27.69661 -24.723245  -53.15507
+q75.75% 104.49543  14.141645   14.42534
+[1] 0.2358729
+[1] -0.217025
+[1] -0.4171722
 Type III Analysis of Variance Table with Satterthwaite's method
-        Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
-method 0.30773 0.15386     2  2350  32.763 9.249e-15 ***
+        Sum Sq Mean Sq NumDF DenDF F value   Pr(>F)    
+method 0.26416 0.13208     2  1720  23.141 1.21e-10 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 $emmeans
- method emmean      SE  df asymp.LCL asymp.UCL
- i      0.0368 0.00202 Inf    0.0328    0.0407
- ii     0.0433 0.00202 Inf    0.0393    0.0472
- iii    0.0210 0.00202 Inf    0.0171    0.0250
+ method emmean      SE   df lower.CL upper.CL
+ i      0.0395 0.00259 2579   0.0344   0.0446
+ ii     0.0387 0.00259 2579   0.0336   0.0437
+ iii    0.0176 0.00259 2579   0.0125   0.0227
 
-Degrees-of-freedom method: asymptotic 
+Degrees-of-freedom method: kenward-roger 
 Confidence level used: 0.95 
 
 $contrasts
- contrast estimate      SE  df z.ratio p.value
- i - ii   -0.00653 0.00283 Inf  -2.311  0.0208
- i - iii   0.01572 0.00283 Inf   5.563  <.0001
- ii - iii  0.02225 0.00283 Inf   7.874  <.0001
+ contrast estimate      SE   df t.ratio p.value
+ i - ii   0.000835 0.00364 1720   0.229  0.8187
+ i - iii  0.021858 0.00364 1720   6.003  <.0001
+ ii - iii 0.021023 0.00364 1720   5.774  <.0001
 
-Degrees-of-freedom method: asymptotic 
+Degrees-of-freedom method: kenward-roger 
 P value adjustment: holm method for 3 tests 
 

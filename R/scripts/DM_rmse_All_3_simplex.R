@@ -40,30 +40,120 @@
 suppressWarnings(suppressPackageStartupMessages(
   library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
-  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
-suppressWarnings(suppressPackageStartupMessages(
   library(lme4, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
   library(lmerTest, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
   library(emmeans, quietly = TRUE, warn.conflicts = FALSE)))
 
-## ---- simplex mesh (mk_simplex.r style) ------------------------------------
-mk_simplex <- function(h, interior = TRUE) {
-  M <- round(1 / h)
-  out <- vector("list", (M + 1) * (M + 2) / 2)
-  k <- 0L
-  for (i in 0:M) for (j in 0:(M - i)) {
-    k3 <- M - i - j
-    if (interior && (i == 0 || j == 0 || k3 == 0)) next
-    k <- k + 1L
-    out[[k]] <- c(i, j, k3) / M
+## ---- simplex functions ----------------------------------------------------  
+
+## ---- generate K compositions of N------------------------------------------
+# nexcom(N, K) outputs a list containing the set of compositions
+#              of the integer N into K parts. The composition list
+#              is ordered lexicographically from the first composition
+#              of P[first] = (N, 0, 0, ..., 0) to the last composition
+#              of P[last] = (0, 0, 0, ..., N)
+#
+# function nexcom.step
+# nexcom.step(N, K, P, MTC, I, J) returns the next K-dimensional composition 
+#                                 vector of N, P[next], given the current 
+#                                 composition vector of N, P[current].
+# function arguments are:
+#	N - The positive integer to compose into K parts.
+#	K - The positive  integer number of parts, or categories in a composition vector. 
+#	P - The current composition vector in the lexicographic set of all vectors.
+#	MTC	- The logical flag indicating if the set of compositions of N is not complete
+#       as in an acronym for "More To Come".
+#   If MTC = TRUE, then the current composition is not the last composition
+#                  in the lexicographic set of all vectors.
+#		If MTC = FALSE, then the current composition is the last composition.
+#	I - An index variable.
+#	J - An index variable.
+#
+# returns - A list containing (P, MTC, I, J).
+#
+nexcom.step <- function (N, K, P, MTC, I, J) {
+  
+  if (MTC == FALSE) {
+    P[1] <- N
+    I <- N
+    J <- 0	
+    if (K != 1) {
+      for (ii in 2:K) {
+        P[ii] <- 0
+      }
+      MTC <- (P[K] != N)
+      return(list(P = P, MTC = MTC, I = I, J = J))
+    }
   }
-  do.call(rbind, out[seq_len(k)])
+  if (I > 1) J <- 0
+  J <- J + 1
+  I <- P[J]
+  P[J] <- 0
+  P[1] <- I - 1
+  P[J + 1] <- P[J + 1] + 1
+  MTC <- (P[K] != N)
+  return(list(P = P, MTC = MTC, I = I, J = J))
+}
+
+# function nexcom
+# nexcom() is the wrapper function that calls nexcom.step to step through
+# the set of lexicographically-ordered K-compositions of N.
+#
+# function arguments are:
+#	N - The positive integer to compose into K parts.
+#	K - The number of parts of N, or categories in the composition. 
+#
+# returns - A data frame containing all possible K-part compositions of N.
+#
+nexcom <- function (N, K) {
+  
+  rn.comp <- nexcom.step(N, K, P = integer(K), MTC = FALSE, I = 0, J = 0)
+  df.comp <- data.frame(P = rbind(rn.comp$P)) 
+  
+  ii <- 0
+  while(rn.comp$MTC == TRUE) {
+    rn.comp <- nexcom.step(N, K, P = rn.comp$P, MTC = rn.comp$MTC, I = rn.comp$I, J = rn.comp$J)
+    df.comp <- rbind(df.comp, data.frame(P = rbind(rn.comp$P)))
+    ii <- ii + 1
+  }
+  return(df.comp)
+}
+
+# --- mk_simplex() using nexcom(N, K) ----------------------------------------
+# Inputs:
+#   K : integer >= 2
+#   h : numeric with 0 < h < 1/K
+# Output:
+#   Matrix with K columns (p1..pK), rows sum to 1.
+#   attr(., "mesh_size") = 1/N, where N = ceiling(1/h).
+mk_simplex <- function(K, h) {
+  # validate
+  if (!is.numeric(K) || length(K) != 1 || K != as.integer(K) || K < 2)
+    stop("K must be a single integer >= 2.")
+  if (!is.numeric(h) || length(h) != 1 || !(h > 0) || !(h < 1 / K))
+    stop("h must be a single numeric with 0 < h < 1/K.")
+  
+  # choose grid so effective step <= h
+  N <- as.integer(ceiling(1 / h))
+  if (N < 1L) N <- 1L
+  h_eff <- 1 / N
+  
+  # all K-part compositions of N (nonnegative integers summing to N)
+  # nexcom(N, K) returns an N x K integer data frame
+  ints <- nexcom(N, K)
+  
+  # scale to the open simplex and convert df to matrix
+  simplex <- (ints + 1) / (N + K)
+  simplex <- as.matrix(simplex)
 }
 
 ## ---- utilities -------------------------------------------------------------
 softmax_from_z <- function(z) { v <- c(z, 0); ev <- exp(v - max(v)); ev / sum(ev) }
+
+logfile <- "DM_rmse_All_3_simplex.lst"
+sink(logfile, split = TRUE, type = "output")
 
 dm_loglik_group <- function(x, p, a0) {
   N <- sum(x)
@@ -72,17 +162,17 @@ dm_loglik_group <- function(x, p, a0) {
 
 # scores (i)
 score_param_i <- function(t, X) {
-  alpha <- exp(t)
-  a0    <- sum(alpha)
-  g_alpha <- rep(0.0, length(alpha))
+  alpha_vec <- exp(t)
+  a0    <- sum(alpha_vec)
+  g_alpha <- rep(0.0, length(alpha_vec))
   for (g in 1:G) {
     xg <- X[g, ]
     Ng <- sum(xg)
     common <- digamma(a0) - digamma(Ng + a0)         # scalar
     g_alpha <- g_alpha +
-      common + (digamma(xg + alpha) - digamma(alpha))# vector add
+      common + (digamma(xg + alpha_vec) - digamma(alpha_vec))# vector add
   }
-  g_t <- alpha * g_alpha
+  g_t <- alpha_vec * g_alpha
   -g_t   # gradient of nll
 }
 
@@ -118,12 +208,6 @@ score_param_iii <- function(X, p, theta) {
 }
 
 rmse <- function(a, b) sqrt(mean((a - b)^2))
-
-logfile <- "DM_rmse_All_3_simplex.lst"
-## sink(logfile, split = TRUE)
-## sink(logfile, split = TRUE)
-sink(logfile, split = TRUE, type = "output")
-
 
 ## ---- simulation settings ---------------------------------------------------
 # ---- Read parameters from DM_rmse_All_3_simplex.inp ----
@@ -162,15 +246,16 @@ if (any(is.na(c(K, G, h, theta_true, Nmin, Nmax, nsamples, random.seed)))) {
 }
 if (Nmin > Nmax) stop("Nmin must be <= Nmax.")
 
-params <- list(K, G, h, theta_true, Nmin, Nmax, nsamples, random.seed)
+params <- list(K = K, G = G, h = h, theta_true = theta_true, Nmin = Nmin, 
+               Nmax = Nmax, nsamples = nsamples, random.seed = random.seed)
 
 set.seed(random.seed)
 
-## ---- mesh of p_true --------------------------------------------------------
-mesh <- mk_simplex(h = 0.02, interior = TRUE)  # exclude boundaries to keep α0 p_k > 0
+## ---- mesh of p_true -------------------------------------------------------
+mesh <- mk_simplex(K, h)
 nmesh <- nrow(mesh)
 
-## Vary N_g over orders of magnitude (kept fixed across mesh points for comparability)
+## Vary N_g over orders of magnitude
 N_vec <- matrix(
   round(exp(runif(nmesh * G, log(Nmin), log(Nmax)))),
   nrow = nmesh, ncol = G, byrow = TRUE
@@ -182,27 +267,27 @@ run_one <- function(p_true,N_row) {
   X <- matrix(0L, nrow = G, ncol = K)
   for (g in 1:G) {
     a0g <- theta_true * N_row[g]
-    alpha <- a0g * p_true
-    phi <- rgamma(K, shape = alpha); phi <- phi / sum(phi)
+    alpha_vec <- a0g * p_true
+    phi <- rgamma(K, shape = alpha_vec, rate = 1); phi <- phi / sum(phi)
     X[g, ] <- as.vector(rmultinom(1, size = N_row[g], prob = phi))
   }
  
-## MLE (i): unconstrained alpha (shared across groups) -------------------
-## Start at alpha = alpha0 * p_init with a small positive floor
+## MLE (i): unconstrained alpha_vec (shared across groups) -------------------
+## Start at alpha_vec = alpha0 * p_init with a small positive floor
 alpha0_init <- 1.0
 pooled <- colSums(X); p_init <- pmax(pooled, 1) / sum(pmax(pooled, 1))
-t0_i <- log(pmax(alpha0_init * p_init, 1e-4))   # t = log(alpha), length K
+t0_i <- log(pmax(alpha0_init * p_init, 1e-4))   # t = log(alpha_vec), length K
 
 ## Negative joint log-likelihood for (i)
 nll_i <- function(t,X) {
-  alpha <- exp(t)                 # length K
-  a0    <- sum(alpha)
+  alpha_vec <- exp(t)                 # length K
+  a0    <- sum(alpha_vec)
   # Sum over groups
   -sum(vapply(1:G, function(g) {
     xg <- X[g, ]
     Ng <- sum(xg)
     lgamma(a0) - lgamma(Ng + a0) +
-      sum(lgamma(xg + alpha) - lgamma(alpha))
+      sum(lgamma(xg + alpha_vec) - lgamma(alpha_vec))
   }, 0.0))
 }
  
@@ -289,6 +374,10 @@ message("Wrote: ", csv_path)
 
 ## ---- ternary plots ---------------------------------------------------------
 if (K == 3) {
+  
+suppressWarnings(suppressPackageStartupMessages(
+  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
+  
 rmse_min <- min(out$rmse_i,out$rmse_ii, out$rmse_iii, na.rm = TRUE)
 rmse_max <- max(out$rmse_i,out$rmse_ii, out$rmse_iii, na.rm = TRUE)
 
@@ -300,13 +389,13 @@ p_i <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_i)) +
 
 p_ii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_ii)) +
   geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(i) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=beta)", G, theta_true), colour = "RMSE") +
+  labs(title = sprintf("(ii) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=beta)", G, theta_true), colour = "RMSE") +
   scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
   theme_bw()
 
 p_iii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_iii)) +
   geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(i) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=θ*N)", G, theta_true), colour = "RMSE") +
+  labs(title = sprintf("(iii) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=θ*N)", G, theta_true), colour = "RMSE") +
     scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
   theme_bw()
 
@@ -319,6 +408,8 @@ print(p_ii)
 print(p_iii)
 
 }
+
+print(params)
 
 n <- length(out$rmse_i)
 stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n)
