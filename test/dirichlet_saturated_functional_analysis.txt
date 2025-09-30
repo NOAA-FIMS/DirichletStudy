@@ -1,0 +1,63 @@
+Name: dirichlet_saturated
+Description:
+Functional analysis of the Saturated Dirichlet distribution.
+
+Run time(seconds): 0
+Number of parameter sets: 200
+Number of parameters per set: 3
+Parameter Range: 
+p0             1e-05  -   1   
+p1             1e-05  -   1   
+p2             1e-05  -   1   
+Min function value: -11.5631
+Max function value: -7.42908
+Parameter Set for Min function value: 
+p0	0.595
+p1	0.385
+p2	0.02
+Parameter Set for Max function value: 
+p0	0.4
+p1	0.325
+p2	0.275
+Infinitesimal Step: 
+p0	0.1
+p1	0.1
+p2	0.1
+Function is Continuous: TRUE
+Function Stochasticity: 0.599396
+Derivative Stochasticity of "p0": 0.701412,	[ 3.35441 : 5.87938 ]
+Derivative Stochasticity of "p1": 1.7343,	[ 4.51581 : 14.8736 ]
+Derivative Stochasticity of "p2": 1.49953,	[ 4.45999 : 197.437 ]
+
+Covariance:
+lower bounds:
+-1.995940e-01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.019791e-01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.598950e-02    
+
+central bounds:
+-2.567576e-01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -4.960472e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -2.309804e-02    
+
+upper bounds:
+-2.806920e-01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -9.903441e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.013562e-03    
+
+
+Correlation:
+lower bounds:
+-5.010170e+00    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -9.805934e+00    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -6.254104e+01    
+
+central bounds:
+-3.894724e+00    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -2.015937e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -4.329372e+01    
+
+upper bounds:
+-3.562624e+00    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.009750e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -9.866195e+02    

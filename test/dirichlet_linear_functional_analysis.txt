@@ -1,0 +1,63 @@
+Name: dirichlet_linear
+Description:
+Functional analysis of the Linear Dirichlet distribution.
+
+Run time(seconds): 0
+Number of parameter sets: 200
+Number of parameters per set: 3
+Parameter Range: 
+p0             1e-05  -   1   
+p1             1e-05  -   1   
+p2             1e-05  -   1   
+Min function value: -11.3306
+Max function value: -4.21662
+Parameter Set for Min function value: 
+p0	0.775
+p1	0.195
+p2	0.03
+Parameter Set for Max function value: 
+p0	0.365
+p1	0.475
+p2	0.16
+Infinitesimal Step: 
+p0	0.1
+p1	0.1
+p2	0.1
+Function is Continuous: TRUE
+Function Stochasticity: 0.566724
+Derivative Stochasticity of "p0": 0.687761,	[ 10.9289 : 23.3175 ]
+Derivative Stochasticity of "p1": 1.32046,	[ 20.2553 : 55.3352 ]
+Derivative Stochasticity of "p2": 0.733299,	[ 11.724 : 95.2132 ]
+
+Covariance:
+lower bounds:
+-3.885511e-02    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.854254e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -8.505181e-03    
+
+central bounds:
+-4.909207e-02    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.143481e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.084447e-02    
+
+upper bounds:
+-5.350190e-02    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -1.815543e-02    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.677538e-03    
+
+
+Correlation:
+lower bounds:
+-2.573664e+01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -5.393006e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -1.175754e+02    
+
+central bounds:
+-2.036989e+01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -8.745225e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -9.221291e+01    
+
+upper bounds:
+-1.869093e+01    -0.000000e+00    -0.000000e+00    
+-0.000000e+00    -5.507994e+01    -0.000000e+00    
+-0.000000e+00    -0.000000e+00    -5.961116e+02    
