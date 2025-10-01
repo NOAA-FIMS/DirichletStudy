@@ -360,12 +360,35 @@ res_mat <- do.call(
     run_one(p_true = mesh[i, ], N_row = N_vec[i, ])
   })
 )
+# Replace your block with this:
+
 out <- as.data.frame(res_mat)
-# N_str <- paste(N_vec, collapse = "-")
-# out$N_vec <- N_str
-N_str <- apply(N_vec, 1, function(v) paste(v, collapse = "-"))
-out$N_sizes <- N_str
-names(out) <- c("p1","p2","p3","rmse_i","rmse_ii","rmse_iii","Sample size by group")
+
+# K = number of true proportions assumed to be the first K columns of res_mat
+K <- ncol(out) - 3L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii)
+
+# Ensure N_vec is a matrix with one row per simulation and G columns (groups)
+N_mat <- if (is.null(dim(N_vec))) {
+  matrix(N_vec, nrow = nrow(out), byrow = TRUE)
+} else {
+  N_vec
+}
+
+# Coerce sample sizes to integers (safe rounding, then integer cast)
+N_int <- matrix(as.integer(round(N_mat)),
+                nrow = nrow(N_mat),
+                ncol = ncol(N_mat))
+colnames(N_int) <- paste0("N", seq_len(ncol(N_int)))  # N1..NG
+
+# Bind G sample-size columns to out
+out <- cbind(out, N_int)
+
+# Name the existing columns for proportions and RMSEs
+colnames(out)[seq_len(K)] <- paste0("p", seq_len(K))
+colnames(out)[K + seq_len(3)] <- c("rmse_i","rmse_ii","rmse_iii")
+
+# Write CSV (no row names)
+# write.csv(out, file = "DM_rmse_by_simulation.csv", row.names = FALSE)
 
 ## ---- write CSV -------------------------------------------------------------
 csv_path <- "DM_rmse_All_3_simplex.csv"
@@ -477,4 +500,5 @@ m <- lmer(rmse ~ method + (1 | id), data = df)
 print(anova(m))                               # overall method effect)
 print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
 
-on.exit(sink(), add = TRUE) 
+on.exit(sink()) 
+# on.exit(sink(), add = TRUE) 
