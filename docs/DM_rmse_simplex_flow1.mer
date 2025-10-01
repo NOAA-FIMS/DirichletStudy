@@ -1,0 +1,23 @@
+flowchart TD
+  Start("Start: Simulate G samples 
+  of categorical data from a Dirichlet Multinomial
+  distribution at each point in the proportion simplex
+  with fixed theta and log-uniform samples sizes 📊")
+  FitModels{"Fit 3 parameterizations of Dirichlet Multinomial
+  to the simulated categorical data"}
+  Estimation("Estimate proportion parameters for each form
+  at each simulated point in the proportion simplex")
+  RMSE("Compute RMSE at each point for accuracy comparison ⚖️")
+  Results("Summarize RMSE results")
+  Plots("Generate ternary RMSE plots 📈")
+  Stats("Statistics and additional metrics")
+  Output("Output results & visualizations 📂")
+
+  Start-->FitModels
+  FitModels-->Estimation
+  Estimation-->RMSE
+  RMSE-->Results
+  Results-->Plots
+  Results-->Stats
+  Stats-->Output
+  Plots-->Output
