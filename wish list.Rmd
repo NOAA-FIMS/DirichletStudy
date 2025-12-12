@@ -1,0 +1,31 @@
+---
+title: "FA calculation wish list"
+author: "Jon Brodziak"
+date: "2025-12-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Functional analysis calculation wish list
+
+- Read in and process a simplex file with 3 proportions (2-D simplex with sum to 1 constraint)
+  + Read in and process a simplex file with N proportions
+- More general output structure to write flat file with rows
+being simplex points with calculated outputs
+- Function outputs for each point in the simplex
+  + loglikelihood
+  + continuity
+  + stochasticity
+  + stochasticity derivatives
+  + other outputs already calculated  
+- Other new output
+  + divergence of the function gradient at a point  
+- Checks
+  + Correlations calculated in one test run were outside 
+  of the interval [-1,1]
+  + Covariance calculation 
+
+

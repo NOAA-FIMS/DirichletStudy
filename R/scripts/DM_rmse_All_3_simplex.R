@@ -1,4 +1,5 @@
 ## file = DM_rmse_All_3_simplex.R
+## C:\Users\Jon.Brodziak\Documents\GitHub\DirichletStudy\R\scripts
 ## Compare accuracy of 3 DM forms over a K=3 simplex mesh
 ## Accuracy measure is the root mean square error of the
 ## estimated DM proportion based on a set of G independent
