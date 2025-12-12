@@ -1,15 +1,15 @@
 ---
-title: "Functional analysis calculation wish list"
-author: "Jon Brodziak"
+title: "Wish list for functional analysis package"
+author: "Jon Brodziak and Matthew Supernaw"
 date: "2025-12-12"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Functional analysis calculation wish list
+## Wish list for functional analysis package
 
 - Read in and process a simplex file with 3 proportions (2-D simplex with sum to 1 constraint)
   + Read in and process a simplex file with N proportions
