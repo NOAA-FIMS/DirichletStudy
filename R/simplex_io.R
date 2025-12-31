@@ -21,5 +21,6 @@ read_simplex_input<-functions(file){
 
   lines <- read.csv(file, header = FALSE, stringsAsFactors = FALSE)
 
+
   return(lines)
 }   
