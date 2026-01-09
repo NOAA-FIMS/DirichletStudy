@@ -1,5 +1,12 @@
 
 
+#' Sample from a 3D simplex using Dirichlet distribution
+sample_simplex_dirichlet <- function(n, alpha) {
+  stopifnot(length(alpha) == 3)
+  x <- matrix(rgamma(n * 3, shape = alpha), ncol = 3, byrow = TRUE)
+  x / rowSums(x)
+}
+
 read_simplex_input<-functions(file){
   #' Read Simplex Input File
   #'
