@@ -1,6 +1,7 @@
 ## file = hake3_ev1.R
 ## C:\Users\Jon.Brodziak\Documents\GitHub\DirichletStudy\HAKE
-## Compare accuracy of 3 DM forms and multinomial distribution
+## Compare accuracy of 3 DM forms (plus DML with estimated θ) 
+## and multinomial distribution
 ## based on RMSE over a K-dim simplex mesh
 ## Accuracy measure is the root mean square error of the
 ## estimated DM proportion based on a set of G independent
@@ -10,15 +11,16 @@
 ## The three Dirichlet multinomial forms and multinomial are
 ## (i)   unconstrained concentration vector alpha
 ## (ii)  constrained total concentration alpha0
-## (iii) linear constraint on input sample size theta
+## (iii) linear Dirichlet-multinomial (DML) with fixed scaling theta (alpha0_g = theta * N_g)
 ## (iv)  multinomial
+## (v)   linear Dirichlet-multinomial (DML) with freely estimated scaling theta (alpha0_g = theta * N_g)
 ##
 ## Input file:
 ##  - txt: "hake3_ev1.inp"
 ## Output files:
 ##  - CSV: "hake3_ev1.csv"
 ##  - Plots: "rmse_i_hake3_ev1.png","rmse_ii_hake3_ev1.png", "rmse_iii_hake3_ev1.png"
-##           and "rmse_iv_hake3_ev1.png"
+##           "rmse_iv_hake3_ev1.png", and "rmse_v_hake3_ev1.png"
 ##  - List: "hake3_ev1.lst"
 ##
 ## Output to console tests of whether significant differences exist
@@ -365,27 +367,46 @@ p_hat_i     <- alpha_hat_i / sum(alpha_hat_i)
     p_hat_ii <- softmax_from_z(zhat)
   }
   
-  ## MLE (iii): (p, theta), α0_g = θ N_g
-  nll_iii <- function(par) {
+  ## MLE (iii): (p), α0_g = θ_fixed * N_g  (linear DML with fixed scaling)
+  theta_fixed <- theta_true
+  nll_iii <- function(z) {
+    p <- softmax_from_z(z)
+    -sum(vapply(1:G, function(g)
+      dm_loglik_group(X[g,], p, theta_fixed * N_vec[g]), 0.0))
+  }
+  grad_iii <- function(z) {
+    p <- softmax_from_z(z)
+    sc <- score_param_iii(X, p, theta_fixed)
+    -sc$g_z
+  }
+  fit_iii <- try(optim(z0, nll_iii, grad_iii, method = "BFGS",
+                       control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  if (inherits(fit_iii, "try-error")) {
+    p_hat_iii <- rep(NA_real_, K)
+  } else {
+    p_hat_iii <- softmax_from_z(fit_iii$par)
+  }
+
+  ## MLE (v): (p, theta), α0_g = θ * N_g  (linear DML with freely estimated scaling)
+  nll_v <- function(par) {
     z <- par[1:(K-1)]; t <- par[K]
     p <- softmax_from_z(z); theta <- exp(t)
     -sum(vapply(1:G, function(g)
       dm_loglik_group(X[g,], p, theta * N_vec[g]), 0.0))
   }
-  grad_iii <- function(par) {
+  grad_v <- function(par) {
     z <- par[1:(K-1)]; t <- par[K]
     p <- softmax_from_z(z); theta <- exp(t)
     sc <- score_param_iii(X, p, theta)
     -c(sc$g_z, sc$g_t)
   }
-  fit_iii <- try(optim(c(z0, 0), nll_iii, grad_iii, method = "BFGS",
-                       control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
-  
-  if (inherits(fit_iii, "try-error")) {
-    p_hat_iii <- rep(NA_real_, K)
+  fit_v <- try(optim(c(z0, 0), nll_v, grad_v, method = "BFGS",
+                     control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  if (inherits(fit_v, "try-error")) {
+    p_hat_v <- rep(NA_real_, K)
   } else {
-    zhat <- fit_iii$par[1:(K-1)]
-    p_hat_iii <- softmax_from_z(zhat)
+    zhat <- fit_v$par[1:(K-1)]
+    p_hat_v <- softmax_from_z(zhat)
   }
   ## MLE (iv): multinomial with shared p across groups
   pooled <- colSums(X)
@@ -393,14 +414,15 @@ p_hat_i     <- alpha_hat_i / sum(alpha_hat_i)
   # Apply p_ubound filter (component-wise). If a point is out of bounds, keep the row
   # but mark RMSEs as NA to avoid dropping rows (and causing row-mismatch later).
   if (any(p_true > p_ubound)) {
-    return(c(p_true, rep(NA_real_, 4)))
+    return(c(p_true, rep(NA_real_, 5)))
   }
 
   rmse_i   = rmse(p_hat_i,   p_true)
   rmse_ii  = rmse(p_hat_ii,  p_true)
   rmse_iii = rmse(p_hat_iii, p_true)
   rmse_iv  = rmse(p_hat_iv,  p_true)
-  return(c(p_true,rmse_i,rmse_ii,rmse_iii,rmse_iv))
+  rmse_v   = rmse(p_hat_v,   p_true)
+  return(c(p_true,rmse_i,rmse_ii,rmse_iii,rmse_iv,rmse_v))
 }
 
 
@@ -415,7 +437,7 @@ res_mat <- do.call(
 out <- as.data.frame(res_mat)
 
 # K = number of true proportions assumed to be the first K columns of res_mat
-K <- ncol(out) - 4L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii, rmse_iv)
+K <- ncol(out) - 5L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii, rmse_iv, rmse_v)
 
 # Ensure N_vec is a matrix with one row per simulation and G columns (groups)
 N_mat <- if (is.null(dim(N_vec))) {
@@ -435,7 +457,7 @@ out <- cbind(out, N_int)
 
 # Name the existing columns for proportions and RMSEs
 colnames(out)[seq_len(K)] <- paste0("p", seq_len(K))
-colnames(out)[K + seq_len(4)] <- c("rmse_i","rmse_ii","rmse_iii","rmse_iv")
+colnames(out)[K + seq_len(5)] <- c("rmse_i","rmse_ii","rmse_iii","rmse_iv","rmse_v")
 
 # Write CSV (no row names)
 # write.csv(out, file = "DM_rmse_by_simulation.csv", row.names = FALSE)
@@ -451,8 +473,8 @@ if (K == 3) {
 suppressWarnings(suppressPackageStartupMessages(
   library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
   
-rmse_min <- min(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, na.rm = TRUE)
-rmse_max <- max(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, na.rm = TRUE)
+rmse_min <- min(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v, na.rm = TRUE)
+rmse_max <- max(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v, na.rm = TRUE)
 
 p_i <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_i)) +
   geom_point(shape = 16, size = 2, alpha = 0.9) +
@@ -478,28 +500,37 @@ p_iv <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_iv)) +
   scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
   theme_bw()
 
+p_v <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_v)) +
+  geom_point(shape = 16, size = 2, alpha = 0.9) +
+  labs(title = sprintf("(v) RMSE over simplex (K=3, G=%d, DML θ estimated)", G), colour = "RMSE") +
+  scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
+  theme_bw()
+
+
 ggsave("rmse_i_hake3_ev1.png", p_i, width = 6, height = 5, dpi = 300)
 ggsave("rmse_ii_hake3_ev1.png", p_ii, width = 6, height = 5, dpi = 300)
 ggsave("rmse_iii_hake3_ev1.png", p_iii, width = 6, height = 5, dpi = 300)
 ggsave("rmse_iv_hake3_ev1.png", p_iv, width = 6, height = 5, dpi = 300)
+ggsave("rmse_v_hake3_ev1.png", p_v, width = 6, height = 5, dpi = 300)
 
 print(p_i)
 print(p_ii)
 print(p_iii)
 print(p_iv)
+print(p_v)
 
 }
 
 print(params)
 
 n <- length(out$rmse_i)
-stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n)
+stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n, length(out$rmse_v) == n)
 
 df <- data.frame(
-  id     = rep(seq_len(n), times = 4),                 # block (simplex point)
-  method = factor(rep(c("i","ii","iii","iv"), each = n),
-                  levels = c("i","ii","iii","iv")),
-  rmse   = c(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv)
+  id     = rep(seq_len(n), times = 5),                 # block (simplex point)
+  method = factor(rep(c("i","ii","iii","iv","v"), each = n),
+                  levels = c("i","ii","iii","iv","v")),
+  rmse   = c(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v)
 )
 
 ## Overall nonparametric repeated-measures test
@@ -521,7 +552,7 @@ print(pw)
 wide <- reshape(df, idvar = "id", timevar = "method", direction = "wide")
 
 ## 1) Paired, robust effect: Hodges–Lehmann (median) difference + 95% CI
-methods <- c("i","ii","iii","iv")
+methods <- c("i","ii","iii","iv","v")
 pair_list <- combn(methods, 2, simplify = FALSE)
 
 wilcox_ci <- lapply(pair_list, function(pr) {
@@ -539,16 +570,25 @@ Paired Wilcoxon (", obj$comp, "):
 }
 
 ## 2) Practical impact: percent change in RMSE (median & IQR)
-pct <- transform(wide,
-                 pct_ii_i    = 100*(rmse.ii  - rmse.i)/rmse.i,
-                 pct_iii_i   = 100*(rmse.iii - rmse.i)/rmse.i,
-                 pct_iv_i    = 100*(rmse.iv  - rmse.i)/rmse.i,
-                 pct_iii_ii  = 100*(rmse.iii - rmse.ii)/rmse.ii,
-                 pct_iv_ii   = 100*(rmse.iv  - rmse.ii)/rmse.ii,
-                 pct_iv_iii  = 100*(rmse.iv  - rmse.iii)/rmse.iii
-)
+## Compute ALL pairwise percent changes: 100 * (RMSE_B - RMSE_A) / RMSE_A
+methods <- c("i","ii","iii","iv","v")
+rmse_cols <- paste0("rmse.", methods)
 
-tmp <- sapply(pct[c("pct_ii_i","pct_iii_i","pct_iv_i","pct_iii_ii","pct_iv_ii","pct_iv_iii")],
+## sanity check
+stopifnot(all(rmse_cols %in% names(wide)))
+
+## build percent-change columns programmatically for every unordered pair
+pairs <- combn(methods, 2, simplify = FALSE)  # each element is c(A,B) with A before B in 'methods'
+pct <- wide
+for (ab in pairs) {
+  a <- ab[1]; b <- ab[2]
+  nm <- paste0("pct_", b, "_", a)
+  pct[[nm]] <- 100 * (pct[[paste0("rmse.", b)]] - pct[[paste0("rmse.", a)]]) / pct[[paste0("rmse.", a)]]
+}
+
+pct_cols <- paste0("pct_", sapply(pairs, `[`, 2), "_", sapply(pairs, `[`, 1))
+
+tmp <- sapply(pct[pct_cols],
               \(x) c(median = median(x), IQR = IQR(x),
                      q25 = quantile(x, .25), q75 = quantile(x, .75)))
 print(tmp)

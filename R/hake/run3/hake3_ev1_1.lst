@@ -107,7 +107,7 @@
 > out <- as.data.frame(res_mat)
 
 > # K = number of true proportions assumed to be the first K columns of res_mat
-> K <- ncol(out) - 4L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii, rmse .... [TRUNCATED] 
+> K <- ncol(out) - 5L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii, rmse .... [TRUNCATED] 
 
 > # Ensure N_vec is a matrix with one row per simulation and G columns (groups)
 > N_mat <- if (is.null(dim(N_vec))) {
@@ -125,7 +125,7 @@
 > # Name the existing columns for proportions and RMSEs
 > colnames(out)[seq_len(K)] <- paste0("p", seq_len(K))
 
-> colnames(out)[K + seq_len(4)] <- c("rmse_i","rmse_ii","rmse_iii","rmse_iv")
+> colnames(out)[K + seq_len(5)] <- c("rmse_i","rmse_ii","rmse_iii","rmse_iv","rmse_v")
 
 > # Write CSV (no row names)
 > # write.csv(out, file = "DM_rmse_by_simulation.csv", row.names = FALSE)
@@ -172,11 +172,11 @@ $kappa
 
 > n <- length(out$rmse_i)
 
-> stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n)
+> stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n, length(out$rmse_v) == n)
 
 > df <- data.frame(
-+   id     = rep(seq_len(n), times = 4),                 # block (simplex point)
-+   method = factor(rep(c("i","ii","iii","iv"), e .... [TRUNCATED] 
++   id     = rep(seq_len(n), times = 5),                 # block (simplex point)
++   method = factor(rep(c("i","ii","iii","iv","v" .... [TRUNCATED] 
 
 > ## Overall nonparametric repeated-measures test
 > ft <- friedman.test(rmse ~ method | id, data = df)
@@ -186,7 +186,7 @@ $kappa
 	Friedman rank sum test
 
 data:  rmse and method and id
-Friedman chi-squared = 7.4163, df = 3, p-value = 0.05975
+Friedman chi-squared = 32.463, df = 4, p-value = 1.539e-06
 
 
 > ## Kendall’s W effect size (approx. from Friedman chi-square)
@@ -195,7 +195,7 @@ Friedman chi-squared = 7.4163, df = 3, p-value = 0.05975
 > W <- as.numeric(ft$statistic) / (n * (k - 1))
 
 > cat(sprintf("Kendall's W ≈ %.3f\n", W))
-Kendall's W ≈ 0.017
+Kendall's W ≈ 0.055
 
 > ## Post-hoc paired comparisons with multiplicity control
 > pw <- pairwise.wilcox.test(df$rmse, df$method,
@@ -207,10 +207,11 @@ Kendall's W ≈ 0.017
 
 data:  df$rmse and df$method 
 
-    i      ii     iii   
-ii  1.0000 -      -     
-iii 0.0137 0.0252 -     
-iv  0.0014 0.0252 1.0000
+    i       ii      iii     iv     
+ii  1.00000 -       -       -      
+iii 2.7e-09 1.3e-08 -       -      
+iv  0.00138 0.02522 0.00135 -      
+v   0.01366 0.02522 0.00088 1.00000
 
 P value adjustment method: holm 
 
@@ -218,7 +219,7 @@ P value adjustment method: holm
 > wide <- reshape(df, idvar = "id", timevar = "method", direction = "wide")
 
 > ## 1) Paired, robust effect: Hodges–Lehmann (median) difference + 95% CI
-> methods <- c("i","ii","iii","iv")
+> methods <- c("i","ii","iii","iv","v")
 
 > pair_list <- combn(methods, 2, simplify = FALSE)
 
@@ -253,13 +254,13 @@ Paired Wilcoxon (iii - i):
 	Wilcoxon signed rank test with continuity correction
 
 data:  b and a
-V = 3889, p-value = 0.002732
+V = 2174, p-value = 2.74e-10
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- -5.472200e-05 -3.067784e-05
+ -0.0007690403 -0.0003412670
 sample estimates:
 (pseudo)median 
- -2.837505e-05 
+ -0.0005030065 
 
 
 Paired Wilcoxon (iv - i):
@@ -276,18 +277,32 @@ sample estimates:
  -2.239633e-05 
 
 
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 3889, p-value = 0.002732
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.472200e-05 -3.067784e-05
+sample estimates:
+(pseudo)median 
+ -2.837505e-05 
+
+
 Paired Wilcoxon (iii - ii):
 
 	Wilcoxon signed rank test with continuity correction
 
 data:  b and a
-V = 4026, p-value = 0.006306
+V = 2310, p-value = 1.45e-09
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- -1.404688e-05 -2.522223e-05
+ -0.0006187179 -0.0002877945
 sample estimates:
 (pseudo)median 
- -5.207963e-05 
+ -0.0004342851 
 
 
 Paired Wilcoxon (iv - ii):
@@ -304,38 +319,98 @@ sample estimates:
  -7.052999e-05 
 
 
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 4026, p-value = 0.006306
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.404688e-05 -2.522223e-05
+sample estimates:
+(pseudo)median 
+ -5.207963e-05 
+
+
 Paired Wilcoxon (iv - iii):
 
 	Wilcoxon signed rank test with continuity correction
 
 data:  b and a
-V = 5488, p-value = 0.9253
+V = 7367, p-value = 0.0001935
 alternative hypothesis: true location shift is not equal to 0
 95 percent confidence interval:
- -4.016723e-05  1.041747e-05
+ 7.251676e-05 2.681238e-04
 sample estimates:
 (pseudo)median 
- -2.436197e-05 
+  0.0001717552 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 7439, p-value = 0.0001104
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 9.399326e-05 2.892053e-04
+sample estimates:
+(pseudo)median 
+  0.0001995875 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 5390, p-value = 0.9253
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.041747e-05  4.016723e-05
+sample estimates:
+(pseudo)median 
+   2.32738e-05 
 
 
 > ## 2) Practical impact: percent change in RMSE (median & IQR)
-> pct <- transform(wide,
-+                  pct_ii_i    = 100*(rmse.ii  - rmse.i)/rmse .... [TRUNCATED] 
+> ## Compute ALL pairwise percent changes: 100 * (RMSE_B - RMSE_A) / RMSE_A
+> methods  .... [TRUNCATED] 
 
-> tmp <- sapply(pct[c("pct_ii_i","pct_iii_i","pct_iv_i","pct_iii_ii","pct_iv_ii","pct_iv_iii")],
-+               \(x) c(median = median(x), IQR = IQR( .... [TRUNCATED] 
+> rmse_cols <- paste0("rmse.", methods)
+
+> ## sanity check
+> stopifnot(all(rmse_cols %in% names(wide)))
+
+> ## build percent-change columns programmatically for every unordered pair
+> pairs <- combn(methods, 2, simplify = FALSE)  # each element is c(A,B) w .... [TRUNCATED] 
+
+> pct <- wide
+
+> for (ab in pairs) {
++   a <- ab[1]; b <- ab[2]
++   nm <- paste0("pct_", b, "_", a)
++   pct[[nm]] <- 100 * (pct[[paste0("rmse.", b)]] - pct[[paste0(" ..." ... [TRUNCATED] 
+
+> pct_cols <- paste0("pct_", sapply(pairs, `[`, 2), "_", sapply(pairs, `[`, 1))
+
+> tmp <- sapply(pct[pct_cols],
++               \(x) c(median = median(x), IQR = IQR(x),
++                      q25 = quantile(x, .25), q75 = quantile( .... [TRUNCATED] 
 
 > print(tmp)
-            pct_ii_i     pct_iii_i      pct_iv_i    pct_iii_ii
-median  -0.000288665 -0.0007199365 -0.0004119767 -0.0004445689
-IQR      0.013833156  0.0302207338  0.0105825396  0.0124416799
-q25.25% -0.005755158 -0.0280095878 -0.0100649315 -0.0105208999
-q75.75%  0.008077998  0.0022111460  0.0005176081  0.0019207800
-            pct_iv_ii    pct_iv_iii
-median  -0.0002392092  3.483172e-05
-IQR      0.0042090093  3.021329e-03
-q25.25% -0.0035491021 -1.366641e-03
-q75.75%  0.0006599072  1.654687e-03
+            pct_ii_i  pct_iii_i      pct_iv_i       pct_v_i pct_iii_ii
+median  -0.000288665 -0.6065561 -0.0004119767 -0.0007199365 -0.5130451
+IQR      0.013833156  2.0340538  0.0105825396  0.0302207338  1.9342821
+q25.25% -0.005755158 -1.9047589 -0.0100649315 -0.0280095878 -1.7815347
+q75.75%  0.008077998  0.1292949  0.0005176081  0.0022111460  0.1527474
+            pct_iv_ii      pct_v_ii pct_iv_iii  pct_v_iii      pct_v_iv
+median  -0.0002392092 -0.0004445689  0.2677419  0.2739953 -3.483171e-05
+IQR      0.0042090093  0.0124416799  1.3712367  1.4330082  3.021320e-03
+q25.25% -0.0035491021 -0.0105208999 -0.2849974 -0.2930555 -1.654660e-03
+q75.75%  0.0006599072  0.0019207800  1.0862394  1.1399527  1.366660e-03
 
 > ## 3) Standardized paired effect r from Wilcoxon Z
 > r_from_wilcox <- function(x, y){
@@ -350,45 +425,54 @@ q75.75%  0.0006599072  1.654687e-03
 > r_tbl <- do.call(rbind, r_pairs)
 
 > print(r_tbl)
-       pair            r
-1   ii vs i -0.016029223
-2  iii vs i -0.247137131
-3   iv vs i -0.303757771
-4 iii vs ii -0.225286349
-5  iv vs ii -0.221936959
-6 iv vs iii  0.007735496
+        pair            r
+1    ii vs i -0.016029223
+2   iii vs i -0.520670645
+3    iv vs i -0.303757771
+4     v vs i -0.247137131
+5  iii vs ii -0.498979358
+6   iv vs ii -0.221936959
+7    v vs ii -0.225286349
+8  iv vs iii  0.307426151
+9   v vs iii  0.318909773
+10   v vs iv -0.007735496
 
 > m <- lmer(rmse ~ method + (1 | id), data = df)
 
 > print(anova(m))                               # overall method effect)
 Type III Analysis of Variance Table with Satterthwaite's method
         Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
-method 0.53173 0.17724     3   438  15.932 7.552e-10 ***
+method 0.65326 0.16331     4   584  18.025 5.712e-14 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 > print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
 $emmeans
  method emmean      SE  df lower.CL upper.CL
- i      0.1276 0.00928 559   0.1094   0.1458
- ii     0.1193 0.00928 559   0.1010   0.1375
- iii    0.0657 0.00928 559   0.0474   0.0839
- iv     0.0616 0.00928 559   0.0434   0.0798
+ i      0.1276 0.00843 682   0.1110   0.1441
+ ii     0.1193 0.00843 682   0.1027   0.1358
+ iii    0.0614 0.00843 682   0.0448   0.0779
+ iv     0.0616 0.00843 682   0.0451   0.0782
+ v      0.0657 0.00843 682   0.0491   0.0822
 
 Degrees-of-freedom method: kenward-roger 
 Confidence level used: 0.95 
 
 $contrasts
- contrast estimate     SE  df t.ratio p.value
- i - ii    0.00832 0.0123 438   0.676  0.9986
- i - iii   0.06191 0.0123 438   5.032 <0.0001
- i - iv    0.06598 0.0123 438   5.363 <0.0001
- ii - iii  0.05359 0.0123 438   4.356 <0.0001
- ii - iv   0.05766 0.0123 438   4.687 <0.0001
- iii - iv  0.00407 0.0123 438   0.331  0.9986
+ contrast  estimate     SE  df t.ratio p.value
+ i - ii    0.008319 0.0111 584   0.749  1.0000
+ i - iii   0.066199 0.0111 584   5.962 <0.0001
+ i - iv    0.065982 0.0111 584   5.943 <0.0001
+ i - v     0.061908 0.0111 584   5.576 <0.0001
+ ii - iii  0.057880 0.0111 584   5.213 <0.0001
+ ii - iv   0.057663 0.0111 584   5.194 <0.0001
+ ii - v    0.053589 0.0111 584   4.827 <0.0001
+ iii - iv -0.000217 0.0111 584  -0.020  1.0000
+ iii - v  -0.004291 0.0111 584  -0.386  1.0000
+ iv - v   -0.004074 0.0111 584  -0.367  1.0000
 
 Degrees-of-freedom method: kenward-roger 
-P value adjustment: holm method for 6 tests 
+P value adjustment: holm method for 10 tests 
 
 
 > on.exit(sink()) 
