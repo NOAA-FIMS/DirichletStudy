@@ -1,0 +1,11 @@
+# Input parameters for hake3_ev1.R
+K = 3
+p_ubound = 0.97, 0.59, 0.21
+G = 1
+h = 0.04
+theta_true = 10
+Nmin = 50
+Nmax = 1000
+nsamples = 100
+random.seed = 18769
+kappa = 25
