@@ -1,0 +1,210 @@
+
+> cat("Logging to: ", logfile, "\n", sep = "")
+Logging to: validate_hake_selftest.lst
+
+> cat("Parameters:\n")
+Parameters:
+
+> print(params)
+$K
+[1] 3
+
+$G
+[1] 2
+
+$p_true
+[1] 0.2 0.3 0.5
+
+$theta_true
+[1] 10
+
+$sigma
+[1] 0.75
+
+$od_mult
+[1] 0.25
+
+$GEN
+[1] "MN"       "DMpure"   "DMstrong"
+
+$Nsamp
+[1]  25 125 250
+
+$R
+[1] 200
+
+$theta_lower
+[1] 1e-06
+
+$theta_upper
+[1] 10000
+
+$profile_reps
+[1] 5
+
+$profile_grid_n
+[1] 40
+
+$random.seed
+[1] 35643
+
+$out_prefix
+[1] "validate_hake_selftest"
+
+
+> # ----------------------------- scenario grid --------------------------------
+> 
+> scen <- expand.grid(
++   GEN = gen_levels,
++   Nsamp = nsamp_lev .... [TRUNCATED] 
+
+> # preallocate results list (faster than rbind)
+> res <- vector("list", nrow(scen) * 2L)  # *2 fits per replicate
+
+> idx <- 0L
+
+> # preallocate profile rows (upper bound)
+> n_profile_scen <- length(gen_levels) * length(nsamp_levels) * min(profile_reps, R)
+
+> theta_grid <- exp(seq(log(theta_lower), log(theta_upper), length.out = profile_grid_n))
+
+> prof_list <- vector("list", n_profile_scen)
+
+> prof_idx <- 0L
+
+> # starting values for p (in z-space), centered on truth
+> z0 <- log(p_true[1:(K-1)]) - log(p_true[K])
+
+> # IMPORTANT: the fitted-model "truth" under our generator scaling is theta_true * od_mult
+> theta_fit_truth <- theta_true * od_mult
+
+> t0 <- log(theta_fit_truth)
+
+> # ----------------------------- main loop ------------------------------------
+> 
+> for (ii in seq_len(nrow(scen))) {
++   gen  <- scen$GEN[ii]
++   N .... [TRUNCATED] 
+
+> raw <- do.call(rbind, res)
+
+> # profiles (drop NULLs)
+> profiles <- if (prof_idx > 0) do.call(rbind, prof_list[seq_len(prof_idx)]) else data.frame()
+
+> # ----------------------------- summaries ------------------------------------
+> 
+> # convergence rate + RMSE summaries + theta summaries + upper-bo .... [TRUNCATED] 
+
+> unpack <- function(matcol, prefix) {
++   data.frame(
++     setNames(list(matcol[, "mean"]), paste0(prefix, "_mean")),
++     setNames(list(matcol[, " ..." ... [TRUNCATED] 
+
+> summary_df <- cbind(
++   summ[, c("GEN","Nsamp","FIT")],
++   unpack(summ$conv, "conv_rate"),
++   unpack(summ$rmse_p, "rmse_p"),
++   unpack(summ$thet .... [TRUNCATED] 
+
+> # parameter bias (per component)
+> for (k in 1:K) {
++   nm <- paste0("p", k, "_hat")
++   bias_df <- aggregate(
++     raw[[nm]] ~ GEN + Nsamp + FIT,
+ .... [TRUNCATED] 
+
+> # upper-bound hit rate for DM fits only
+> dm_only <- subset(raw, FIT == "DM")
+
+> hit_tbl <- aggregate(
++   as.numeric(hit_upper) ~ GEN + Nsamp,
++   data = dm_only,
++   FUN = function(x) mean(x, na.rm = TRUE)
++ )
+
+> names(hit_tbl)[3] <- "theta_upper_hit_rate"
+
+> summary_df <- merge(summary_df, hit_tbl, by = c("GEN","Nsamp"), all.x = TRUE, sort = FALSE)
+
+> # add the fitted-model truth for reference
+> summary_df$theta_fit_truth <- theta_fit_truth
+
+> # ----------------------------- write outputs --------------------------------
+> 
+> raw_path <- paste0(out_prefix, "_raw.csv")
+
+> sum_path <- paste0(out_prefix, "_summary.csv")
+
+> prof_path <- paste0(out_prefix, "_theta_profile.csv")
+
+> write.csv(raw, raw_path, row.names = FALSE)
+
+> write.csv(summary_df, sum_path, row.names = FALSE)
+
+> if (nrow(profiles) > 0) write.csv(profiles, prof_path, row.names = FALSE)
+
+> cat("Wrote: ", raw_path, "\n", sep = "")
+Wrote: validate_hake_selftest_raw.csv
+
+> cat("Wrote: ", sum_path, "\n", sep = "")
+Wrote: validate_hake_selftest_summary.csv
+
+> if (nrow(profiles) > 0) cat("Wrote: ", prof_path, "\n", sep = "")
+Wrote: validate_hake_selftest_theta_profile.csv
+
+> # Plot: RMSE by FIT, faceted by GEN and Nsamp
+> p <- ggplot(raw, aes(x = FIT, y = rmse_p)) +
++   geom_boxplot(outlier.size = 0.6) +
++   facet_grid(G .... [TRUNCATED] 
+
+> plot_path <- paste0(out_prefix, "_rmse_boxplot.png")
+
+> ggsave(plot_path, p, width = 9, height = 5.5, dpi = 300)
+
+> cat("Wrote: ", plot_path, "\n", sep = "")
+Wrote: validate_hake_selftest_rmse_boxplot.png
+
+> # Print a compact summary to console / list file
+> cat("\n--- Summary (means) ---\n")
+
+--- Summary (means) ---
+
+> print(summary_df[order(summary_df$GEN, summary_df$Nsamp, summary_df$FIT), ])
+       GEN Nsamp FIT conv_rate_mean conv_rate_sd rmse_p_mean   rmse_p_sd theta_hat_mean
+1   DMpure    25  DM          0.985   0.12185748  0.06682627 0.034688029      7700.8821
+4   DMpure   125  DM          1.000   0.00000000  0.03012448 0.016444463      7295.3019
+7   DMpure   250  DM          0.995   0.07071068  0.02044708 0.010564428      7663.1520
+2 DMstrong    25  DM          0.995   0.07071068  0.13902235 0.076392011      3151.7163
+5 DMstrong   125  DM          1.000   0.00000000  0.11323850 0.062362195       654.8274
+8 DMstrong   250  DM          1.000   0.00000000  0.11147115 0.060281417       286.2165
+3       MN    25  DM          0.995   0.07071068  0.05427963 0.028187294      8601.6703
+6       MN   125  DM          0.995   0.07071068  0.02886081 0.014616494      8237.1077
+9       MN   250  DM          0.985   0.12185748  0.01807951 0.009586479      8041.1575
+  theta_hat_sd       bias_p1       bias_p2       bias_p3 theta_upper_hit_rate theta_fit_truth
+1     4217.268 -2.352995e-03 -0.0043922219  0.0067452171                0.770             2.5
+4     4403.701 -8.275706e-05 -0.0026391758  0.0027219328                0.715             2.5
+7     4096.539 -1.170370e-04 -0.0004947056  0.0006117426                0.740             2.5
+2     4655.663  2.830197e-02  0.0085890414 -0.0368910088                0.315             2.5
+5     2470.867  1.275545e-02  0.0109948561 -0.0237503093                0.065             2.5
+8     1640.506  2.792799e-02  0.0172130938 -0.0451410850                0.025             2.5
+3     3474.456  1.766808e-04 -0.0008503779  0.0006736971                0.860             2.5
+6     3743.837  2.972131e-04 -0.0029819734  0.0026847603                0.810             2.5
+9     3827.055  1.185382e-03 -0.0013438194  0.0001584371                0.785             2.5
+
+> cat("\nInterpretation tip:\n")
+
+Interpretation tip:
+
+> cat("  - If theta_upper_hit_rate is high for a GEN scenario, the fitted DM likelihood is effectively preferring MN.\n")
+  - If theta_upper_hit_rate is high for a GEN scenario, the fitted DM likelihood is effectively preferring MN.
+
+> cat("  - DMPure should recover theta around theta_fit_truth (~theta_true*od_mult) if the optimizer is behaving.\n")
+  - DMPure should recover theta around theta_fit_truth (~theta_true*od_mult) if the optimizer is behaving.
+
+> cat("  - DMstrong is deliberately mis-specified relative to the fitted mean structure; large theta can occur even when overdispersion exists.\n")
+  - DMstrong is deliberately mis-specified relative to the fitted mean structure; large theta can occur even when overdispersion exists.
+
+> # Show plot
+> print(p)
+
+> on.exit(sink())

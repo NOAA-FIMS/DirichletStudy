@@ -1,0 +1,268 @@
+
+--- Sample-size distribution diagnostics ---
+dist_code = 3 (Poisson)
+ dist_code = 3 (Lognormal)
+ dist_code = 3 (Negative Binomial)
+ dist_code = 3 (Log-uniform)
+Target mean (mean_nsamp) = 100.000
+Realized mean across all N_vec entries = 99.925
+Realized SD across all N_vec entries = 22.373
+Quantiles (0%, 5%, 25%, 50%, 75%, 95%, 100%):
+  0%   5%  25%  50%  75%  95% 100% 
+  32   65   84   98  114  139  201 
+--- End diagnostics ---
+
+$K
+[1] 3
+
+$G
+[1] 2
+
+$h
+[1] 0.01
+
+$theta_true
+[1] 10
+
+$dist_code
+[1] 3
+
+$mean_nsamp
+[1] 100
+
+$ln_sd
+[1] 1
+
+$nb_size
+[1] 25
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 1000
+
+$nsims
+[1] 1000
+
+$random.seed
+[1] 35643
+
+$sigma
+[1] 0.75
+
+$od_mult
+[1] 0.55
+
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 186.85, df = 4, p-value < 2.2e-16
+
+Kendall's W ≈ 0.037
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii    iv    
+ii  < 2e-16 -       -      -     
+iii 0.0025  < 2e-16 -      -     
+iv  0.0012  < 2e-16 0.5647 -     
+v   9.1e-06 < 2e-16 1.0000 1.0000
+
+P value adjustment method: holm 
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 551146, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.02289671 0.03197428
+sample estimates:
+(pseudo)median 
+    0.02744843 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 439387, p-value = 0.0006199
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0002307323 0.0012049937
+sample estimates:
+(pseudo)median 
+  0.0006944347 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 442744, p-value = 0.00023
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0001982681 0.0012725303
+sample estimates:
+(pseudo)median 
+  0.0007397984 
+
+
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457239, p-value = 1.513e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0003375664 0.0011252793
+sample estimates:
+(pseudo)median 
+   0.000742378 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 227191, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03107461 -0.02212779
+sample estimates:
+(pseudo)median 
+    -0.0266004 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 231894, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03103198 -0.02203679
+sample estimates:
+(pseudo)median 
+   -0.02668143 
+
+
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 229803, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03161053 -0.02271300
+sample estimates:
+(pseudo)median 
+   -0.02703993 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 404515, p-value = 0.1882
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 7.636902e-06 4.898637e-05
+sample estimates:
+(pseudo)median 
+  1.722078e-05 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 397386, p-value = 0.8729
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0001754518  0.0001453627
+sample estimates:
+(pseudo)median 
+   7.36245e-06 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 384439, p-value = 0.5132
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.521927e-04  1.750667e-05
+sample estimates:
+(pseudo)median 
+ -6.559826e-05 
+
+         pct_ii_i  pct_iii_i     pct_iv_i     pct_v_i pct_iii_ii pct_iv_ii  pct_v_ii pct_iv_iii
+median   20.41912  0.1227708  0.007871802  0.01903419  -14.85421 -15.33938 -14.98655  0.0000000
+IQR     139.53519 12.3865199 13.116804618  8.73786051   66.70410  66.62308  64.43402  0.9843468
+q25.25% -13.43857 -4.1425993 -4.410203131 -2.45497815  -54.10823 -54.04099 -53.87675 -0.4324552
+q75.75% 126.09661  8.2439206  8.706601488  6.28288236   12.59586  12.58209  10.55727  0.5518916
+            pct_v_iii      pct_v_iv
+median   0.0002610042 -2.494584e-11
+IQR      6.7732754825  7.784827e+00
+q25.25% -3.2519987272 -3.910878e+00
+q75.75%  3.5212767552  3.873949e+00
+        pair            r
+1    ii vs i  0.341414090
+2   iii vs i  0.096539606
+3    iv vs i  0.103895109
+4     v vs i  0.135655017
+5  iii vs ii -0.368399605
+6   iv vs ii -0.358094890
+7    v vs ii -0.362676467
+8  iv vs iii  0.000000000
+9   v vs iii  0.004511463
+10   v vs iv -0.018441622
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method  1.335 0.33375     4  5024  151.28 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i      0.0993 0.00217 Inf    0.0951     0.104
+ ii     0.1344 0.00217 Inf    0.1302     0.139
+ iii    0.0975 0.00217 Inf    0.0932     0.102
+ iv     0.0975 0.00217 Inf    0.0933     0.102
+ v      0.0978 0.00217 Inf    0.0935     0.102
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -3.51e-02 0.00187 Inf -18.726 <0.0001
+ i - iii   1.88e-03 0.00187 Inf   1.004  1.0000
+ i - iv    1.80e-03 0.00187 Inf   0.960  1.0000
+ i - v     1.57e-03 0.00187 Inf   0.837  1.0000
+ ii - iii  3.70e-02 0.00187 Inf  19.730 <0.0001
+ ii - iv   3.69e-02 0.00187 Inf  19.686 <0.0001
+ ii - v    3.67e-02 0.00187 Inf  19.562 <0.0001
+ iii - iv -8.18e-05 0.00187 Inf  -0.044  1.0000
+ iii - v  -3.13e-04 0.00187 Inf  -0.167  1.0000
+ iv - v   -2.32e-04 0.00187 Inf  -0.124  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
