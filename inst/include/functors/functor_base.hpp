@@ -1,5 +1,6 @@
 #ifndef FUNCTOR_BASE_HPP
 #define FUNCTOR_BASE_HPP
+#include "../dirichlet.hpp"
 
 template <typename T>
 class FunctorBase
