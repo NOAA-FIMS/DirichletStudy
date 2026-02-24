@@ -1,6 +1,7 @@
 ## file = hake.R
 ## C:\Users\Jon.Brodziak\Documents\GitHub\DirichletStudy\hake
 ## Run with "source("hake.R", echo = FALSE, print.eval = TRUE)"
+## Clear global environment with "rm(list = ls())"
 ##
 ## Compare accuracy of 4 DM forms and multinomial distribution
 ## based on RMSE over a K-dim simplex mesh
@@ -274,6 +275,18 @@ if (is.null(p_ubound_raw) || is.na(p_ubound_raw) || !nzchar(trimws(p_ubound_raw)
   if (length(p_ubound) != K) stop(sprintf("p_ubound must have length K=%d.", K))
 }
 
+p_lbound_raw <- kv[["p_lbound"]]
+if (is.null(p_lbound_raw) || is.na(p_lbound_raw) || !nzchar(trimws(p_lbound_raw))) {
+  # Default: no filtering beyond the simplex constraints (components >= 0)
+  p_lbound <- rep(0, K)
+} else {
+  parts <- unlist(strsplit(p_lbound_raw, "[,[:space:]]+"))
+  parts <- parts[nzchar(parts)]
+  p_lbound <- as.numeric(parts)
+  if (any(is.na(p_lbound))) stop("p_lbound must be numeric in [0,1].")
+  if (length(p_lbound) != K) stop(sprintf("p_lbound must have length K=%d.", K))
+}
+
 # basic validation
 # basic validation
 if (any(is.na(c(K, G, h, theta_true, dist_code, mean_nsamp, nsims, random.seed, sigma, od_mult)))) {
@@ -382,7 +395,7 @@ cat("--- End diagnostics ---
 ## ---- filter mesh by p_ubound (component-wise upper bounds) ---------------
 # Keep only rows where each component of p_true is <= the corresponding bound.
 # (This filter is applied consistently to both mesh and N_vec to prevent row mismatches.)
-keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all)
+keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all) & apply(sweep(mesh, 2, p_lbound, `>=`), 1, all)
 mesh <- mesh[keep_idx, , drop = FALSE]
 N_vec <- N_vec[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
@@ -505,10 +518,9 @@ p_hat_i     <- alpha_hat_i / sum(alpha_hat_i)
   
   # Apply p_ubound filter (component-wise). If a point is out of bounds, keep the row
   # but mark RMSEs as NA to avoid dropping rows (and causing row-mismatch later).
-  if (any(p_true > p_ubound)) {
+  if (any(p_true > p_ubound) || any(p_true < p_lbound)) {
     return(c(p_true, rep(NA_real_, 5)))
   }
-  
 
   rmse_i   = rmse(p_hat_i,   p_true)
   rmse_ii  = rmse(p_hat_ii,  p_true)
