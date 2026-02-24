@@ -311,7 +311,8 @@ params <- list(
   ln_sd = ln_sd, nb_size = nb_size,
   Nmin = Nmin, Nmax = Nmax,
   nsims = nsims, random.seed = random.seed,
-  sigma = sigma, od_mult = od_mult
+  sigma = sigma, od_mult = od_mult,
+  p_lbound = p_lbound, p_ubound = p_ubound
 )
 
 set.seed(random.seed)

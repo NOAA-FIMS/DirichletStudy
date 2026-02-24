@@ -54,6 +54,12 @@ $sigma
 $od_mult
 [1] 0.55
 
+$p_lbound
+[1] 0.10 0.04 0.04
+
+$p_ubound
+[1] 0.97 0.59 0.21
+
 
 	Friedman rank sum test
 
