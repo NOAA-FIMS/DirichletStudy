@@ -1,0 +1,580 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={hake\_parameter\_mapping},
+  pdfauthor={Jon Brodziak},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{hake\_parameter\_mapping}
+\author{Jon Brodziak}
+\date{2026-02-27}
+
+\begin{document}
+\maketitle
+
+\section{\texorpdfstring{Current parameter mapping for \texttt{hake.R}
+(driven by
+\texttt{hake.inp})}{Current parameter mapping for hake.R (driven by hake.inp)}}\label{current-parameter-mapping-for-hake.r-driven-by-hake.inp}
+
+This document maps \textbf{input parameters} read from \texttt{hake.inp}
+into the \textbf{objects and roles} they play in \texttt{hake.R}, and
+then maps the \textbf{estimated parameters} for models \textbf{(i)--(v)}
+to the \textbf{exact optimization blocks} in the script.
+
+\begin{quote}
+Updated: 2026-02-27 (based on the current \texttt{hake.R} in this
+project)
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{1) How \texttt{hake.inp} is
+read}{1) How hake.inp is read}}\label{how-hake.inp-is-read}
+
+\texttt{hake.R} reads \texttt{hake.inp} as \textbf{key=value} pairs via
+\texttt{read.table(...,\ sep="=")} and stores them in \texttt{kv} (a
+named character vector). Typed parameters are then created with
+\texttt{as.integer()} / \texttt{as.numeric()} conversions.
+
+\begin{itemize}
+\tightlist
+\item
+  Input parsing: around lines \textbf{236--243}
+\item
+  Typed parameter assignment: around lines \textbf{244--290} (see table
+  below)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{2) Input parameters from
+\texttt{hake.inp}}{2) Input parameters from hake.inp}}\label{input-parameters-from-hake.inp}
+
+\subsubsection{Summary table (keys → R objects →
+meaning)}\label{summary-table-keys-r-objects-meaning}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2353}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\texttt{hake.inp} key
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+R object in \texttt{hake.R}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Used for
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Where used in \texttt{hake.R} (typical)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{K} & \texttt{K} & integer & Number of composition categories
+(simplex dimension) & mesh construction; likelihood dimensions (e.g.,
+\texttt{mk\_simplex(K,h)}, \texttt{ncol=K}) \\
+\texttt{G} & \texttt{G} & integer & Number of independent samples /
+groups & simulation loop over groups; groupwise likelihood sums \\
+\texttt{h} & \texttt{h} & numeric & Grid step for
+\texttt{mk\_simplex(K,h)} (mesh resolution) & controls number of simplex
+points \texttt{nmesh} \\
+\texttt{theta\_true} & \texttt{theta\_true} & numeric & ``True'' linear
+Dirichlet--multinomial scaling used in simulation; also used as fixed θ
+in model (iii) & simulation:
+\texttt{a0g\ \textless{}-\ (theta\_true*od\_mult)*N\_row{[}g{]}}; model
+(iii): \texttt{theta\_fixed\ \textless{}-\ theta\_true} \\
+\texttt{od\_mult} & \texttt{od\_mult} & numeric & Overdispersion
+multiplier applied to α₀,g (smaller → more overdispersion) & simulation
+only: multiplies α₀,g before drawing Dirichlet \\
+\texttt{sigma} & \texttt{sigma} & numeric & Between-sample variation for
+perturbed group proportions \texttt{p\_g} & simulation only:
+\texttt{z\ \textless{}-\ log(p\_true)\ +\ rnorm(K,0,sigma)} \\
+\texttt{nsims} & \texttt{nsims} & integer & Replicates per simplex point
+(Monte Carlo) & outer simulation loop / repeated RMSE estimation \\
+\texttt{random.seed} & \texttt{random.seed} & integer & RNG seed &
+\texttt{set.seed(random.seed)} \\
+\texttt{dist\_code} & \texttt{dist\_code} & integer & Sample-size
+generator selection (1--4) & drives \texttt{draw\_nsamp()} \\
+\texttt{mean\_nsamp} & \texttt{mean\_nsamp} & numeric & Target mean
+sample size across distributions & used by all \texttt{dist\_code}
+cases \\
+\texttt{ln\_sd} & \texttt{ln\_sd} & numeric & Lognormal sdlog (only when
+\texttt{dist\_code==2}) & \texttt{draw\_nsamp()} lognormal case \\
+\texttt{nb\_size} & \texttt{nb\_size} & numeric & NegBin ``size'' (only
+when \texttt{dist\_code==3}) & \texttt{draw\_nsamp()} negbin case \\
+\texttt{Nmin} & \texttt{Nmin} & integer & Baseline lower bound for
+log-uniform sample sizes (only when \texttt{dist\_code==4}) &
+\texttt{draw\_nsamp()} log-uniform case (scaled to hit
+\texttt{mean\_nsamp}) \\
+\texttt{Nmax} & \texttt{Nmax} & integer & Baseline upper bound for
+log-uniform sample sizes (only when \texttt{dist\_code==4}) &
+\texttt{draw\_nsamp()} log-uniform case (scaled to hit
+\texttt{mean\_nsamp}) \\
+\texttt{p\_ubound} & \texttt{p\_ubound} & numeric vector length
+\texttt{K} & Component-wise \textbf{upper} bounds for filtering simplex
+points & mesh filter: keep rows where
+\texttt{p\_true{[}k{]}\ \textless{}=\ p\_ubound{[}k{]}} \\
+\texttt{p\_lbound} & \texttt{p\_lbound} & numeric vector length
+\texttt{K} & Component-wise \textbf{lower} bounds for filtering simplex
+points & mesh filter: keep rows where
+\texttt{p\_true{[}k{]}\ \textgreater{}=\ p\_lbound{[}k{]}} \\
+\end{longtable}
+
+\subsubsection{Required vs conditional
+keys}\label{required-vs-conditional-keys}
+
+\begin{itemize}
+\item
+  \textbf{Always required} (must be present and numeric):\\
+  \texttt{K,\ G,\ h,\ theta\_true,\ dist\_code,\ mean\_nsamp,\ nsims,\ random.seed,\ sigma,\ od\_mult}
+\item
+  \textbf{Conditionally required}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \texttt{dist\_code==2} (lognormal): \texttt{ln\_sd}
+  \item
+    If \texttt{dist\_code==3} (negative binomial): \texttt{nb\_size}
+  \item
+    If \texttt{dist\_code==4} (log-uniform): \texttt{Nmin,\ Nmax}
+  \end{itemize}
+\item
+  \textbf{Optional}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{p\_ubound} defaults to \texttt{rep(1,\ K)} if blank/missing
+  \item
+    \texttt{p\_lbound} defaults to \texttt{rep(0,\ K)} if blank/missing
+  \end{itemize}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3) Derived objects: where inputs turn into data used for
+estimation}\label{derived-objects-where-inputs-turn-into-data-used-for-estimation}
+
+\subsubsection{3.1 Mesh of ``true''
+compositions}\label{mesh-of-true-compositions}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{mesh\ \textless{}-\ mk\_simplex(K,\ h)} creates a grid of
+  simplex points \texttt{p\_true} (one per row).
+\item
+  After optional filtering via \texttt{p\_lbound}/\texttt{p\_ubound},
+  the script loops over rows of \texttt{mesh}.
+\end{itemize}
+
+\subsubsection{\texorpdfstring{3.2 Sample sizes per group
+(\texttt{N\_vec})}{3.2 Sample sizes per group (N\_vec)}}\label{sample-sizes-per-group-n_vec}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{N\_vec} is an \texttt{(nmesh\ ×\ G)} matrix of sample sizes
+  generated by \texttt{draw\_nsamp()} using:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{dist\_code}, \texttt{mean\_nsamp}
+  \item
+    plus \texttt{ln\_sd} or \texttt{nb\_size} or \texttt{Nmin/Nmax}
+    depending on \texttt{dist\_code}.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{\texorpdfstring{3.3 Simulated composition counts
+(\texttt{X})}{3.3 Simulated composition counts (X)}}\label{simulated-composition-counts-x}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Phi calculation}: \texttt{phi} is calculated as the inverse of
+  the overdispersion parameterization used in the likelihood (e.g., for
+  Dirichlet-multinomial parameterizations, typically
+  \texttt{phi\ =\ 1\ /\ theta} or via model-specific scaling inside the
+  MLE block).
+\end{itemize}
+
+For each simplex point \texttt{p\_true} and each group \texttt{g=1..G},
+the script simulates:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Group concentration (Dirichlet total mass):\\
+  \textbf{α₀,g = (theta\_true · od\_mult) · N\_g}
+\item
+  Perturbed group composition on the simplex:\\
+  \textbf{log(p\_g) = log(p\_true) + Normal(0, sigma)}
+\item
+  Dirichlet draw for multinomial probability \texttt{phi}, then
+  multinomial counts:\\
+  \textbf{X{[}g,{]} \textasciitilde{} Multinomial(N\_g, phi)}
+\end{enumerate}
+
+These simulated counts \texttt{X} are the data used by all MLE blocks
+(i)--(v).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4) Estimated-parameter mapping for models
+(i)--(v)}\label{estimated-parameter-mapping-for-models-iv}
+
+\subsubsection{4.1 MLE Calculation Line Numbers by
+Model}\label{mle-calculation-line-numbers-by-model}
+
+\begin{itemize}
+\tightlist
+\item
+  Line 440:
+  \texttt{fit\_i\ \textless{}-\ optim(t0\_i,\ nll\_i,\ score\_param\_i,\ method\ =\ "BFGS",}
+\item
+  Line 464:
+  \texttt{fit\_ii\ \textless{}-\ try(optim(c(z0,\ t0),\ nll\_ii,\ grad\_ii,\ method\ =\ "BFGS",}
+\item
+  Line 486:
+  \texttt{fit\_iii\ \textless{}-\ try(optim(z0,\ nll\_iii,\ grad\_iii,\ method\ =\ "BFGS",}
+\item
+  Line 507:
+  \texttt{fit\_v\ \textless{}-\ try(optim(c(z0,\ 0),\ nll\_v,\ grad\_v,\ method\ =\ "BFGS",}
+\end{itemize}
+
+All models produce an estimate of the \textbf{shared composition vector}
+\texttt{p} (length \texttt{K}) using a softmax parameterization:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Unconstrained} parameter: \texttt{z} (length \texttt{K-1})
+\item
+  \textbf{Simplex} parameter: \texttt{p\ =\ softmax\_from\_z(z)}
+\end{itemize}
+
+\subsubsection{\texorpdfstring{Model (i): shared unconstrained
+\texttt{alpha\_vec}}{Model (i): shared unconstrained alpha\_vec}}\label{model-i-shared-unconstrained-alpha_vec}
+
+\textbf{Estimated parameters} - \texttt{alpha\_vec} (length \texttt{K},
+positive), shared across all groups
+
+\textbf{Optimization parameterization} - Optimized parameter:
+\texttt{t\ =\ log(alpha\_vec)} (length \texttt{K}) - After optimization:
+\texttt{alpha\_hat\_i\ =\ exp(fit\_i\$par)} - Implied simplex estimate:
+\texttt{p\_hat\_i\ =\ alpha\_hat\_i\ /\ sum(alpha\_hat\_i)}
+
+\textbf{Where in script} - Block header: \texttt{\#\#\ MLE\ (i)} (around
+line \textbf{421})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{Model (ii): shared simplex \texttt{p} and
+group-specific total mass
+\texttt{a0\_g}}{Model (ii): shared simplex p and group-specific total mass a0\_g}}\label{model-ii-shared-simplex-p-and-group-specific-total-mass-a0_g}
+
+\textbf{Estimated parameters} - \texttt{p} (length \texttt{K}, simplex)
+- \texttt{a0\_g} for each group \texttt{g} (length \texttt{G}, positive)
+
+\textbf{Optimization parameterization} - Optimized parameter vector:
+\texttt{par\ =\ c(z,\ t)} - \texttt{z} length \texttt{K-1} →
+\texttt{p\ =\ softmax\_from\_z(z)} - \texttt{t} length \texttt{G} →
+\texttt{a0\ =\ exp(t)}
+
+\textbf{Where in script} - Block header: \texttt{\#\#\ MLE\ (ii)}
+(around line \textbf{447})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{Model (iii): shared simplex \texttt{p},
+with fixed linear scaling α₀,g = θ ·
+N\_g}{Model (iii): shared simplex p, with fixed linear scaling α₀,g = θ · N\_g}}\label{model-iii-shared-simplex-p-with-fixed-linear-scaling-ux3b1ux2080g-ux3b8-n_g}
+
+\textbf{Estimated parameters} - \texttt{p} (length \texttt{K}, simplex)
+
+\textbf{Fixed inputs used} -
+\texttt{theta\_fixed\ \textless{}-\ theta\_true} (θ is fixed, not
+estimated) - \texttt{N\_vec{[}g{]}} (sample sizes)
+
+\textbf{Model structure} - α₀,g = θ\_fixed · N\_g
+
+\textbf{Optimization parameterization} - Optimize \texttt{z} (length
+\texttt{K-1}), map to \texttt{p\ =\ softmax\_from\_z(z)}
+
+\textbf{Where in script} - Block header: \texttt{\#\#\ MLE\ (iii)}
+(around line \textbf{474})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{Model (iv): multinomial MLE with shared
+simplex
+\texttt{p}}{Model (iv): multinomial MLE with shared simplex p}}\label{model-iv-multinomial-mle-with-shared-simplex-p}
+
+\textbf{Estimated parameters} - \texttt{p} (length \texttt{K}, simplex)
+
+\textbf{Model structure} - Multinomial log-likelihood using pooled
+counts across groups (no Dirichlet layer)
+
+\textbf{Where in script} - Block header: \texttt{\#\#\ MLE\ (iv)}
+(around line \textbf{516})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{Model (v): shared simplex \texttt{p} and
+estimated linear scaling θ, α₀,g = θ ·
+N\_g}{Model (v): shared simplex p and estimated linear scaling θ, α₀,g = θ · N\_g}}\label{model-v-shared-simplex-p-and-estimated-linear-scaling-ux3b8-ux3b1ux2080g-ux3b8-n_g}
+
+\textbf{Estimated parameters} - \texttt{p} (length \texttt{K}, simplex)
+- \texttt{theta} (scalar positive)
+
+\textbf{Optimization parameterization} - Optimized parameter vector:
+\texttt{par\ =\ c(z,\ t)} - \texttt{z} length \texttt{K-1} →
+\texttt{p\ =\ softmax\_from\_z(z)} - \texttt{t} scalar →
+\texttt{theta\ =\ exp(t)}
+
+\textbf{Where in script} - Block header: \texttt{\#\#\ MLE\ (v)} (around
+line \textbf{494})
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{4) Output CSV structure (created by
+\texttt{hake.R})}{4) Output CSV structure (created by hake.R)}}\label{output-csv-structure-created-by-hake.r}
+
+When \texttt{hake.R} finishes evaluating the simplex grid, it writes a
+CSV file named:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{csv\_path\ \textless{}-\ paste0(out\_prefix,\ ".csv")} (around
+  line \textbf{585} in \texttt{hake.R})
+\end{itemize}
+
+\subsubsection{4.1 Row definition}\label{row-definition}
+
+Each row corresponds to \textbf{one simplex point} \texttt{p\_true} from
+\texttt{mesh} (length \texttt{K}) and the associated
+simulation/estimation results for that point. The script then appends
+the group sample sizes \texttt{N1..NG} used for that row.
+
+If a simplex point violates the component-wise bounds
+(\texttt{p\_lbound} / \texttt{p\_ubound}), the row is still returned but
+\textbf{all model outputs are set to \texttt{NA}} to avoid dropping rows
+(see the early return around line \textbf{524}).
+
+\subsubsection{4.2 Column order}\label{column-order}
+
+For a given \texttt{K} and \texttt{G}, the CSV columns are written in
+this order (see column naming around lines \textbf{552--563}, and
+binding of \texttt{N1..NG} around lines \textbf{565--580}):
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{True simplex coordinates}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{p1,\ p2,\ ...,\ pK}
+  \end{itemize}
+\item
+  \textbf{Model (i)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{rmse\_i}\strut \\
+  \item
+    \texttt{p\_hat\_i\_1,\ p\_hat\_i\_2,\ ...,\ p\_hat\_i\_K}
+  \end{itemize}
+\item
+  \textbf{Model (ii)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{rmse\_ii}\strut \\
+  \item
+    \texttt{p\_hat\_ii\_1,\ ...,\ p\_hat\_ii\_K}
+  \end{itemize}
+\item
+  \textbf{Model (iii)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{rmse\_iii}\strut \\
+  \item
+    \texttt{p\_hat\_iii\_1,\ ...,\ p\_hat\_iii\_K}
+  \end{itemize}
+\item
+  \textbf{Model (iv)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{rmse\_iv}\strut \\
+  \item
+    \texttt{p\_hat\_iv\_1,\ ...,\ p\_hat\_iv\_K}
+  \end{itemize}
+\item
+  \textbf{Model (v)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{rmse\_v}\strut \\
+  \item
+    \texttt{p\_hat\_v\_1,\ ...,\ p\_hat\_v\_K}
+  \end{itemize}
+\item
+  \textbf{Group sample sizes appended at the end}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{N1,\ N2,\ ...,\ NG}
+  \end{itemize}
+\end{enumerate}
+
+\subsubsection{4.3 Interpretation notes}\label{interpretation-notes}
+
+\begin{itemize}
+\tightlist
+\item
+  Each \texttt{p\_hat\_*} is an estimated simplex vector (length
+  \texttt{K}) produced by the corresponding MLE block.
+\item
+  \texttt{rmse\_*} is the RMSE between \texttt{p\_hat\_*} and
+  \texttt{p\_true} for that row.
+\item
+  The CSV contains \textbf{both} the truth (\texttt{p1..pK}) and each
+  model's paired \texttt{(rmse,\ p\_hat)} output, so downstream analysis
+  can avoid re-running the MLEs.
+\end{itemize}
+
+\subsection{5) Practical notes for keeping the mapping
+``current''}\label{practical-notes-for-keeping-the-mapping-current}
+
+If you add new keys to \texttt{hake.inp}, the mapping should be updated
+in \textbf{two places}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The typed assignment block where \texttt{kv{[}{[}"..."{]}{]}} gets
+  converted (near lines \textasciitilde244--290).
+\item
+  The \texttt{params\ \textless{}-\ list(...)} block (near lines
+  \textasciitilde300--315), so the run prints a complete record of
+  inputs.
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{Appendix A: Example \texttt{hake.inp} keys
+(for
+reference)}{Appendix A: Example hake.inp keys (for reference)}}\label{appendix-a-example-hake.inp-keys-for-reference}
+
+This is the \textbf{expected} set of keys (order does not matter), using
+key=value format:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{K}, \texttt{G}, \texttt{h}
+\item
+  \texttt{theta\_true}, \texttt{od\_mult}, \texttt{sigma}
+\item
+  \texttt{nsims}, \texttt{random.seed}
+\item
+  \texttt{dist\_code}, \texttt{mean\_nsamp}, plus \texttt{ln\_sd} or
+  \texttt{nb\_size} or \texttt{Nmin}/\texttt{Nmax} depending on
+  \texttt{dist\_code}
+\item
+  Optional: \texttt{p\_lbound}, \texttt{p\_ubound}
+\end{itemize}
+
+\end{document}
