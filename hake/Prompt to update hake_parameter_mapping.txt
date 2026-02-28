@@ -1,0 +1,7 @@
+Revise the R markdown file "hake_parameter_mapping.Rmd" 
+to account for changes to the output csv file in the 
+R script "hake.R" attached to this prompt. 
+Make no revisions to the R code in the script that 
+does not make changes in the output csv file created 
+when hake.R is run. make the Rmd file downloadable. 
+Thank you.
