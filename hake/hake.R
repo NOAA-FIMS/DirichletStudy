@@ -245,6 +245,7 @@ K          <- as.integer(kv[["K"]])
 G          <- as.integer(kv[["G"]])
 h          <- as.numeric(kv[["h"]])
 theta_true <- as.numeric(kv[["theta_true"]])
+theta_CV   <- as.numeric(kv[["theta_CV"]])
 
 # Log-uniform bounds (baseline spread); will be scaled to hit mean_nsamp when dist_code==4
 Nmin       <- as.integer(kv[["Nmin"]])
@@ -252,8 +253,8 @@ Nmax       <- as.integer(kv[["Nmax"]])
 
 nsims       <- as.integer(kv[["nsims"]])
 random.seed       <- as.integer(kv[["random.seed"]])
-sigma      <- as.numeric(kv[["sigma"]])
 od_mult   <- as.numeric(kv[["od_mult"]])  # <1 increases overdispersion by reducing Dirichlet concentration (alpha0_g). Tune as needed.
+sigma      <- as.numeric(kv[["sigma"]])
 
 # Sample-size distribution controls
 dist_code  <- as.integer(kv[["dist_code"]])   # 1=Poisson, 2=lognormal, 3=neg-bin, 4=log-uniform
@@ -289,7 +290,7 @@ if (is.null(p_lbound_raw) || is.na(p_lbound_raw) || !nzchar(trimws(p_lbound_raw)
 
 # basic validation
 # basic validation
-if (any(is.na(c(K, G, h, theta_true, dist_code, mean_nsamp, nsims, random.seed, sigma, od_mult)))) {
+if (any(is.na(c(K, G, h, theta_true, theta_CV, dist_code, mean_nsamp, nsims, random.seed, sigma, od_mult)))) {
   stop("One or more required parameters are missing or not numeric in the .inp file.")
 }
 if (!dist_code %in% 1:4) stop("dist_code must be one of {1,2,3,4}.")
@@ -306,12 +307,13 @@ if (dist_code == 4) {
 }
 
 params <- list(
-  K = K, G = G, h = h, theta_true = theta_true,
+  K = K, G = G, h = h, 
+  theta_true = theta_true, theta_CV = theta_CV,
   dist_code = dist_code, mean_nsamp = mean_nsamp,
   ln_sd = ln_sd, nb_size = nb_size,
   Nmin = Nmin, Nmax = Nmax,
   nsims = nsims, random.seed = random.seed,
-  sigma = sigma, od_mult = od_mult,
+  od_mult = od_mult, sigma = sigma,
   p_lbound = p_lbound, p_ubound = p_ubound
 )
 
@@ -402,14 +404,24 @@ mesh <- mesh[keep_idx, , drop = FALSE]
 N_vec <- N_vec[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
+# hard-wire theta_sigma for now
+theta_sigma <- 0.2
+theta_sigma <- sqrt(log(theta_CV^2 + 1))
+
 ## ---- loop over mesh --------------------------------------------------------
 run_one <- function(p_true,N_row) {
   ## simulate counts for this p_true
   X <- matrix(0L, nrow = G, ncol = K)
   
   for (g in 1:G) {
-    a0g <- (theta_true * od_mult) * N_row[g]  # smaller alpha0_g => more overdispersion
+
+    # Draw a stochastic theta for this group using a log-normal distribution
+    # The bias correction -(theta_sigma^2)/2 ensures that E[theta_g] = theta_true
+    theta_g <- theta_true * exp(rnorm(1, mean = 0, sd = theta_sigma) - (theta_sigma^2) / 2)
     
+    # Calculate alpha0_g using the strictly positive, stochastic theta_g
+    a0g <- (theta_g * od_mult) * N_row[g]  
+
     z <- log(p_true) + rnorm(K, 0, sigma)      # larger sigma => more between-sample variation in p_g
     p_g <- exp(z)
     p_g <- p_g / sum(p_g)
@@ -532,6 +544,7 @@ p_hat_i     <- alpha_hat_i / sum(alpha_hat_i)
 #  return(c(p_true,rmse_i,rmse_ii,rmse_iii,rmse_iv,rmse_v))
   return(c(p_true,rmse_i,p_hat_i,rmse_ii,p_hat_ii,rmse_iii,p_hat_iii,rmse_iv,p_hat_iv,rmse_v,p_hat_v))
 }
+## ---- end of loop over mesh -------------------------------------------------
 
 # res_mat <- t(apply(mesh, 1, run_one))
 res_mat <- do.call(

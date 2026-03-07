@@ -13,9 +13,12 @@ h = 0.01
 # Set true theta value 
 theta_true = 10
 
+# Set coefficient of variation for lognormally-distributed theta_true
+theta_CV = 0.2
+
 # Set lower and upper bounds for the log-uniform distribution, if applicable
 Nmin = 50
-Nmax = 1000
+Nmax = 100
 
 # Set number of simulated data points for each simplex proportion
 nsims = 1000
@@ -23,9 +26,10 @@ nsims = 1000
 # Set random number generator seed
 random.seed = 35643
 
-# Log-scale standard deviation and multiplier for proportion overdispersion
-sigma = 0.75
+# Set multiplier for proportion overdispersion and log-scale standard deviation and 
 od_mult = 0.55
+sigma = 0.75
+
 
 # Sample-size distribution for N_vec (composition sample sizes)
 # dist_code: 1=Poisson, 2=lognormal, 3=negative binomial, 4=log-uniform
