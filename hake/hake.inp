@@ -45,11 +45,14 @@ ln_sd = 1.0
 nb_size = 25
 
 # Set upper bounds on proportions with hake bounds of (0.97, 0.59, 0.21)
-# p_ubound = 0.5, 0.5, 0.5, 0.5, 0.5
-p_ubound = 0.97, 0.59, 0.21
-# p_ubound = 1.0, 1.0, 1.0
 # p_ubound = 1.0, 1.0, 1.0 1.0 1.0
+# p_ubound = 0.5, 0.5, 0.5, 0.5, 0.5
+# p_ubound = 1.0, 1.0, 1.0
+p_ubound = 0.97, 0.59, 0.21
 
-# Set lower bounds on proportions with example bounds of (0.06, 0.04, 0.02)
-p_lbound = 0.10, 0.04, 0.04
+
+
+# Set lower bounds on proportions with hake bounds of (0.36, 0.01, 0.0)
+# p_lbound = 0.0, 0.0, 0.0
+p_lbound = 0.36, 0.01, 0.0
 
