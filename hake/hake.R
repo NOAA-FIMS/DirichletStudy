@@ -1,49 +1,6 @@
 ## file = hake.R
-## C:\Users\Jon.Brodziak\Documents\GitHub\DirichletStudy\hake
-## Run with "source("hake.R", echo = FALSE, print.eval = TRUE)"
+## Runs nsims iterations per simplex point
 ## Clear global environment with "rm(list = ls())"
-##
-## Compare accuracy of 4 DM forms and multinomial distribution
-## based on RMSE over a K-dim simplex mesh
-## Accuracy measure is the root mean square error of the
-## estimated DM proportion based on a set of G independent
-## samples from a single population with observed sample sizes
-## distributed as Poisson, lognormal, negative binomial, or log-uniform
-## dist_code: 1=Poisson, 2=lognormal, 3=negative binomial, 4=log-uniform
-## 
-## The four Dirichlet multinomial forms and the multinomial are:
-## (i)   unconstrained concentration vector alpha
-## (ii)  constrained total concentration alpha0
-## (iii) linear constraint on input sample size theta
-## (iv)  multinomial
-## (v)   linear Dirichlet-multinomial (DML) with freely estimated scaling theta (alpha0_g = theta * N_g)
-##
-## Input file:
-##  - txt: "hake.inp"
-## Output files:
-##  - CSV: "hake.csv"
-##  - Plots: "rmse_i_hake.png","rmse_ii_hake.png", "rmse_iii_hake.png"
-##           "rmse_iv_hake.png", and "rmse_v_hake.png"
-##  - List: "hake.lst"
-##
-## Output to console tests of whether significant differences exist
-## Friedman test: Tests whether the three RMSE distributions differ 
-## overall across matched simplex points using a nonparametric 
-## repeated-measures ANOVA.
-## Kendall’s W: Quantifies the effect size from the Friedman test, 
-## indicating how consistently one method outperforms others across the grid (0–1 scale).
-## Pairwise Wilcoxon signed-rank (Holm-adjusted): Pinpoints which 
-## method pairs have significant RMSE differences while respecting the 
-## within-point pairing and controlling familywise error.
-## Hodges–Lehmann median difference with 95% CI: Estimates the 
-## typical magnitude and direction of RMSE change between each pair 
-## of methods with robust confidence intervals.
-## Percent-change summaries (median, IQR): Expresses practical 
-## impact as relative RMSE improvement/worsening between methods 
-## across simplex points.
-## Mixed-effects model (optional parametric check): Confirms results 
-## by modeling method as a fixed effect and simplex point as a random 
-## effect, with estimated marginal means for pairwise contrasts.
 
 ## ---- packages --------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(
@@ -56,42 +13,13 @@ suppressWarnings(suppressPackageStartupMessages(
   library(emmeans, quietly = TRUE, warn.conflicts = FALSE)))
 
 ## ---- simplex functions ----------------------------------------------------  
-
-## ---- generate K compositions of N------------------------------------------
-# nexcom(N, K) outputs a list containing the set of compositions
-#              of the integer N into K parts. The composition list
-#              is ordered lexicographically from the first composition
-#              of P[first] = (N, 0, 0, ..., 0) to the last composition
-#              of P[last] = (0, 0, 0, ..., N)
-#
-# function nexcom.step
-# nexcom.step(N, K, P, MTC, I, J) returns the next K-dimensional composition 
-#                                 vector of N, P[next], given the current 
-#                                 composition vector of N, P[current].
-# function arguments are:
-#	N - The positive integer to compose into K parts.
-#	K - The positive  integer number of parts, or categories in a composition vector. 
-#	P - The current composition vector in the lexicographic set of all vectors.
-#	MTC	- The logical flag indicating if the set of compositions of N is not complete
-#       as in an acronym for "More To Come".
-#   If MTC = TRUE, then the current composition is not the last composition
-#                  in the lexicographic set of all vectors.
-#		If MTC = FALSE, then the current composition is the last composition.
-#	I - An index variable.
-#	J - An index variable.
-#
-# returns - A list containing (P, MTC, I, J).
-#
 nexcom.step <- function (N, K, P, MTC, I, J) {
-  
   if (MTC == FALSE) {
     P[1] <- N
     I <- N
     J <- 0	
     if (K != 1) {
-      for (ii in 2:K) {
-        P[ii] <- 0
-      }
+      for (ii in 2:K) { P[ii] <- 0 }
       MTC <- (P[K] != N)
       return(list(P = P, MTC = MTC, I = I, J = J))
     }
@@ -106,21 +34,9 @@ nexcom.step <- function (N, K, P, MTC, I, J) {
   return(list(P = P, MTC = MTC, I = I, J = J))
 }
 
-# function nexcom
-# nexcom() is the wrapper function that calls nexcom.step to step through
-# the set of lexicographically-ordered K-compositions of N.
-#
-# function arguments are:
-#	N - The positive integer to compose into K parts.
-#	K - The number of parts of N, or categories in the composition. 
-#
-# returns - A data frame containing all possible K-part compositions of N.
-#
 nexcom <- function (N, K) {
-  
   rn.comp <- nexcom.step(N, K, P = integer(K), MTC = FALSE, I = 0, J = 0)
   df.comp <- data.frame(P = rbind(rn.comp$P)) 
-  
   ii <- 0
   while(rn.comp$MTC == TRUE) {
     rn.comp <- nexcom.step(N, K, P = rn.comp$P, MTC = rn.comp$MTC, I = rn.comp$I, J = rn.comp$J)
@@ -130,30 +46,15 @@ nexcom <- function (N, K) {
   return(df.comp)
 }
 
-# --- mk_simplex() using nexcom(N, K) ----------------------------------------
-# Inputs:
-#   K : integer >= 2
-#   h : numeric with 0 < h < 1/K
-# Output:
-#   Matrix with K columns (p1..pK), rows sum to 1.
-#   attr(., "mesh_size") = 1/N, where N = ceiling(1/h).
 mk_simplex <- function(K, h) {
-  # validate
   if (!is.numeric(K) || length(K) != 1 || K != as.integer(K) || K < 2)
     stop("K must be a single integer >= 2.")
   if (!is.numeric(h) || length(h) != 1 || !(h > 0) || !(h < 1 / K))
     stop("h must be a single numeric with 0 < h < 1/K.")
-  
-  # choose grid so effective step <= h
   N <- as.integer(ceiling(1 / h))
   if (N < 1L) N <- 1L
   h_eff <- 1 / N
-  
-  # all K-part compositions of N (nonnegative integers summing to N)
-  # nexcom(N, K) returns an N x K integer data frame
   ints <- nexcom(N, K)
-  
-  # scale to the open simplex and convert df to matrix
   simplex <- (ints + 1) / (N + K)
   simplex <- as.matrix(simplex)
 }
@@ -161,30 +62,25 @@ mk_simplex <- function(K, h) {
 ## ---- utilities -------------------------------------------------------------
 softmax_from_z <- function(z) { v <- c(z, 0); ev <- exp(v - max(v)); ev / sum(ev) }
 
-# Log output is started after reading input parameters (see below).
-
 dm_loglik_group <- function(x, p, a0) {
   N <- sum(x)
   lgamma(a0) - lgamma(N + a0) + sum(lgamma(x + a0 * p) - lgamma(a0 * p))
 }
 
-# scores (i)
 score_param_i <- function(t, X) {
   alpha_vec <- exp(t)
   a0    <- sum(alpha_vec)
   g_alpha <- rep(0.0, length(alpha_vec))
-  for (g in 1:G) {
+  for (g in 1:nrow(X)) {
     xg <- X[g, ]
     Ng <- sum(xg)
-    common <- digamma(a0) - digamma(Ng + a0)         # scalar
-    g_alpha <- g_alpha +
-      common + (digamma(xg + alpha_vec) - digamma(alpha_vec))# vector add
+    common <- digamma(a0) - digamma(Ng + a0)
+    g_alpha <- g_alpha + common + (digamma(xg + alpha_vec) - digamma(alpha_vec))
   }
   g_t <- alpha_vec * g_alpha
-  -g_t   # gradient of nll
+  -g_t
 }
 
-## scores (ii): p shared; a0_g free (opt over z (length K-1) and t_g = log a0_g)
 score_param_ii <- function(X, p, a0_vec) {
   G <- nrow(X); K <- length(p)
   g_p <- numeric(K); g_t <- numeric(G)
@@ -194,12 +90,11 @@ score_param_ii <- function(X, p, a0_vec) {
     g_t[g] <- a0 * ( digamma(a0) - digamma(Ng + a0)
                      + sum(p * (digamma(xg + a0 * p) - digamma(a0 * p))) )
   }
-  J <- diag(p) - tcrossprod(p)                     # projection to simplex tangent
+  J <- diag(p) - tcrossprod(p)
   g_z <- as.vector(crossprod(J[, 1:(K-1), drop=FALSE], g_p))
   list(g_z = g_z, g_t = g_t)
 }
 
-## scores (iii): p shared; theta shared (opt over z and t = log theta)
 score_param_iii <- function(X, p, theta) {
   G <- nrow(X); K <- length(p)
   g_p <- numeric(K); g_theta <- 0
@@ -218,351 +113,178 @@ score_param_iii <- function(X, p, theta) {
 rmse <- function(a, b) sqrt(mean((a - b)^2))
 
 ## ---- simulation settings ---------------------------------------------------
-# ---- Read parameters from hake.inp ----
 args <- commandArgs(trailingOnly = TRUE)
-# Default input file is "hake.inp" (or supply a path as the first command-line argument)
 inp_path <- if (length(args) >= 1) args[1] else "hake.inp"
+if (!file.exists(inp_path)) stop(sprintf("Input file '%s' not found.", inp_path))
 
-if (!file.exists(inp_path)) {
-  stop(sprintf("Input file '%s' not found. Create it first.", inp_path))
-}
-
-# Parse key=value pairs, ignore comments and blank lines
 tbl <- read.table(
-  file = inp_path,
-  sep = "=",
-  comment.char = "#",
-  strip.white = TRUE,
-  blank.lines.skip = TRUE,
-  col.names = c("key", "value"),
-  colClasses = c("character", "character")
+  file = inp_path, sep = "=", comment.char = "#", strip.white = TRUE,
+  blank.lines.skip = TRUE, col.names = c("key", "value"), colClasses = c("character", "character")
 )
-
 kv <- setNames(tbl$value, tbl$key)
 
-# Set typed parameters
 K          <- as.integer(kv[["K"]])
 G          <- as.integer(kv[["G"]])
 h          <- as.numeric(kv[["h"]])
 theta_true <- as.numeric(kv[["theta_true"]])
 theta_CV   <- as.numeric(kv[["theta_CV"]])
-
-# Log-uniform bounds (baseline spread); will be scaled to hit mean_nsamp when dist_code==4
 Nmin       <- as.integer(kv[["Nmin"]])
 Nmax       <- as.integer(kv[["Nmax"]])
-
-nsims       <- as.integer(kv[["nsims"]])
-random.seed       <- as.integer(kv[["random.seed"]])
-od_mult   <- as.numeric(kv[["od_mult"]])  # <1 increases overdispersion by reducing Dirichlet concentration (alpha0_g). Tune as needed.
+nsims      <- as.integer(kv[["nsims"]])
+random.seed<- as.integer(kv[["random.seed"]])
+od_mult    <- as.numeric(kv[["od_mult"]])
 sigma      <- as.numeric(kv[["sigma"]])
-
-# Sample-size distribution controls
-dist_code  <- as.integer(kv[["dist_code"]])   # 1=Poisson, 2=lognormal, 3=neg-bin, 4=log-uniform
-mean_nsamp <- as.numeric(kv[["mean_nsamp"]])  # common mean across distributions
-
-# Distribution-specific parameters
-ln_sd    <- as.numeric(kv[["ln_sd"]])         # lognormal sdlog (used when dist_code==2)
-nb_size  <- as.numeric(kv[["nb_size"]])       # negbin "size" (used when dist_code==3)
+dist_code  <- as.integer(kv[["dist_code"]])
+mean_nsamp <- as.numeric(kv[["mean_nsamp"]])
+ln_sd      <- as.numeric(kv[["ln_sd"]])
+nb_size    <- as.numeric(kv[["nb_size"]])
 
 p_ubound_raw <- kv[["p_ubound"]]
 if (is.null(p_ubound_raw) || is.na(p_ubound_raw) || !nzchar(trimws(p_ubound_raw))) {
-  # Default: no filtering beyond the simplex constraints (components <= 1)
   p_ubound <- rep(1, K)
 } else {
-  parts <- unlist(strsplit(p_ubound_raw, "[,[:space:]]+"))
-  parts <- parts[nzchar(parts)]
-  p_ubound <- as.numeric(parts)
-  if (any(is.na(p_ubound))) stop("p_ubound must be numeric in [0,1].")
-  if (length(p_ubound) != K) stop(sprintf("p_ubound must have length K=%d.", K))
+  p_ubound <- as.numeric(unlist(strsplit(p_ubound_raw, "[,[:space:]]+")))[nzchar(unlist(strsplit(p_ubound_raw, "[,[:space:]]+")))]
 }
 
 p_lbound_raw <- kv[["p_lbound"]]
 if (is.null(p_lbound_raw) || is.na(p_lbound_raw) || !nzchar(trimws(p_lbound_raw))) {
-  # Default: no filtering beyond the simplex constraints (components >= 0)
   p_lbound <- rep(0, K)
 } else {
-  parts <- unlist(strsplit(p_lbound_raw, "[,[:space:]]+"))
-  parts <- parts[nzchar(parts)]
-  p_lbound <- as.numeric(parts)
-  if (any(is.na(p_lbound))) stop("p_lbound must be numeric in [0,1].")
-  if (length(p_lbound) != K) stop(sprintf("p_lbound must have length K=%d.", K))
+  p_lbound <- as.numeric(unlist(strsplit(p_lbound_raw, "[,[:space:]]+")))[nzchar(unlist(strsplit(p_lbound_raw, "[,[:space:]]+")))]
 }
 
-# basic validation
-# basic validation
-if (any(is.na(c(K, G, h, theta_true, theta_CV, dist_code, mean_nsamp, nsims, random.seed, sigma, od_mult)))) {
-  stop("One or more required parameters are missing or not numeric in the .inp file.")
-}
-if (!dist_code %in% 1:4) stop("dist_code must be one of {1,2,3,4}.")
-if (is.na(mean_nsamp) || mean_nsamp <= 0) stop("mean_nsamp must be > 0.")
-if (is.na(sigma) || sigma <= 0) stop("sigma must be > 0.")
-
-# distribution-specific validation
-if (dist_code == 2 && (is.na(ln_sd) || ln_sd <= 0)) stop("ln_sd must be > 0 when dist_code == 2 (lognormal).")
-if (dist_code == 3 && (is.na(nb_size) || nb_size <= 0)) stop("nb_size must be > 0 when dist_code == 3 (negative binomial).")
-if (dist_code == 4) {
-  if (any(is.na(c(Nmin, Nmax)))) stop("Nmin and Nmax must be provided when dist_code == 4 (log-uniform).")
-  if (Nmin < 1) stop("Nmin must be >= 1.")
-  if (Nmin > Nmax) stop("Nmin must be <= Nmax.")
-}
-
-params <- list(
-  K = K, G = G, h = h, 
-  theta_true = theta_true, theta_CV = theta_CV,
-  dist_code = dist_code, mean_nsamp = mean_nsamp,
-  ln_sd = ln_sd, nb_size = nb_size,
-  Nmin = Nmin, Nmax = Nmax,
-  nsims = nsims, random.seed = random.seed,
-  od_mult = od_mult, sigma = sigma,
-  p_lbound = p_lbound, p_ubound = p_ubound
-)
+params <- list(K=K, G=G, h=h, theta_true=theta_true, theta_CV=theta_CV, dist_code=dist_code,
+               mean_nsamp=mean_nsamp, ln_sd=ln_sd, nb_size=nb_size, Nmin=Nmin, Nmax=Nmax,
+               nsims=nsims, random.seed=random.seed, od_mult=od_mult, sigma=sigma,
+               p_lbound=p_lbound, p_ubound=p_ubound)
 
 set.seed(random.seed)
 
-# Output file prefix includes the input file stem and the distribution choice
 dist_levels <- c("Poisson", "Lognormal", "Negative binomial", "Log-uniform")
 dist_tag    <- dist_levels[[as.integer(dist_code)]]
-base_stem  <- tools::file_path_sans_ext(basename(inp_path))
-out_prefix <- "hake"
-# mean_tag   <- gsub("\\.", "p", format(mean_nsamp, scientific = FALSE, trim = TRUE))
-# out_prefix <- paste0(base_stem, "_", dist_tag, "_mean", mean_tag)
+base_stem   <- tools::file_path_sans_ext(basename(inp_path))
+out_prefix  <- "hake"
 
 logfile <- paste0(out_prefix, ".lst")
 sink(logfile, split = TRUE, type = "output")
-
 message("Logging to: ", logfile)
-
+start_time <- Sys.time()
+cat("Run Time Start:", format(start_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
 
 ## ---- mesh of p_true -------------------------------------------------------
 mesh <- mk_simplex(K, h)
-nmesh <- nrow(mesh)
 
-## ---- sample sizes (N_vec) ------------------------------------------------
-# N_vec is an (nmesh x G) matrix of sample sizes for each simplex point (row)
-# and each independent sample (column). The distribution is selected by dist_code
-# and forced to have a common mean = mean_nsamp (up to rounding/truncation).
-
-
-draw_nsamp <- function(n, dist_code, mean_nsamp, ln_sd, nb_size, Nmin, Nmax) {
-  if (dist_code == 1L) {
-    # Poisson with mean mean_nsamp; force >= 1
-    x <- rpois(n, lambda = mean_nsamp)
-    return(pmax(1L, as.integer(x)))
-  }
-  if (dist_code == 2L) {
-    # Lognormal with mean mean_nsamp: mean = exp(mu + 0.5*sd^2)
-    mu <- log(mean_nsamp) - 0.5 * ln_sd^2
-    x <- rlnorm(n, meanlog = mu, sdlog = ln_sd)
-    return(pmax(1L, as.integer(round(x))))
-  }
-  if (dist_code == 3L) {
-    # Negative binomial with mean mean_nsamp (mu) and dispersion nb_size; force >= 1
-    x <- rnbinom(n, size = nb_size, mu = mean_nsamp)
-    return(pmax(1L, as.integer(x)))
-  }
-  if (dist_code == 4L) {
-    # Log-uniform baseline [Nmin, Nmax] (continuous); scale bounds to hit mean_nsamp
-    # Continuous log-uniform mean: (b-a)/(log(b)-log(a)) for 0<a<b
-    mu0 <- (Nmax - Nmin) / (log(Nmax) - log(Nmin))
-    s <- mean_nsamp / mu0
-    a <- max(1L, as.integer(round(Nmin * s)))
-    b <- max(a + 1L, as.integer(round(Nmax * s)))
-    x <- exp(runif(n, log(a), log(b)))
-    return(pmax(1L, as.integer(round(x))))
-  }
-  stop("Unknown dist_code (must be 1..4).")
-}
-
-N_draws <- draw_nsamp(nmesh * G, dist_code, mean_nsamp, ln_sd, nb_size, Nmin, Nmax)
-N_vec <- matrix(N_draws, nrow = nmesh, ncol = G, byrow = TRUE)
-
-# Console diagnostics: clearly labeled by distribution type
-dist_label = c("Poisson","Lognormal","Negative Binomial","Log-uniform")
-cat("
---- Sample-size distribution diagnostics ---
-")
-cat(sprintf("Sample Size Distribution = %d (%s)
-", dist_code, dist_tag))
-cat(sprintf("Target mean (mean_nsamp) = %.3f
-", mean_nsamp))
-cat(sprintf("Realized mean across all N_vec entries = %.3f
-", mean(as.vector(N_vec))))
-cat(sprintf("Realized SD across all N_vec entries = %.3f
-", sd(as.vector(N_vec))))
-cat("Quantiles (0%, 5%, 25%, 50%, 75%, 95%, 100%):
-")
-print(quantile(as.vector(N_vec), probs = c(0, 0.05, 0.25, 0.5, 0.75, 0.95, 1)))
-cat("--- End diagnostics ---
-
-")
-
-## ---- filter mesh by p_ubound (component-wise upper bounds) ---------------
-# Keep only rows where each component of p_true is <= the corresponding bound.
-# (This filter is applied consistently to both mesh and N_vec to prevent row mismatches.)
+## Filter mesh based on bounds FIRST
 keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all) & apply(sweep(mesh, 2, p_lbound, `>=`), 1, all)
 mesh <- mesh[keep_idx, , drop = FALSE]
-N_vec <- N_vec[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
-# hard-wire theta_sigma for now
-theta_sigma <- 0.2
+## Calculate total runs using nsims
+total_runs <- nmesh * nsims
+
+## ---- sample sizes (N_vec) ------------------------------------------------
+draw_nsamp <- function(n, dist_code, mean_nsamp, ln_sd, nb_size, Nmin, Nmax) {
+  if (dist_code == 1L) return(pmax(1L, as.integer(rpois(n, lambda = mean_nsamp))))
+  if (dist_code == 2L) return(pmax(1L, as.integer(round(rlnorm(n, meanlog = log(mean_nsamp) - 0.5 * ln_sd^2, sdlog = ln_sd)))))
+  if (dist_code == 3L) return(pmax(1L, as.integer(rnbinom(n, size = nb_size, mu = mean_nsamp))))
+  if (dist_code == 4L) {
+    mu0 <- (Nmax - Nmin) / (log(Nmax) - log(Nmin))
+    s <- mean_nsamp / mu0
+    return(pmax(1L, as.integer(round(exp(runif(n, log(max(1L, as.integer(round(Nmin * s)))), log(max(1L + max(1L, as.integer(round(Nmin * s))), as.integer(round(Nmax * s))))))))))
+  }
+}
+
+# Expand mesh and tracking IDs
+mesh_expanded <- mesh[rep(seq_len(nmesh), each = nsims), , drop = FALSE]
+mesh_id_vec <- rep(seq_len(nmesh), each = nsims)
+sim_id_vec  <- rep(seq_len(nsims), times = nmesh)
+
+# Draw sample sizes for the fully expanded simulation grid
+N_draws <- draw_nsamp(total_runs * G, dist_code, mean_nsamp, ln_sd, nb_size, Nmin, Nmax)
+N_vec <- matrix(N_draws, nrow = total_runs, ncol = G, byrow = TRUE)
+
+cat("--- Sample-size distribution diagnostics ---\n")
+cat(sprintf("Sample Size Distribution = %d (%s)\nTarget mean = %.3f\nRealized mean = %.3f\nRealized SD = %.3f\n", 
+            dist_code, dist_tag, mean_nsamp, mean(as.vector(N_vec)), sd(as.vector(N_vec))))
+print(quantile(as.vector(N_vec), probs = c(0, 0.05, 0.25, 0.5, 0.75, 0.95, 1)))
+cat("--- End diagnostics ---\n\n")
+
 theta_sigma <- sqrt(log(theta_CV^2 + 1))
 
-## ---- loop over mesh --------------------------------------------------------
-run_one <- function(p_true,N_row) {
-  ## simulate counts for this p_true
+## ---- loop over total runs --------------------------------------------------
+run_one <- function(p_true, N_row) {
   X <- matrix(0L, nrow = G, ncol = K)
-  
   for (g in 1:G) {
-
-    # Draw a stochastic theta for this group using a log-normal distribution
-    # The bias correction -(theta_sigma^2)/2 ensures that E[theta_g] = theta_true
     theta_g <- theta_true * exp(rnorm(1, mean = 0, sd = theta_sigma) - (theta_sigma^2) / 2)
-    
-    # Calculate alpha0_g using the strictly positive, stochastic theta_g
     a0g <- (theta_g * od_mult) * N_row[g]  
-
-    z <- log(p_true) + rnorm(K, 0, sigma)      # larger sigma => more between-sample variation in p_g
+    z <- log(p_true) + rnorm(K, 0, sigma) 
     p_g <- exp(z)
     p_g <- p_g / sum(p_g)
-    
     alpha_vec <- a0g * p_g
     phi <- rgamma(K, shape = alpha_vec, rate = 1); phi <- phi / sum(phi)
     X[g, ] <- as.vector(rmultinom(1, size = N_row[g], prob = phi))
   }
   
-## MLE (i): unconstrained alpha_vec (shared across groups) -------------------
-## Start at alpha_vec = alpha0 * p_init with a small positive floor
-alpha0_init <- 1.0
-pooled <- colSums(X); p_init <- pmax(pooled, 1) / sum(pmax(pooled, 1))
-t0_i <- log(pmax(alpha0_init * p_init, 1e-4))   # t = log(alpha_vec), length K
-
-## Negative joint log-likelihood for (i)
-nll_i <- function(t,X) {
-  alpha_vec <- exp(t)                 # length K
-  a0    <- sum(alpha_vec)
-  # Sum over groups
-  -sum(vapply(1:G, function(g) {
-    xg <- X[g, ]
-    Ng <- sum(xg)
-    lgamma(a0) - lgamma(Ng + a0) +
-      sum(lgamma(xg + alpha_vec) - lgamma(alpha_vec))
-  }, 0.0))
-}
- 
-fit_i <- optim(t0_i, nll_i, score_param_i, method = "BFGS",
-               control = list(maxit = 500, reltol = 1e-10), 
-               X = X)
-
-alpha_hat_i <- exp(fit_i$par)
-p_hat_i     <- alpha_hat_i / sum(alpha_hat_i)
-
-  ## MLE (ii): (p, a0_g)
-  pooled <- colSums(X); p_init <- pmax(pooled, 1) / sum(pmax(pooled, 1))
-  z0 <- log(p_init[1:(K-1)]) - log(p_init[K])
-  t0 <- rep(0, G)  # log a0_g = 0 => a0_g = 1
+  ## MLE (i)
+  alpha0_init <- 1.0; pooled <- colSums(X); p_init <- pmax(pooled, 1) / sum(pmax(pooled, 1))
+  t0_i <- log(pmax(alpha0_init * p_init, 1e-4))
+  nll_i <- function(t, X) {
+    alpha_vec <- exp(t); a0 <- sum(alpha_vec)
+    -sum(vapply(1:G, function(g) {
+      lgamma(a0) - lgamma(sum(X[g, ]) + a0) + sum(lgamma(X[g, ] + alpha_vec) - lgamma(alpha_vec))
+    }, 0.0))
+  }
+  fit_i <- optim(t0_i, nll_i, score_param_i, method = "BFGS", control = list(maxit = 500, reltol = 1e-10), X = X)
+  alpha_hat_i <- exp(fit_i$par); p_hat_i <- alpha_hat_i / sum(alpha_hat_i)
   
+  ## MLE (ii)
+  z0 <- log(p_init[1:(K-1)]) - log(p_init[K]); t0 <- rep(0, G)
   nll_ii <- function(par) {
-    z <- par[1:(K-1)]; t <- par[K:(K-1+G)]
-    p <- softmax_from_z(z); a0 <- exp(t)
-    -sum(vapply(1:G, function(g)
-      dm_loglik_group(X[g,], p, a0[g]), 0.0))
+    z <- par[1:(K-1)]; t <- par[K:(K-1+G)]; p <- softmax_from_z(z); a0 <- exp(t)
+    -sum(vapply(1:G, function(g) dm_loglik_group(X[g,], p, a0[g]), 0.0))
   }
   grad_ii <- function(par) {
-    z <- par[1:(K-1)]; t <- par[K:(K-1+G)]
-    p <- softmax_from_z(z); a0 <- exp(t)
-    sc <- score_param_ii(X, p, a0)
-    -c(sc$g_z, sc$g_t)
+    z <- par[1:(K-1)]; t <- par[K:(K-1+G)]; p <- softmax_from_z(z); a0 <- exp(t)
+    sc <- score_param_ii(X, p, a0); -c(sc$g_z, sc$g_t)
   }
-  fit_ii <- try(optim(c(z0, t0), nll_ii, grad_ii, method = "BFGS",
-                      control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  fit_ii <- try(optim(c(z0, t0), nll_ii, grad_ii, method = "BFGS", control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  p_hat_ii <- if(inherits(fit_ii, "try-error")) rep(NA_real_, K) else softmax_from_z(fit_ii$par[1:(K-1)])
   
-  if (inherits(fit_ii, "try-error")) {
-    p_hat_ii <- rep(NA_real_, K)
-  } else {
-    zhat <- fit_ii$par[1:(K-1)]
-    p_hat_ii <- softmax_from_z(zhat)
-  }
-  
-  ## MLE (iii): (p), α0_g = θ_fixed * N_g  (linear DML with fixed scaling)
+  ## MLE (iii)
   theta_fixed <- theta_true
-  nll_iii <- function(z) {
-    p <- softmax_from_z(z)
-    -sum(vapply(1:G, function(g)
-      dm_loglik_group(X[g,], p, theta_fixed * N_vec[g]), 0.0))
-  }
-  grad_iii <- function(z) {
-    p <- softmax_from_z(z)
-    sc <- score_param_iii(X, p, theta_fixed)
-    -sc$g_z
-  }
-  fit_iii <- try(optim(z0, nll_iii, grad_iii, method = "BFGS",
-                       control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
-  if (inherits(fit_iii, "try-error")) {
-    p_hat_iii <- rep(NA_real_, K)
-  } else {
-    p_hat_iii <- softmax_from_z(fit_iii$par)
-  }
+  nll_iii <- function(z) { p <- softmax_from_z(z); -sum(vapply(1:G, function(g) dm_loglik_group(X[g,], p, theta_fixed * N_row[g]), 0.0)) }
+  grad_iii <- function(z) { p <- softmax_from_z(z); sc <- score_param_iii(X, p, theta_fixed); -sc$g_z }
+  fit_iii <- try(optim(z0, nll_iii, grad_iii, method = "BFGS", control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  p_hat_iii <- if(inherits(fit_iii, "try-error")) rep(NA_real_, K) else softmax_from_z(fit_iii$par)
   
-  ## MLE (v): (p, theta), α0_g = θ * N_g  (linear DML with freely estimated scaling)
+  ## MLE (v)
   nll_v <- function(par) {
-    z <- par[1:(K-1)]; t <- par[K]
-    p <- softmax_from_z(z); theta <- exp(t)
-    -sum(vapply(1:G, function(g)
-      dm_loglik_group(X[g,], p, theta * N_vec[g]), 0.0))
+    z <- par[1:(K-1)]; t <- par[K]; p <- softmax_from_z(z); theta <- exp(t)
+    -sum(vapply(1:G, function(g) dm_loglik_group(X[g,], p, theta * N_row[g]), 0.0))
   }
   grad_v <- function(par) {
-    z <- par[1:(K-1)]; t <- par[K]
-    p <- softmax_from_z(z); theta <- exp(t)
-    sc <- score_param_iii(X, p, theta)
-    -c(sc$g_z, sc$g_t)
+    z <- par[1:(K-1)]; t <- par[K]; p <- softmax_from_z(z); theta <- exp(t)
+    sc <- score_param_iii(X, p, theta); -c(sc$g_z, sc$g_t)
   }
-  fit_v <- try(optim(c(z0, 0), nll_v, grad_v, method = "BFGS",
-                     control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
-  if (inherits(fit_v, "try-error")) {
-    p_hat_v <- rep(NA_real_, K)
-  } else {
-    zhat <- fit_v$par[1:(K-1)]
-    p_hat_v <- softmax_from_z(zhat)
-  }
-
-  ## MLE (iv): multinomial with shared p across groups
-  pooled <- colSums(X)
-  p_hat_iv <- pooled / sum(pooled)
+  fit_v <- try(optim(c(z0, 0), nll_v, grad_v, method = "BFGS", control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
+  p_hat_v <- if(inherits(fit_v, "try-error")) rep(NA_real_, K) else softmax_from_z(fit_v$par[1:(K-1)])
   
-  # Apply p_ubound filter (component-wise). If a point is out of bounds, keep the row
-  # but mark RMSEs as NA to avoid dropping rows (and causing row-mismatch later).
-  if (any(p_true > p_ubound) || any(p_true < p_lbound)) {
-    return(c(p_true, rep(NA_real_, 5L * (length(p_true) + 1L))))
-  }
-
-  rmse_i   = rmse(p_hat_i,   p_true)
-  rmse_ii  = rmse(p_hat_ii,  p_true)
-  rmse_iii = rmse(p_hat_iii, p_true)
-  rmse_iv  = rmse(p_hat_iv,  p_true)
-  rmse_v   = rmse(p_hat_v,   p_true)
-#  return(c(p_true,rmse_i,rmse_ii,rmse_iii,rmse_iv,rmse_v))
-  return(c(p_true,rmse_i,p_hat_i,rmse_ii,p_hat_ii,rmse_iii,p_hat_iii,rmse_iv,p_hat_iv,rmse_v,p_hat_v))
+  ## MLE (iv)
+  p_hat_iv <- colSums(X) / sum(colSums(X))
+  
+  rmse_i = rmse(p_hat_i, p_true); rmse_ii = rmse(p_hat_ii, p_true)
+  rmse_iii = rmse(p_hat_iii, p_true); rmse_iv = rmse(p_hat_iv, p_true); rmse_v = rmse(p_hat_v, p_true)
+  
+  return(c(p_true, rmse_i, p_hat_i, rmse_ii, p_hat_ii, rmse_iii, p_hat_iii, rmse_iv, p_hat_iv, rmse_v, p_hat_v))
 }
-## ---- end of loop over mesh -------------------------------------------------
 
-# res_mat <- t(apply(mesh, 1, run_one))
-res_mat <- do.call(
-  rbind,
-  lapply(seq_len(nmesh), function(i) {
-    run_one(p_true = mesh[i, ], N_row = N_vec[i, ])
-  })
-)
+# Run the simulation over all expanded combinations
+res_mat <- do.call(rbind, lapply(seq_len(total_runs), function(i) {
+  c(mesh_id_vec[i], sim_id_vec[i], run_one(p_true = mesh_expanded[i, ], N_row = N_vec[i, ]))
+}))
 
 out <- as.data.frame(res_mat)
-
-# K is read from hake.inp earlier in the script and is the length of p_true and each p_hat_* vector.
-# res_mat columns (in order) are:
-#   p_true[1:K], (rmse_i, p_hat_i[1:K]), (rmse_ii, p_hat_ii[1:K]), (rmse_iii, p_hat_iii[1:K]),
-#   (rmse_iv, p_hat_iv[1:K]), (rmse_v, p_hat_v[1:K])
 K_true <- K
-
-# Name columns for p_true and model outputs (RMSE + estimated proportions by model)
 true_names <- paste0("p", seq_len(K_true))
 model_block_names <- c(
   "rmse_i",   paste0("p_hat_i_",   seq_len(K_true)),
@@ -572,177 +294,102 @@ model_block_names <- c(
   "rmse_v",   paste0("p_hat_v_",   seq_len(K_true))
 )
 
-# Apply names to the current out data.frame (N columns get appended later)
-colnames(out) <- c(true_names, model_block_names)
+colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names)
 
-# Ensure N_vec is a matrix with one row per simulation and G columns (groups)
-N_mat <- if (is.null(dim(N_vec))) {
-  matrix(N_vec, nrow = nrow(out), byrow = TRUE)
-} else {
-  N_vec
-}
-
-# Coerce sample sizes to integers (safe rounding, then integer cast)
-N_int <- matrix(as.integer(round(N_mat)),
-                nrow = nrow(N_mat),
-                ncol = ncol(N_mat))
-colnames(N_int) <- paste0("N", seq_len(ncol(N_int)))  # N1..NG
-
-# Bind G sample-size columns to out
+N_int <- matrix(as.integer(round(N_vec)), nrow = total_runs, ncol = G)
+colnames(N_int) <- paste0("N", seq_len(G))
 out <- cbind(out, N_int)
-
-# Write CSV (no row names)
-# write.csv(out, file = "hake.csv", row.names = FALSE)
 
 ## ---- write CSV -------------------------------------------------------------
 csv_path <- paste0(out_prefix, ".csv")
 write.csv(out, csv_path, row.names = FALSE)
 message("Wrote: ", csv_path)
 
-## ---- ternary plots ---------------------------------------------------------
+## ---- ternary plots (using averages for each mesh point to prevent overplotting) --------
 if (K == 3) {
+  suppressWarnings(suppressPackageStartupMessages(library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
   
-suppressWarnings(suppressPackageStartupMessages(
-  library(ggtern, quietly = TRUE, warn.conflicts = FALSE)))
+  # Aggregate mean RMSE by mesh_id for cleaner ternary plots
+  out_agg <- aggregate(out[, c("rmse_i", "rmse_ii", "rmse_iii", "rmse_iv", "rmse_v", "p1", "p2", "p3")], 
+                       by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
   
-  rmse_min <- min(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v, na.rm = TRUE)
-  rmse_max <- max(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v, na.rm = TRUE)
+  rmse_min <- min(out_agg$rmse_i, out_agg$rmse_ii, out_agg$rmse_iii, out_agg$rmse_iv, out_agg$rmse_v, na.rm = TRUE)
+  rmse_max <- max(out_agg$rmse_i, out_agg$rmse_ii, out_agg$rmse_iii, out_agg$rmse_iv, out_agg$rmse_v, na.rm = TRUE)
   
-p_i <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_i)) +
-  geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(i) RMSE over simplex (K=3, G=%d, θ=%.1f, unconstrained α)", G, theta_true), colour = "RMSE") +
-  scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
-  theme_bw()
-
-p_ii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_ii)) +
-  geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(ii) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=beta)", G, theta_true), colour = "RMSE") +
-  scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
-  theme_bw()
-
-p_iii <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_iii)) +
-  geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(iii) RMSE over simplex (K=3, G=%d, θ=%.1f, α0=θ*N)", G, theta_true), colour = "RMSE") +
-    scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
-  theme_bw()
-
-p_iv <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_iv)) +
-  geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(iv) RMSE over simplex (K=3, G=%d, Multinomial MLE)", G), colour = "RMSE") +
-  scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
-  theme_bw()
-
-p_v <- ggtern::ggtern(out, aes(x = p1, y = p2, z = p3, colour = rmse_v)) +
-  geom_point(shape = 16, size = 2, alpha = 0.9) +
-  labs(title = sprintf("(v) RMSE over simplex (K=3, G=%d, DML θ estimated)", G), colour = "RMSE") +
-  scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
-  theme_bw()
-
-ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
-
-print(p_i)
-print(p_ii)
-print(p_iii)
-print(p_iv)
-print(p_v)
-
+  plot_tern <- function(data, rmse_col, title_str) {
+    ggtern::ggtern(data, aes_string(x = "p1", y = "p2", z = "p3", colour = rmse_col)) +
+      geom_point(shape = 16, size = 2, alpha = 0.9) +
+      labs(title = title_str, colour = "Mean RMSE") +
+      scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
+      theme_bw()
+  }
+  
+  p_i <- plot_tern(out_agg, "rmse_i", sprintf("(i) RMSE over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
+  p_ii <- plot_tern(out_agg, "rmse_ii", sprintf("(ii) RMSE over simplex (K=3, G=%d, α0=beta)", G))
+  p_iii <- plot_tern(out_agg, "rmse_iii", sprintf("(iii) RMSE over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_iv <- plot_tern(out_agg, "rmse_iv", sprintf("(iv) RMSE over simplex (K=3, G=%d, Multinomial)", G))
+  p_v <- plot_tern(out_agg, "rmse_v", sprintf("(v) RMSE over simplex (K=3, G=%d, DML θ estimated)", G))
+  
+  print(p_i)
+  print(p_ii)
+  print(p_iii)
+  print(p_iv)
+  print(p_v)
+  
+  ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
 }
 
 print(params)
 
-n <- length(out$rmse_i)
-stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n, length(out$rmse_v) == n)
-
+## Statistics
+n_obs <- nrow(out)
 df <- data.frame(
-  id     = rep(seq_len(n), times = 5),                 # block (simplex point)
-  method = factor(rep(c("i","ii","iii","iv","v"), each = n),
-                  levels = c("i","ii","iii","iv","v")),
+  id     = rep(seq_len(n_obs), times = 5), # id now correctly identifies the specific simulation dataset run
+  method = factor(rep(c("i","ii","iii","iv","v"), each = n_obs), levels = c("i","ii","iii","iv","v")),
   rmse   = c(out$rmse_i, out$rmse_ii, out$rmse_iii, out$rmse_iv, out$rmse_v)
 )
 
-## Overall nonparametric repeated-measures test
 ft <- friedman.test(rmse ~ method | id, data = df)
 print(ft)
 
-## Kendall’s W effect size (approx. from Friedman chi-square)
 k <- nlevels(df$method)
-W <- as.numeric(ft$statistic) / (n * (k - 1))
+W <- as.numeric(ft$statistic) / (n_obs * (k - 1))
 cat(sprintf("Kendall's W ≈ %.3f\n", W))
 
-## Post-hoc paired comparisons with multiplicity control
-pw <- pairwise.wilcox.test(df$rmse, df$method,
-                           paired = TRUE, p.adjust.method = "holm",
-                           exact = FALSE)
+pw <- pairwise.wilcox.test(df$rmse, df$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
 print(pw)
 
-## Convert to wide for paired, within-simplex-point comparisons
 wide <- reshape(df, idvar = "id", timevar = "method", direction = "wide")
-
-## 1) Paired, robust effect: Hodges–Lehmann (median) difference + 95% CI
 methods <- c("i","ii","iii","iv","v")
 pair_list <- combn(methods, 2, simplify = FALSE)
 
 wilcox_ci <- lapply(pair_list, function(pr) {
-  a <- wide[[paste0("rmse.", pr[1])]]
-  b <- wide[[paste0("rmse.", pr[2])]]
+  a <- wide[[paste0("rmse.", pr[1])]]; b <- wide[[paste0("rmse.", pr[2])]]
   wt <- wilcox.test(b, a, paired = TRUE, conf.int = TRUE, exact = FALSE)
   list(comp = paste0(pr[2], " - ", pr[1]), test = wt)
 })
+for (obj in wilcox_ci) { cat("\nPaired Wilcoxon (", obj$comp, "):\n", sep = ""); print(obj$test) }
 
-for (obj in wilcox_ci) {
-  cat("
-Paired Wilcoxon (", obj$comp, "):
-", sep = "")
-  print(obj$test)
-}
-
-## 2) Practical impact: percent change in RMSE (median & IQR)
-## Compute ALL pairwise percent changes: 100 * (RMSE_B - RMSE_A) / RMSE_A
-methods <- c("i","ii","iii","iv","v")
-rmse_cols <- paste0("rmse.", methods)
-
-## sanity check
-stopifnot(all(rmse_cols %in% names(wide)))
-
-## build percent-change columns programmatically for every unordered pair
-pairs <- combn(methods, 2, simplify = FALSE)  # each element is c(A,B) with A before B in 'methods'
 pct <- wide
-for (ab in pairs) {
-  a <- ab[1]; b <- ab[2]
-  nm <- paste0("pct_", b, "_", a)
-  pct[[nm]] <- 100 * (pct[[paste0("rmse.", b)]] - pct[[paste0("rmse.", a)]]) / pct[[paste0("rmse.", a)]]
+for (ab in pair_list) {
+  nm <- paste0("pct_", ab[2], "_", ab[1])
+  pct[[nm]] <- 100 * (pct[[paste0("rmse.", ab[2])]] - pct[[paste0("rmse.", ab[1])]]) / pct[[paste0("rmse.", ab[1])]]
 }
-
-pct_cols <- paste0("pct_", sapply(pairs, `[`, 2), "_", sapply(pairs, `[`, 1))
-
-tmp <- sapply(pct[pct_cols],
-              \(x) c(median = median(x), IQR = IQR(x),
-                     q25 = quantile(x, .25), q75 = quantile(x, .75)))
+pct_cols <- paste0("pct_", sapply(pair_list, `[`, 2), "_", sapply(pair_list, `[`, 1))
+tmp <- sapply(pct[pct_cols], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x, na.rm=TRUE), q25 = quantile(x, .25, na.rm=TRUE), q75 = quantile(x, .75, na.rm=TRUE)))
 print(tmp)
 
-## 3) Standardized paired effect r from Wilcoxon Z
-r_from_wilcox <- function(x, y){
-  wt <- wilcox.test(x, y, paired = TRUE, exact = FALSE)
-  z  <- qnorm(wt$p.value/2, lower.tail = FALSE) * sign(median(y - x, na.rm = TRUE))
-  r  <- as.numeric(z) / sqrt(sum(!is.na(x) & !is.na(y)))
-  return(r)
-}
-
-r_pairs <- lapply(pair_list, function(pr){
-  a <- wide[[paste0("rmse.", pr[1])]]
-  b <- wide[[paste0("rmse.", pr[2])]]
-  r <- r_from_wilcox(a, b)
-  data.frame(pair = paste0(pr[2], " vs ", pr[1]), r = r)
-})
-r_tbl <- do.call(rbind, r_pairs)
-print(r_tbl)
-
 m <- lmer(rmse ~ method + (1 | id), data = df)
-print(anova(m))                               # overall method effect)
-print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
+print(anova(m))
+print(emmeans(m, pairwise ~ method, adjust = "holm"))
+
+end_time <- Sys.time()
+cat("Run Time End:", format(end_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
+run_time <- end_time - start_time
+cat("Total Elapsed Time:", round(run_time, 2), attr(run_time, "units"), "\n\n")
 
 on.exit(sink())

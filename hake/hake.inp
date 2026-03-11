@@ -8,7 +8,7 @@ K = 3
 G = 2
 
 # Set mesh to sample the proportion simplex, h < 1/K
-h = 0.01
+h = 0.05
 
 # Set true theta value 
 theta_true = 10
@@ -21,15 +21,14 @@ Nmin = 50
 Nmax = 100
 
 # Set number of simulated data points for each simplex proportion
-nsims = 1000
+nsims = 10
 
 # Set random number generator seed
-random.seed = 35643
+random.seed = 7331
 
 # Set multiplier for proportion overdispersion and log-scale standard deviation and 
-od_mult = 0.55
-sigma = 0.75
-
+od_mult = 0.5
+sigma = 0.5
 
 # Sample-size distribution for N_vec (composition sample sizes)
 # dist_code: 1=Poisson, 2=lognormal, 3=negative binomial, 4=log-uniform
@@ -47,12 +46,11 @@ nb_size = 25
 # Set upper bounds on proportions with hake bounds of (0.97, 0.59, 0.21)
 # p_ubound = 1.0, 1.0, 1.0 1.0 1.0
 # p_ubound = 0.5, 0.5, 0.5, 0.5, 0.5
-# p_ubound = 1.0, 1.0, 1.0
-p_ubound = 0.97, 0.59, 0.21
-
-
+p_ubound = 1.0, 1.0, 1.0
+# p_ubound = 0.97, 0.59, 0.21
 
 # Set lower bounds on proportions with hake bounds of (0.36, 0.01, 0.0)
-# p_lbound = 0.0, 0.0, 0.0
-p_lbound = 0.36, 0.01, 0.0
+# p_lbound = 0.25, 0.15, 0.05, 0.2, 0.1
+p_lbound = 0.0, 0.0, 0.0
+# p_lbound = 0.36, 0.01, 0.0
 
