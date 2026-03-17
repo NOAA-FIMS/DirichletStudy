@@ -11,6 +11,10 @@ suppressWarnings(suppressPackageStartupMessages(
   library(lmerTest, quietly = TRUE, warn.conflicts = FALSE)))
 suppressWarnings(suppressPackageStartupMessages(
   library(emmeans, quietly = TRUE, warn.conflicts = FALSE)))
+suppressWarnings(suppressPackageStartupMessages(
+  library(future, quietly = TRUE, warn.conflicts = FALSE)))
+suppressWarnings(suppressPackageStartupMessages(
+  library(future.apply, quietly = TRUE, warn.conflicts = FALSE)))
 
 ## ---- simplex functions ----------------------------------------------------  
 nexcom.step <- function (N, K, P, MTC, I, J) {
@@ -278,10 +282,12 @@ run_one <- function(p_true, N_row) {
   return(c(p_true, rmse_i, p_hat_i, rmse_ii, p_hat_ii, rmse_iii, p_hat_iii, rmse_iv, p_hat_iv, rmse_v, p_hat_v))
 }
 
-# Run the simulation over all expanded combinations
-res_mat <- do.call(rbind, lapply(seq_len(total_runs), function(i) {
+# Run the simulation over all expanded combinations using parallel processing
+message("Starting parallel simulation...")
+plan(multisession)
+res_mat <- do.call(rbind, future_lapply(seq_len(total_runs), function(i) {
   c(mesh_id_vec[i], sim_id_vec[i], run_one(p_true = mesh_expanded[i, ], N_row = N_vec[i, ]))
-}))
+}, future.seed = TRUE))
 
 out <- as.data.frame(res_mat)
 K_true <- K
@@ -317,7 +323,7 @@ if (K == 3) {
   rmse_max <- max(out_agg$rmse_i, out_agg$rmse_ii, out_agg$rmse_iii, out_agg$rmse_iv, out_agg$rmse_v, na.rm = TRUE)
   
   plot_tern <- function(data, rmse_col, title_str) {
-    ggtern::ggtern(data, aes_string(x = "p1", y = "p2", z = "p3", colour = rmse_col)) +
+    ggtern::ggtern(data, aes(x = p1, y = p2, z = p3, colour = .data[[rmse_col]])) +
       geom_point(shape = 16, size = 2, alpha = 0.9) +
       labs(title = title_str, colour = "Mean RMSE") +
       scale_colour_viridis_c(limits = c(rmse_min, rmse_max), oob = scales::squish) +
@@ -384,8 +390,13 @@ tmp <- sapply(pct[pct_cols], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x,
 print(tmp)
 
 m <- lmer(rmse ~ method + (1 | id), data = df)
+if(any(grepl("singular", m@optinfo$conv$lme4$messages))) {
+  warning("Linear Mixed Model fit is singular. Variance estimates may be unreliable.")
+}
 print(anova(m))
 print(emmeans(m, pairwise ~ method, adjust = "holm"))
+
+gc() # Clear memory
 
 end_time <- Sys.time()
 cat("Run Time End:", format(end_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
