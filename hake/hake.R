@@ -396,6 +396,48 @@ if(any(grepl("singular", m@optinfo$conv$lme4$messages))) {
 print(anova(m))
 print(emmeans(m, pairwise ~ method, adjust = "holm"))
 
+## ---- Extract and Visualize Statistical Summaries ---------------------------
+# 1. Extract the EMMeans into a clean data frame
+emm_results <- emmeans(m, pairwise ~ method, adjust = "holm")
+emm_summary_df <- as.data.frame(emm_results$emmeans)
+
+# Save the summary table to a CSV
+write.csv(emm_summary_df, paste0(out_prefix, "_emmeans_summary.csv"), row.names = FALSE)
+message("Wrote: ", paste0(out_prefix, "_emmeans_summary.csv"))
+
+# 2. Plot 1: Boxplot of the raw RMSE data
+p_box <- ggplot(df, aes(x = method, y = rmse, fill = method)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.4) +
+  scale_fill_viridis_d(option = "plasma") +
+  labs(
+    title = "Distribution of Raw RMSE by Estimation Method",
+    subtitle = sprintf("Based on %d simulations (K=%d, G=%d)", n_obs, K, G),
+    x = "Estimation Method",
+    y = "Root Mean Square Error (RMSE)"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# 3. Plot 2: Point-Range plot of the Estimated Marginal Means
+p_emm <- ggplot(emm_summary_df, aes(x = method, y = emmean, color = method)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  scale_color_viridis_d(option = "plasma") +
+  labs(
+    title = "Estimated Marginal Mean RMSE (with 95% CIs)",
+    subtitle = "Parametric estimates from Linear Mixed-Effects Model",
+    x = "Estimation Method",
+    y = "Estimated Mean RMSE"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# Print and save the plots
+print(p_box)
+print(p_emm)
+ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
+ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
+
 gc() # Clear memory
 
 end_time <- Sys.time()
