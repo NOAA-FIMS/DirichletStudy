@@ -7,7 +7,7 @@ sample_simplex_dirichlet <- function(n, alpha) {
   x / rowSums(x)
 }
 
-read_simplex_input<-functions(file){
+read_simplex_input<-function(file){
   #' Read Simplex Input File
   #'
   #' This function reads a Simplex input file and returns its contents as a character vector.
