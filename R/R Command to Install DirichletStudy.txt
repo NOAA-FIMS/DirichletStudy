@@ -1,0 +1,3 @@
+
+# R command to install R package DirichletStudy
+install.packages("C:/Users/Jon.Brodziak/Documents/GitHub/DirichletStudy", repos = NULL, type = "source")
