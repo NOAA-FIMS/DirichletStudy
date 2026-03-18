@@ -1,6 +1,7 @@
-Run Time Start: 2026-03-17 15:49:17 
+Run Time Start: 2026-03-17 16:59:44 
 
-Filtered mesh dimensions: 231 3 
+Sampled simplex dimensions: 231 3 
+
 --- Sample-size distribution diagnostics ---
 Sample Size Distribution = 3 (Negative binomial)
 Target mean = 100.000
@@ -263,9 +264,10 @@ Degrees-of-freedom method: asymptotic
 P value adjustment: holm method for 10 tests 
 
           used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 3627283 193.8    6763777 361.3  6763777 361.3
-Vcells 7415175  56.6   14786712 112.9 12255278  93.6
-Run Time End: 2026-03-17 15:49:35 
+Ncells 3634276 194.1    6761441 361.1  6761441 361.1
+Vcells 7465668  57.0   14855744 113.4 14855654 113.4
 
-Total Elapsed Time: 18.93 secs 
+Run Time End: 2026-03-17 17:00:03 
+
+Total Elapsed Time: 19.56 secs 
 
