@@ -183,6 +183,9 @@ keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all) & apply(sweep(mesh, 2,
 mesh <- mesh[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
+cat("Filtered mesh dimensions:", dim(mesh), "\n")
+write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
+
 ## Calculate total runs using nsims
 total_runs <- nmesh * nsims
 

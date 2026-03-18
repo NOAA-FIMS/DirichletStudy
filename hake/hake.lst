@@ -1,103 +1,15 @@
+Run Time Start: 2026-03-17 15:49:17 
 
-> message("Logging to: ", logfile)
-
-> start_time <- Sys.time()
-
-> cat("Run Time Start:", format(start_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
-Run Time Start: 2026-03-16 20:58:41 
-
-
-> ## ---- mesh of p_true -------------------------------------------------------
-> mesh <- mk_simplex(K, h)
-
-> ## Filter mesh based on bounds FIRST
-> keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all) & apply(sweep(mesh, 2, p_lbound, `>=`), 1, all)
-
-> mesh <- mesh[keep_idx, , drop = FALSE]
-
-> nmesh <- nrow(mesh)
-
-> ## Calculate total runs using nsims
-> total_runs <- nmesh * nsims
-
-> ## ---- sample sizes (N_vec) ------------------------------------------------
-> draw_nsamp <- function(n, dist_code, mean_nsamp, ln_sd, nb_size, Nmi .... [TRUNCATED] 
-
-> # Expand mesh and tracking IDs
-> mesh_expanded <- mesh[rep(seq_len(nmesh), each = nsims), , drop = FALSE]
-
-> mesh_id_vec <- rep(seq_len(nmesh), each = nsims)
-
-> sim_id_vec  <- rep(seq_len(nsims), times = nmesh)
-
-> # Draw sample sizes for the fully expanded simulation grid
-> N_draws <- draw_nsamp(total_runs * G, dist_code, mean_nsamp, ln_sd, nb_size, Nmin, Nmax .... [TRUNCATED] 
-
-> N_vec <- matrix(N_draws, nrow = total_runs, ncol = G, byrow = TRUE)
-
-> cat("--- Sample-size distribution diagnostics ---\n")
+Filtered mesh dimensions: 231 3 
 --- Sample-size distribution diagnostics ---
-
-> cat(sprintf("Sample Size Distribution = %d (%s)\nTarget mean = %.3f\nRealized mean = %.3f\nRealized SD = %.3f\n", 
-+             dist_code, dist_tag .... [TRUNCATED] 
 Sample Size Distribution = 3 (Negative binomial)
 Target mean = 100.000
 Realized mean = 99.661
 Realized SD = 22.353
-
-> print(quantile(as.vector(N_vec), probs = c(0, 0.05, 0.25, 0.5, 0.75, 0.95, 1)))
   0%   5%  25%  50%  75%  95% 100% 
   40   65   84   98  114  138  196 
-
-> cat("--- End diagnostics ---\n\n")
 --- End diagnostics ---
 
-
-> theta_sigma <- sqrt(log(theta_CV^2 + 1))
-
-> ## ---- loop over total runs --------------------------------------------------
-> run_one <- function(p_true, N_row) {
-+   X <- matrix(0L, nrow = G, .... [TRUNCATED] 
-
-> # Run the simulation over all expanded combinations using parallel processing
-> message("Starting parallel simulation...")
-
-> plan(multisession)
-
-> res_mat <- do.call(rbind, future_lapply(seq_len(total_runs), function(i) {
-+   c(mesh_id_vec[i], sim_id_vec[i], run_one(p_true = mesh_expanded[i, ], .... [TRUNCATED] 
-
-> out <- as.data.frame(res_mat)
-
-> K_true <- K
-
-> true_names <- paste0("p", seq_len(K_true))
-
-> model_block_names <- c(
-+   "rmse_i",   paste0("p_hat_i_",   seq_len(K_true)),
-+   "rmse_ii",  paste0("p_hat_ii_",  seq_len(K_true)),
-+   "rmse_iii" .... [TRUNCATED] 
-
-> colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names)
-
-> N_int <- matrix(as.integer(round(N_vec)), nrow = total_runs, ncol = G)
-
-> colnames(N_int) <- paste0("N", seq_len(G))
-
-> out <- cbind(out, N_int)
-
-> ## ---- write CSV -------------------------------------------------------------
-> csv_path <- paste0(out_prefix, ".csv")
-
-> write.csv(out, csv_path, row.names = FALSE)
-
-> message("Wrote: ", csv_path)
-
-> ## ---- ternary plots (using averages for each mesh point to prevent overplotting) --------
-> if (K == 3) {
-+   suppressWarnings(suppressPackageStar .... [TRUNCATED] 
-
-> print(params)
 $K
 [1] 3
 
@@ -150,33 +62,12 @@ $p_ubound
 [1] 1 1 1
 
 
-> ## Statistics
-> n_obs <- nrow(out)
-
-> df <- data.frame(
-+   id     = rep(seq_len(n_obs), times = 5), # id now correctly identifies the specific simulation dataset run
-+   method = factor .... [TRUNCATED] 
-
-> ft <- friedman.test(rmse ~ method | id, data = df)
-
-> print(ft)
-
 	Friedman rank sum test
 
 data:  rmse and method and id
 Friedman chi-squared = 302.69, df = 4, p-value < 2.2e-16
 
-
-> k <- nlevels(df$method)
-
-> W <- as.numeric(ft$statistic) / (n_obs * (k - 1))
-
-> cat(sprintf("Kendall's W ≈ %.3f\n", W))
 Kendall's W ≈ 0.033
-
-> pw <- pairwise.wilcox.test(df$rmse, df$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
-
-> print(pw)
 
 	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
 
@@ -189,18 +80,6 @@ iv  0.76   <2e-16 0.11 -
 v   0.65   <2e-16 0.76 0.18
 
 P value adjustment method: holm 
-
-> wide <- reshape(df, idvar = "id", timevar = "method", direction = "wide")
-
-> methods <- c("i","ii","iii","iv","v")
-
-> pair_list <- combn(methods, 2, simplify = FALSE)
-
-> wilcox_ci <- lapply(pair_list, function(pr) {
-+   a <- wide[[paste0("rmse.", pr[1])]]; b <- wide[[paste0("rmse.", pr[2])]]
-+   wt <- wilcox.test(b,  .... [TRUNCATED] 
-
-> for (obj in wilcox_ci) { cat("\nPaired Wilcoxon (", obj$comp, "):\n", sep = ""); print(obj$test) }
 
 Paired Wilcoxon (ii - i):
 
@@ -341,18 +220,6 @@ sample estimates:
 (pseudo)median 
  -1.733849e-05 
 
-
-> pct <- wide
-
-> for (ab in pair_list) {
-+   nm <- paste0("pct_", ab[2], "_", ab[1])
-+   pct[[nm]] <- 100 * (pct[[paste0("rmse.", ab[2])]] - pct[[paste0("rmse.", ab[ .... [TRUNCATED] 
-
-> pct_cols <- paste0("pct_", sapply(pair_list, `[`, 2), "_", sapply(pair_list, `[`, 1))
-
-> tmp <- sapply(pct[pct_cols], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x, na.rm=TRUE), q25 = quantile(x, .25, na.rm=TRUE), q75 = quantile(x,  .... [TRUNCATED] 
-
-> print(tmp)
          pct_ii_i   pct_iii_i      pct_iv_i       pct_v_i pct_iii_ii
 median    2.44065 -0.05755081  3.254161e-05  0.0000209788  -3.616851
 IQR     115.53563  8.84360044  8.893287e+00  5.5650707083  53.228977
@@ -363,21 +230,11 @@ median   -2.727640  -3.947570  0.03942047  0.01264333 -0.0003127861
 IQR      53.093947  52.095360  0.91463472  2.88465287  3.1390637678
 q25.25% -49.402461 -49.376219 -0.42638497 -1.73293876 -1.7826026440
 q75.75%   3.691486   2.719141  0.48824975  1.15171411  1.3564611238
-
-> m <- lmer(rmse ~ method + (1 | id), data = df)
-
-> if(any(grepl("singular", m@optinfo$conv$lme4$messages))) {
-+   warning("Linear Mixed Model fit is singular. Variance estimates may be unreliable.")
- .... [TRUNCATED] 
-
-> print(anova(m))
 Type III Analysis of Variance Table with Satterthwaite's method
        Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
 method  1.592 0.39799     4  9236  166.85 < 2.2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-> print(emmeans(m, pairwise ~ method, adjust = "holm"))
 $emmeans
  method emmean      SE  df asymp.LCL asymp.UCL
  i      0.0869 0.00136 Inf    0.0842    0.0895
@@ -405,50 +262,10 @@ $contrasts
 Degrees-of-freedom method: asymptotic 
 P value adjustment: holm method for 10 tests 
 
-
-> ## ---- Extract and Visualize Statistical Summaries ---------------------------
-> # 1. Extract the EMMeans into a clean data frame
-> emm_results <-  .... [TRUNCATED] 
-
-> emm_summary_df <- as.data.frame(emm_results$emmeans)
-
-> # Save the summary table to a CSV
-> write.csv(emm_summary_df, paste0(out_prefix, "_emmeans_summary.csv"), row.names = FALSE)
-
-> message("Wrote: ", paste0(out_prefix, "_emmeans_summary.csv"))
-
-> # 2. Plot 1: Boxplot of the raw RMSE data
-> p_box <- ggplot(df, aes(x = method, y = rmse, fill = method)) +
-+   geom_boxplot(alpha = 0.7, outlier.al .... [TRUNCATED] 
-
-> # 3. Plot 2: Point-Range plot of the Estimated Marginal Means
-> p_emm <- ggplot(emm_summary_df, aes(x = method, y = emmean, color = method)) +
-+   g .... [TRUNCATED] 
-
-> # Print and save the plots
-> print(p_box)
-
-> print(p_emm)
-
-> ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
-
-> ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
-
-> gc() # Clear memory
           used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 3648192 194.9    6761888 361.2  6761888 361.2
-Vcells 7505751  57.3   14788302 112.9 14788302 112.9
+Ncells 3627283 193.8    6763777 361.3  6763777 361.3
+Vcells 7415175  56.6   14786712 112.9 12255278  93.6
+Run Time End: 2026-03-17 15:49:35 
 
-> end_time <- Sys.time()
+Total Elapsed Time: 18.93 secs 
 
-> cat("Run Time End:", format(end_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
-Run Time End: 2026-03-16 20:58:55 
-
-
-> run_time <- end_time - start_time
-
-> cat("Total Elapsed Time:", round(run_time, 2), attr(run_time, "units"), "\n\n")
-Total Elapsed Time: 13.65 secs 
-
-
-> on.exit(sink())
