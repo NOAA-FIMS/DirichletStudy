@@ -115,6 +115,8 @@ score_param_iii <- function(X, p, theta) {
 }
 
 rmse <- function(a, b) sqrt(mean((a - b)^2))
+L1_norm <- function(a, b) sum(abs(a - b))
+Linf_norm <- function(a, b) max(abs(a - b))
 
 ## ---- simulation settings ---------------------------------------------------
 args <- commandArgs(trailingOnly = TRUE)
@@ -173,6 +175,7 @@ logfile <- paste0(out_prefix, ".lst")
 sink(logfile, split = TRUE, type = "output")
 message("Logging to: ", logfile)
 start_time <- Sys.time()
+# cat("file = hake.lst", "\n\n")
 cat("Run Time Start:", format(start_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
 
 ## ---- mesh of p_true -------------------------------------------------------
@@ -183,7 +186,7 @@ keep_idx <- apply(sweep(mesh, 2, p_ubound, `<=`), 1, all) & apply(sweep(mesh, 2,
 mesh <- mesh[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
-cat("Filtered mesh dimensions:", dim(mesh), "\n")
+cat("Sampled simplex dimensions:", dim(mesh), "\n\n")
 write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
 
 ## Calculate total runs using nsims
@@ -231,6 +234,7 @@ run_one <- function(p_true, N_row) {
     phi <- rgamma(K, shape = alpha_vec, rate = 1); phi <- phi / sum(phi)
     X[g, ] <- as.vector(rmultinom(1, size = N_row[g], prob = phi))
   }
+  X_out <- as.vector(t(cbind(N_row, X)))
   
   ## MLE (i)
   alpha0_init <- 1.0; pooled <- colSums(X); p_init <- pmax(pooled, 1) / sum(pmax(pooled, 1))
@@ -264,6 +268,9 @@ run_one <- function(p_true, N_row) {
   fit_iii <- try(optim(z0, nll_iii, grad_iii, method = "BFGS", control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
   p_hat_iii <- if(inherits(fit_iii, "try-error")) rep(NA_real_, K) else softmax_from_z(fit_iii$par)
   
+  ## MLE (iv)
+  p_hat_iv <- colSums(X) / sum(colSums(X))
+   
   ## MLE (v)
   nll_v <- function(par) {
     z <- par[1:(K-1)]; t <- par[K]; p <- softmax_from_z(z); theta <- exp(t)
@@ -276,13 +283,21 @@ run_one <- function(p_true, N_row) {
   fit_v <- try(optim(c(z0, 0), nll_v, grad_v, method = "BFGS", control = list(maxit = 500, reltol = 1e-10)), silent = TRUE)
   p_hat_v <- if(inherits(fit_v, "try-error")) rep(NA_real_, K) else softmax_from_z(fit_v$par[1:(K-1)])
   
-  ## MLE (iv)
-  p_hat_iv <- colSums(X) / sum(colSums(X))
-  
-  rmse_i = rmse(p_hat_i, p_true); rmse_ii = rmse(p_hat_ii, p_true)
-  rmse_iii = rmse(p_hat_iii, p_true); rmse_iv = rmse(p_hat_iv, p_true); rmse_v = rmse(p_hat_v, p_true)
-  
-  return(c(p_true, rmse_i, p_hat_i, rmse_ii, p_hat_ii, rmse_iii, p_hat_iii, rmse_iv, p_hat_iv, rmse_v, p_hat_v))
+  rmse_i = rmse(p_hat_i, p_true);   L1_norm_i = L1_norm(p_hat_i, p_true);   Linf_norm_i = Linf_norm(p_hat_i, p_true)
+  rmse_ii = rmse(p_hat_ii, p_true); L1_norm_ii = L1_norm(p_hat_ii, p_true); Linf_norm_ii = Linf_norm(p_hat_ii, p_true)
+  rmse_iii = rmse(p_hat_iii, p_true); L1_norm_iii = L1_norm(p_hat_iii, p_true); Linf_norm_iii = Linf_norm(p_hat_iii, p_true)
+  rmse_iv = rmse(p_hat_iv, p_true); L1_norm_iv = L1_norm(p_hat_iv, p_true); Linf_norm_iv = Linf_norm(p_hat_iv, p_true)
+  rmse_v = rmse(p_hat_v, p_true);   L1_norm_v = L1_norm(p_hat_v, p_true);   Linf_norm_v = Linf_norm(p_hat_v, p_true)
+
+  return(c(
+    p_true,
+    rmse_i, L1_norm_i, Linf_norm_i, p_hat_i,
+    rmse_ii, L1_norm_ii, Linf_norm_ii, p_hat_ii,
+    rmse_iii, L1_norm_iii, Linf_norm_iii, p_hat_iii,
+    rmse_iv, L1_norm_iv, Linf_norm_iv, p_hat_iv,
+    rmse_v, L1_norm_v, Linf_norm_v, p_hat_v,
+    X_out
+  ))
 }
 
 # Run the simulation over all expanded combinations using parallel processing
@@ -296,18 +311,15 @@ out <- as.data.frame(res_mat)
 K_true <- K
 true_names <- paste0("p", seq_len(K_true))
 model_block_names <- c(
-  "rmse_i",   paste0("p_hat_i_",   seq_len(K_true)),
-  "rmse_ii",  paste0("p_hat_ii_",  seq_len(K_true)),
-  "rmse_iii", paste0("p_hat_iii_", seq_len(K_true)),
-  "rmse_iv",  paste0("p_hat_iv_",  seq_len(K_true)),
-  "rmse_v",   paste0("p_hat_v_",   seq_len(K_true))
+  "rmse_i",   "L1_norm_i",   "Linf_norm_i",   paste0("p_hat_i_",   seq_len(K_true)),
+  "rmse_ii",  "L1_norm_ii",  "Linf_norm_ii",  paste0("p_hat_ii_",  seq_len(K_true)),
+  "rmse_iii", "L1_norm_iii", "Linf_norm_iii", paste0("p_hat_iii_", seq_len(K_true)),
+  "rmse_iv",  "L1_norm_iv",  "Linf_norm_iv",  paste0("p_hat_iv_",  seq_len(K_true)),
+  "rmse_v",   "L1_norm_v",   "Linf_norm_v",   paste0("p_hat_v_",   seq_len(K_true))
 )
 
-colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names)
-
-N_int <- matrix(as.integer(round(N_vec)), nrow = total_runs, ncol = G)
-colnames(N_int) <- paste0("N", seq_len(G))
-out <- cbind(out, N_int)
+X_block_names <- as.vector(sapply(seq_len(G), function(g) c(paste0("N", g), paste0("X", g, "_", seq_len(K)))))
+colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names, X_block_names)
 
 ## ---- write CSV -------------------------------------------------------------
 csv_path <- paste0(out_prefix, ".csv")
@@ -350,6 +362,72 @@ if (K == 3) {
   ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
   ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
   ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
+
+  # Aggregate mean L1 norm by mesh_id for cleaner ternary plots
+  out_agg_L1 <- aggregate(out[, c("L1_norm_i", "L1_norm_ii", "L1_norm_iii", "L1_norm_iv", "L1_norm_v", "p1", "p2", "p3")],
+                          by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
+
+  L1_norm_min <- min(out_agg_L1$L1_norm_i, out_agg_L1$L1_norm_ii, out_agg_L1$L1_norm_iii, out_agg_L1$L1_norm_iv, out_agg_L1$L1_norm_v, na.rm = TRUE)
+  L1_norm_max <- max(out_agg_L1$L1_norm_i, out_agg_L1$L1_norm_ii, out_agg_L1$L1_norm_iii, out_agg_L1$L1_norm_iv, out_agg_L1$L1_norm_v, na.rm = TRUE)
+
+  plot_tern_L1 <- function(data, L1_norm_col, title_str) {
+    ggtern::ggtern(data, aes(x = p1, y = p2, z = p3, colour = .data[[L1_norm_col]])) +
+      geom_point(shape = 16, size = 2, alpha = 0.9) +
+      labs(title = title_str, colour = "Mean L1 norm") +
+      scale_colour_viridis_c(limits = c(L1_norm_min, L1_norm_max), oob = scales::squish) +
+      theme_bw()
+  }
+
+  p_L1_i <- plot_tern_L1(out_agg_L1, "L1_norm_i", sprintf("(i) L1 norm over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
+  p_L1_ii <- plot_tern_L1(out_agg_L1, "L1_norm_ii", sprintf("(ii) L1 norm over simplex (K=3, G=%d, α0=beta)", G))
+  p_L1_iii <- plot_tern_L1(out_agg_L1, "L1_norm_iii", sprintf("(iii) L1 norm over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_L1_iv <- plot_tern_L1(out_agg_L1, "L1_norm_iv", sprintf("(iv) L1 norm over simplex (K=3, G=%d, Multinomial)", G))
+  p_L1_v <- plot_tern_L1(out_agg_L1, "L1_norm_v", sprintf("(v) L1 norm over simplex (K=3, G=%d, DML θ estimated)", G))
+
+  print(p_L1_i)
+  print(p_L1_ii)
+  print(p_L1_iii)
+  print(p_L1_iv)
+  print(p_L1_v)
+
+  ggsave(paste0("L1_norm_i_", out_prefix, ".png"), p_L1_i, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_ii_", out_prefix, ".png"), p_L1_ii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_iii_", out_prefix, ".png"), p_L1_iii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_iv_", out_prefix, ".png"), p_L1_iv, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_v_", out_prefix, ".png"), p_L1_v, width = 6, height = 5, dpi = 300)
+
+  # Aggregate mean Linf norm by mesh_id for cleaner ternary plots
+  out_agg_Linf <- aggregate(out[, c("Linf_norm_i", "Linf_norm_ii", "Linf_norm_iii", "Linf_norm_iv", "Linf_norm_v", "p1", "p2", "p3")],
+                            by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
+
+  Linf_norm_min <- min(out_agg_Linf$Linf_norm_i, out_agg_Linf$Linf_norm_ii, out_agg_Linf$Linf_norm_iii, out_agg_Linf$Linf_norm_iv, out_agg_Linf$Linf_norm_v, na.rm = TRUE)
+  Linf_norm_max <- max(out_agg_Linf$Linf_norm_i, out_agg_Linf$Linf_norm_ii, out_agg_Linf$Linf_norm_iii, out_agg_Linf$Linf_norm_iv, out_agg_Linf$Linf_norm_v, na.rm = TRUE)
+
+  plot_tern_Linf <- function(data, Linf_norm_col, title_str) {
+    ggtern::ggtern(data, aes(x = p1, y = p2, z = p3, colour = .data[[Linf_norm_col]])) +
+      geom_point(shape = 16, size = 2, alpha = 0.9) +
+      labs(title = title_str, colour = "Mean Linf norm") +
+      scale_colour_viridis_c(limits = c(Linf_norm_min, Linf_norm_max), oob = scales::squish) +
+      theme_bw()
+  }
+
+  p_Linf_i <- plot_tern_Linf(out_agg_Linf, "Linf_norm_i", sprintf("(i) Linf norm over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
+  p_Linf_ii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_ii", sprintf("(ii) Linf norm over simplex (K=3, G=%d, α0=beta)", G))
+  p_Linf_iii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_iii", sprintf("(iii) Linf norm over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_Linf_iv <- plot_tern_Linf(out_agg_Linf, "Linf_norm_iv", sprintf("(iv) Linf norm over simplex (K=3, G=%d, Multinomial)", G))
+  p_Linf_v <- plot_tern_Linf(out_agg_Linf, "Linf_norm_v", sprintf("(v) Linf norm over simplex (K=3, G=%d, DML θ estimated)", G))
+
+  print(p_Linf_i)
+  print(p_Linf_ii)
+  print(p_Linf_iii)
+  print(p_Linf_iv)
+  print(p_Linf_v)
+
+  ggsave(paste0("Linf_norm_i_", out_prefix, ".png"), p_Linf_i, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_ii_", out_prefix, ".png"), p_Linf_ii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_iii_", out_prefix, ".png"), p_Linf_iii, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_iv_", out_prefix, ".png"), p_Linf_iv, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_v_", out_prefix, ".png"), p_Linf_v, width = 6, height = 5, dpi = 300)
 }
 
 print(params)
@@ -390,6 +468,7 @@ for (ab in pair_list) {
 }
 pct_cols <- paste0("pct_", sapply(pair_list, `[`, 2), "_", sapply(pair_list, `[`, 1))
 tmp <- sapply(pct[pct_cols], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x, na.rm=TRUE), q25 = quantile(x, .25, na.rm=TRUE), q75 = quantile(x, .75, na.rm=TRUE)))
+cat("Percent change in RMSE for method X relative to method Y", "\n\n")
 print(tmp)
 
 m <- lmer(rmse ~ method + (1 | id), data = df)
@@ -398,6 +477,94 @@ if(any(grepl("singular", m@optinfo$conv$lme4$messages))) {
 }
 print(anova(m))
 print(emmeans(m, pairwise ~ method, adjust = "holm"))
+
+df_L1 <- data.frame(
+  id      = rep(seq_len(n_obs), times = 5),
+  method  = factor(rep(c("i","ii","iii","iv","v"), each = n_obs), levels = c("i","ii","iii","iv","v")),
+  L1_norm = c(out$L1_norm_i, out$L1_norm_ii, out$L1_norm_iii, out$L1_norm_iv, out$L1_norm_v)
+)
+
+ft_L1 <- friedman.test(L1_norm ~ method | id, data = df_L1)
+print(ft_L1)
+
+k_L1 <- nlevels(df_L1$method)
+W_L1 <- as.numeric(ft_L1$statistic) / (n_obs * (k_L1 - 1))
+cat(sprintf("Kendall's W for L1 norm ≈ %.3f\n", W_L1))
+
+pw_L1 <- pairwise.wilcox.test(df_L1$L1_norm, df_L1$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
+print(pw_L1)
+
+wide_L1 <- reshape(df_L1, idvar = "id", timevar = "method", direction = "wide")
+methods_L1 <- c("i","ii","iii","iv","v")
+pair_list_L1 <- combn(methods_L1, 2, simplify = FALSE)
+
+wilcox_ci_L1 <- lapply(pair_list_L1, function(pr) {
+  a <- wide_L1[[paste0("L1_norm.", pr[1])]]; b <- wide_L1[[paste0("L1_norm.", pr[2])]]
+  wt <- wilcox.test(b, a, paired = TRUE, conf.int = TRUE, exact = FALSE)
+  list(comp = paste0(pr[2], " - ", pr[1]), test = wt)
+})
+for (obj in wilcox_ci_L1) { cat("\nPaired Wilcoxon for L1 norm (", obj$comp, "):\n", sep = ""); print(obj$test) }
+
+pct_L1 <- wide_L1
+for (ab in pair_list_L1) {
+  nm <- paste0("pct_L1_norm_", ab[2], "_", ab[1])
+  pct_L1[[nm]] <- 100 * (pct_L1[[paste0("L1_norm.", ab[2])]] - pct_L1[[paste0("L1_norm.", ab[1])]]) / pct_L1[[paste0("L1_norm.", ab[1])]]
+}
+pct_cols_L1 <- paste0("pct_L1_norm_", sapply(pair_list_L1, `[`, 2), "_", sapply(pair_list_L1, `[`, 1))
+tmp_L1 <- sapply(pct_L1[pct_cols_L1], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x, na.rm=TRUE), q25 = quantile(x, .25, na.rm=TRUE), q75 = quantile(x, .75, na.rm=TRUE)))
+cat("Percent change in L1 norm for method X relative to method Y", "\n\n")
+print(tmp_L1)
+
+m_L1 <- lmer(L1_norm ~ method + (1 | id), data = df_L1)
+if(any(grepl("singular", m_L1@optinfo$conv$lme4$messages))) {
+  warning("Linear Mixed Model fit for L1 norm is singular. Variance estimates may be unreliable.")
+}
+print(anova(m_L1))
+print(emmeans(m_L1, pairwise ~ method, adjust = "holm"))
+
+df_Linf <- data.frame(
+  id        = rep(seq_len(n_obs), times = 5),
+  method    = factor(rep(c("i","ii","iii","iv","v"), each = n_obs), levels = c("i","ii","iii","iv","v")),
+  Linf_norm = c(out$Linf_norm_i, out$Linf_norm_ii, out$Linf_norm_iii, out$Linf_norm_iv, out$Linf_norm_v)
+)
+
+ft_Linf <- friedman.test(Linf_norm ~ method | id, data = df_Linf)
+print(ft_Linf)
+
+k_Linf <- nlevels(df_Linf$method)
+W_Linf <- as.numeric(ft_Linf$statistic) / (n_obs * (k_Linf - 1))
+cat(sprintf("Kendall's W for Linf norm ≈ %.3f\n", W_Linf))
+
+pw_Linf <- pairwise.wilcox.test(df_Linf$Linf_norm, df_Linf$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
+print(pw_Linf)
+
+wide_Linf <- reshape(df_Linf, idvar = "id", timevar = "method", direction = "wide")
+methods_Linf <- c("i","ii","iii","iv","v")
+pair_list_Linf <- combn(methods_Linf, 2, simplify = FALSE)
+
+wilcox_ci_Linf <- lapply(pair_list_Linf, function(pr) {
+  a <- wide_Linf[[paste0("Linf_norm.", pr[1])]]; b <- wide_Linf[[paste0("Linf_norm.", pr[2])]]
+  wt <- wilcox.test(b, a, paired = TRUE, conf.int = TRUE, exact = FALSE)
+  list(comp = paste0(pr[2], " - ", pr[1]), test = wt)
+})
+for (obj in wilcox_ci_Linf) { cat("\nPaired Wilcoxon for Linf norm (", obj$comp, "):\n", sep = ""); print(obj$test) }
+
+pct_Linf <- wide_Linf
+for (ab in pair_list_Linf) {
+  nm <- paste0("pct_Linf_norm_", ab[2], "_", ab[1])
+  pct_Linf[[nm]] <- 100 * (pct_Linf[[paste0("Linf_norm.", ab[2])]] - pct_Linf[[paste0("Linf_norm.", ab[1])]]) / pct_Linf[[paste0("Linf_norm.", ab[1])]]
+}
+pct_cols_Linf <- paste0("pct_Linf_norm_", sapply(pair_list_Linf, `[`, 2), "_", sapply(pair_list_Linf, `[`, 1))
+tmp_Linf <- sapply(pct_Linf[pct_cols_Linf], \(x) c(median = median(x, na.rm=TRUE), IQR = IQR(x, na.rm=TRUE), q25 = quantile(x, .25, na.rm=TRUE), q75 = quantile(x, .75, na.rm=TRUE)))
+cat("Percent change in Linf norm for method X relative to method Y", "\n\n")
+print(tmp_Linf)
+
+m_Linf <- lmer(Linf_norm ~ method + (1 | id), data = df_Linf)
+if(any(grepl("singular", m_Linf@optinfo$conv$lme4$messages))) {
+  warning("Linear Mixed Model fit for Linf norm is singular. Variance estimates may be unreliable.")
+}
+print(anova(m_Linf))
+print(emmeans(m_Linf, pairwise ~ method, adjust = "holm"))
 
 ## ---- Extract and Visualize Statistical Summaries ---------------------------
 # 1. Extract the EMMeans into a clean data frame
@@ -441,7 +608,90 @@ print(p_emm)
 ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
 ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
 
+# 4. Extract the EMMeans for L1 norm into a clean data frame
+emm_results_L1 <- emmeans(m_L1, pairwise ~ method, adjust = "holm")
+emm_summary_df_L1 <- as.data.frame(emm_results_L1$emmeans)
+
+# Save the L1 norm summary table to a CSV
+write.csv(emm_summary_df_L1, paste0(out_prefix, "_L1_norm_emmeans_summary.csv"), row.names = FALSE)
+message("Wrote: ", paste0(out_prefix, "_L1_norm_emmeans_summary.csv"))
+
+# 5. Plot 3: Boxplot of the raw L1 norm data
+p_box_L1 <- ggplot(df_L1, aes(x = method, y = L1_norm, fill = method)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.4) +
+  scale_fill_viridis_d(option = "plasma") +
+  labs(
+    title = "Distribution of Raw L1 Norm by Estimation Method",
+    subtitle = sprintf("Based on %d simulations (K=%d, G=%d)", n_obs, K, G),
+    x = "Estimation Method",
+    y = "L1 Norm"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# 6. Plot 4: Point-Range plot of the Estimated Marginal Means for L1 norm
+p_emm_L1 <- ggplot(emm_summary_df_L1, aes(x = method, y = emmean, color = method)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  scale_color_viridis_d(option = "plasma") +
+  labs(
+    title = "Estimated Marginal Mean L1 Norm (with 95% CIs)",
+    subtitle = "Parametric estimates from Linear Mixed-Effects Model",
+    x = "Estimation Method",
+    y = "Estimated Mean L1 Norm"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# Print and save the L1 norm plots
+print(p_box_L1)
+print(p_emm_L1)
+ggsave(paste0("L1_norm_boxplot_", out_prefix, ".png"), p_box_L1, width = 6, height = 5, dpi = 300)
+ggsave(paste0("L1_norm_emmeans_", out_prefix, ".png"), p_emm_L1, width = 6, height = 5, dpi = 300)
+
+# 7. Extract the EMMeans for Linf norm into a clean data frame
+emm_results_Linf <- emmeans(m_Linf, pairwise ~ method, adjust = "holm")
+emm_summary_df_Linf <- as.data.frame(emm_results_Linf$emmeans)
+
+# Save the Linf norm summary table to a CSV
+write.csv(emm_summary_df_Linf, paste0(out_prefix, "_Linf_norm_emmeans_summary.csv"), row.names = FALSE)
+message("Wrote: ", paste0(out_prefix, "_Linf_norm_emmeans_summary.csv"))
+
+# 8. Plot 5: Boxplot of the raw Linf norm data
+p_box_Linf <- ggplot(df_Linf, aes(x = method, y = Linf_norm, fill = method)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.4) +
+  scale_fill_viridis_d(option = "plasma") +
+  labs(
+    title = "Distribution of Raw Linf Norm by Estimation Method",
+    subtitle = sprintf("Based on %d simulations (K=%d, G=%d)", n_obs, K, G),
+    x = "Estimation Method",
+    y = "Linf Norm"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# 9. Plot 6: Point-Range plot of the Estimated Marginal Means for Linf norm
+p_emm_Linf <- ggplot(emm_summary_df_Linf, aes(x = method, y = emmean, color = method)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  scale_color_viridis_d(option = "plasma") +
+  labs(
+    title = "Estimated Marginal Mean Linf Norm (with 95% CIs)",
+    subtitle = "Parametric estimates from Linear Mixed-Effects Model",
+    x = "Estimation Method",
+    y = "Estimated Mean Linf Norm"
+  ) +
+  theme_bw() +
+  theme(legend.position = "none")
+
+# Print and save the Linf norm plots
+print(p_box_Linf)
+print(p_emm_Linf)
+ggsave(paste0("Linf_norm_boxplot_", out_prefix, ".png"), p_box_Linf, width = 6, height = 5, dpi = 300)
+ggsave(paste0("Linf_norm_emmeans_", out_prefix, ".png"), p_emm_Linf, width = 6, height = 5, dpi = 300)
+
 gc() # Clear memory
+cat("\n")
 
 end_time <- Sys.time()
 cat("Run Time End:", format(end_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
