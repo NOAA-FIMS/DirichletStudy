@@ -1,0 +1,4 @@
+analysis,cut1,cut2,group1,group2,group3,sum_std_log,stdlog_g1,stdlog_g2,stdlog_g3
+"Combined fleets (aggregate by time), objective = sum SD[log(abundance)]",7,11,1-7,8-11,12-15,3.032625197,1.112781577,0.981311265,0.938532354
+"Fleet 1 (aggregate by time), objective = sum SD[log(abundance)]",8,12,1-8,9-12,13-15,3.006748163,1.061348023,1.000507047,0.944893093
+"Fleet 2 (aggregate by time), objective = sum SD[log(abundance)]",8,11,1-8,9-11,12-15,1.71332454,0.209133464,0.884095387,0.62009569

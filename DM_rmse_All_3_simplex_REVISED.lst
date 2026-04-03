@@ -1,0 +1,31 @@
+
+> dm_loglik_group <- function(x, p, a0) {
++   N <- sum(x)
++   lgamma(a0) - lgamma(N + a0) + sum(lgamma(x + a0 * p) - lgamma(a0 * p))
++ }
+
+> # scores (i)
+> score_param_i <- function(t, X) {
++   alpha_vec <- exp(t)
++   a0    <- sum(alpha_vec)
++   g_alpha <- rep(0.0, length(alpha_vec))
++    .... [TRUNCATED] 
+
+> ## scores (ii): p shared; a0_g free (opt over z (length K-1) and t_g = log a0_g)
+> score_param_ii <- function(X, p, a0_vec) {
++   G <- nrow(X); K <- .... [TRUNCATED] 
+
+> ## scores (iii): p shared; theta shared (opt over z and t = log theta)
+> score_param_iii <- function(X, p, theta) {
++   G <- nrow(X); K <- length(p) .... [TRUNCATED] 
+
+> rmse <- function(a, b) sqrt(mean((a - b)^2))
+
+> ## ---- simulation settings ---------------------------------------------------
+> # ---- Read parameters from DM_rmse_All_3_simplex.inp ----
+> inp_p .... [TRUNCATED] 
+
+> if (!file.exists(inp_path)) {
++   stop(sprintf("Input file '%s' not found. Create it first.", inp_path))
++ }
+[1] "C:/Users/jon.brodziak/Documents/GitHub/DirichletStudy"

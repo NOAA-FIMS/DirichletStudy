@@ -1,0 +1,37 @@
+# Input parameters for hake_selftest.R
+# Fast high-value run:
+#   GEN ∈ {MN, DMstrong}
+#   Nsamp ∈ {25, 125, 250}
+#   FIT ∈ {MN, DM}
+#   R = 200 reps per (GEN, Nsamp)
+
+# Output prefix (controls .lst, .csv, .png names)
+out_prefix = validate_hake_selftest
+
+# Number of composition categories and groups
+K = 3
+G = 2
+
+# Fixed operating-model truth (must sum to 1, all > 0)
+p_true = 0.20, 0.30, 0.50
+
+# Dirichlet-multinomial "strong" overdispersion controls (used only when GEN=DMstrong)
+theta_true = 10
+sigma = 0.75
+od_mult = 0.25
+
+# Self-test design
+nsamp_levels = 25, 125, 250
+R = 200
+
+# Random number generator seed
+random.seed = 35643
+
+# Diagnostic parameters
+theta_lower = 1e-6
+theta_upper = 1e4
+profile_reps = 5
+profile_grid_n = 40
+include_DMpure = 1
+include_DMstrong = 1
+

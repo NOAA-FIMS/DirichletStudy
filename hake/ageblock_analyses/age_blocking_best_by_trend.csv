@@ -1,0 +1,4 @@
+analysis,cut1,cut2,group1,group2,group3,sum_abs_year_slope_log,year_slope_g1,year_slope_g2,year_slope_g3
+"Combined fleets (row-level), objective = sum abs(year slope)",9,12,1-9,10-12,13-15,0.09947146680414984,0.053977535296952345,0.02210133429648487,0.023392597210712636
+"Fleet 1 (row-level), objective = sum abs(year slope)",9,12,1-9,10-12,13-15,0.11676686513739742,0.058719983683771015,0.02868447268344925,0.02936240877017715
+"Fleet 2 (row-level), objective = sum abs(year slope)",4,8,1-4,5-8,9-15,0.04264115625532418,0.006923024648656129,-0.011326938243091916,-0.024391193363576133

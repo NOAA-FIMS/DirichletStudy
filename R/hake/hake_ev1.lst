@@ -1,0 +1,495 @@
+
+> dm_loglik_group <- function(x, p, a0) {
++   N <- sum(x)
++   lgamma(a0) - lgamma(N + a0) + sum(lgamma(x + a0 * p) - lgamma(a0 * p))
++ }
+
+> # scores (i)
+> score_param_i <- function(t, X) {
++   alpha_vec <- exp(t)
++   a0    <- sum(alpha_vec)
++   g_alpha <- rep(0.0, length(alpha_vec))
++    .... [TRUNCATED] 
+
+> ## scores (ii): p shared; a0_g free (opt over z (length K-1) and t_g = log a0_g)
+> score_param_ii <- function(X, p, a0_vec) {
++   G <- nrow(X); K <- .... [TRUNCATED] 
+
+> ## scores (iii): p shared; theta shared (opt over z and t = log theta)
+> score_param_iii <- function(X, p, theta) {
++   G <- nrow(X); K <- length(p) .... [TRUNCATED] 
+
+> rmse <- function(a, b) sqrt(mean((a - b)^2))
+
+> ## ---- simulation settings ---------------------------------------------------
+> # ---- Read parameters from hake.inp ----
+> inp_path <- "hake_ev1. ..." ... [TRUNCATED] 
+
+> if (!file.exists(inp_path)) {
++   stop(sprintf("Input file '%s' not found. Create it first.", inp_path))
++ }
+
+> # Parse key=value pairs, ignore comments and blank lines
+> tbl <- read.table(
++   file = inp_path,
++   sep = "=",
++   comment.char = "#",
++   strip. .... [TRUNCATED] 
+
+> kv <- setNames(tbl$value, tbl$key)
+
+> # Set typed parameters
+> K          <- as.integer(kv[["K"]])
+
+> G          <- as.integer(kv[["G"]])
+
+> h          <- as.numeric(kv[["h"]])
+
+> theta_true <- as.numeric(kv[["theta_true"]])
+
+> Nmin       <- as.integer(kv[["Nmin"]])
+
+> Nmax       <- as.integer(kv[["Nmax"]])
+
+> nsamples       <- as.integer(kv[["nsamples"]])
+
+> random.seed       <- as.integer(kv[["random.seed"]])
+
+> kappa      <- as.numeric(kv[["kappa"]])
+
+> # basic validation
+> if (any(is.na(c(K, G, h, theta_true, Nmin, Nmax, nsamples, random.seed, kappa)))) {
++   stop("One or more required parameters a ..." ... [TRUNCATED] 
+
+> if (Nmin > Nmax) stop("Nmin must be <= Nmax.")
+
+> if (is.na(kappa) || kappa <= 0) stop("kappa must be > 0.")
+
+> params <- list(K = K, G = G, h = h, theta_true = theta_true, Nmin = Nmin, 
++                Nmax = Nmax, nsamples = nsamples, random.seed = random.s .... [TRUNCATED] 
+
+> set.seed(random.seed)
+
+> ## ---- mesh of p_true -------------------------------------------------------
+> mesh <- mk_simplex(K, h)
+
+> nmesh <- nrow(mesh)
+
+> ## Vary N_g over orders of magnitude
+> N_vec <- matrix(
++   round(exp(runif(nmesh * G, log(Nmin), log(Nmax)))),
++   nrow = nmesh, ncol = G, byrow =  .... [TRUNCATED] 
+
+> ## ---- loop over mesh --------------------------------------------------------
+> run_one <- function(p_true,N_row) {
++   ## simulate counts for thi .... [TRUNCATED] 
+
+> # res_mat <- t(apply(mesh, 1, run_one))
+> res_mat <- do.call(
++   rbind,
++   lapply(seq_len(nmesh), function(i) {
++     run_one(p_true = mesh[i, ],  .... [TRUNCATED] 
+
+> out <- as.data.frame(res_mat)
+
+> # K = number of true proportions assumed to be the first K columns of res_mat
+> K <- ncol(out) - 4L  # (p1..pK, then rmse_i, rmse_ii, rmse_iii, rmse .... [TRUNCATED] 
+
+> # Ensure N_vec is a matrix with one row per simulation and G columns (groups)
+> N_mat <- if (is.null(dim(N_vec))) {
++   matrix(N_vec, nrow = nrow(ou .... [TRUNCATED] 
+
+> # Coerce sample sizes to integers (safe rounding, then integer cast)
+> N_int <- matrix(as.integer(round(N_mat)),
++                 nrow = nrow(N_mat .... [TRUNCATED] 
+
+> colnames(N_int) <- paste0("N", seq_len(ncol(N_int)))  # N1..NG
+
+> # Bind G sample-size columns to out
+> out <- cbind(out, N_int)
+
+> # Name the existing columns for proportions and RMSEs
+> colnames(out)[seq_len(K)] <- paste0("p", seq_len(K))
+
+> colnames(out)[K + seq_len(4)] <- c("rmse_i","rmse_ii","rmse_iii","rmse_iv")
+
+> # Write CSV (no row names)
+> # write.csv(out, file = "DM_rmse_by_simulation.csv", row.names = FALSE)
+> 
+> ## ---- write CSV ------------------------ .... [TRUNCATED] 
+
+> write.csv(out, csv_path, row.names = FALSE)
+
+> message("Wrote: ", csv_path)
+
+> ## ---- ternary plots ---------------------------------------------------------
+> if (K == 3) {
++   
++ suppressWarnings(suppressPackageStartupMessag .... [TRUNCATED] 
+
+> print(params)
+$K
+[1] 5
+
+$G
+[1] 1
+
+$h
+[1] 0.05
+
+$theta_true
+[1] 1
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 1000
+
+$nsamples
+[1] 10
+
+$random.seed
+[1] 18769
+
+$kappa
+[1] 100
+
+
+> n <- length(out$rmse_i)
+
+> stopifnot(length(out$rmse_ii) == n, length(out$rmse_iii) == n, length(out$rmse_iv) == n)
+
+> df <- data.frame(
++   id     = rep(seq_len(n), times = 4),                 # block (simplex point)
++   method = factor(rep(c("i","ii","iii","iv"), e .... [TRUNCATED] 
+
+> ## Overall nonparametric repeated-measures test
+> ft <- friedman.test(rmse ~ method | id, data = df)
+
+> print(ft)
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 801.05, df = 3, p-value < 2.2e-16
+
+
+> ## Kendall’s W effect size (approx. from Friedman chi-square)
+> k <- nlevels(df$method)
+
+> W <- as.numeric(ft$statistic) / (n * (k - 1))
+
+> cat(sprintf("Kendall's W ≈ %.3f\n", W))
+Kendall's W ≈ 0.025
+
+> ## Post-hoc paired comparisons with multiplicity control
+> pw <- pairwise.wilcox.test(df$rmse, df$method,
++                            paired = TRUE .... [TRUNCATED] 
+
+> print(pw)
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii  
+ii  4.4e-09 -       -    
+iii < 2e-16 < 2e-16 -    
+iv  < 2e-16 < 2e-16 0.012
+
+P value adjustment method: holm 
+
+> ## Convert to wide for paired, within-simplex-point comparisons
+> wide <- reshape(df, idvar = "id", timevar = "method", direction = "wide")
+
+> ## 1) Paired, robust effect: Hodges–Lehmann (median) difference + 95% CI
+> methods <- c("i","ii","iii","iv")
+
+> pair_list <- combn(methods, 2, simplify = FALSE)
+
+> wilcox_ci <- lapply(pair_list, function(pr) {
++   a <- wide[[paste0("rmse.", pr[1])]]
++   b <- wide[[paste0("rmse.", pr[2])]]
++   wt <- wilcox.test( .... [TRUNCATED] 
+
+> for (obj in wilcox_ci) {
++   cat("
++ Paired Wilcoxon (", obj$comp, "):
++ ", sep = "")
++   print(obj$test)
++ }
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 26293261, p-value = 2.191e-09
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.235889e-05 -6.631862e-05
+sample estimates:
+(pseudo)median 
+ -4.281726e-05 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 18515189, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.796019e-05 -2.970516e-06
+sample estimates:
+(pseudo)median 
+ -1.845677e-05 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 17984084, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -8.383422e-05 -1.045748e-05
+sample estimates:
+(pseudo)median 
+ -6.129095e-05 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 19932875, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.938271e-05 -4.528611e-05
+sample estimates:
+(pseudo)median 
+ -5.803073e-06 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 19603143, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.164623e-05 -1.282079e-05
+sample estimates:
+(pseudo)median 
+ -2.399692e-05 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 27438103, p-value = 0.0122
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.609041e-05 -2.344360e-05
+sample estimates:
+(pseudo)median 
+ -2.359735e-05 
+
+
+> ## 2) Practical impact: percent change in RMSE (median & IQR)
+> pct <- transform(wide,
++                  pct_ii_i    = 100*(rmse.ii  - rmse.i)/rmse .... [TRUNCATED] 
+
+> tmp <- sapply(pct[c("pct_ii_i","pct_iii_i","pct_iv_i","pct_iii_ii","pct_iv_ii","pct_iv_iii")],
++               \(x) c(median = median(x), IQR = IQR( .... [TRUNCATED] 
+
+> print(tmp)
+             pct_ii_i     pct_iii_i      pct_iv_i    pct_iii_ii
+median  -0.0001071198 -0.0008845099 -0.0002269416 -0.0006996486
+IQR      0.0092218565  0.0146005889  0.0085510835  0.0097853972
+q25.25% -0.0057387583 -0.0131015257 -0.0080667875 -0.0081068812
+q75.75%  0.0034830982  0.0014990633  0.0004842960  0.0016785160
+            pct_iv_ii    pct_iv_iii
+median  -0.0001606151  4.467253e-05
+IQR      0.0048582474  3.030809e-03
+q25.25% -0.0042850499 -1.636663e-03
+q75.75%  0.0005731975  1.394146e-03
+
+> ## 3) Standardized paired effect r from Wilcoxon Z
+> r_from_wilcox <- function(x, y){
++   wt <- wilcox.test(x, y, paired = TRUE, exact = FALSE)
++    .... [TRUNCATED] 
+
+> r_pairs <- lapply(pair_list, function(pr){
++   a <- wide[[paste0("rmse.", pr[1])]]
++   b <- wide[[paste0("rmse.", pr[2])]]
++   r <- r_from_wilcox(a, .... [TRUNCATED] 
+
+> r_tbl <- do.call(rbind, r_pairs)
+
+> print(r_tbl)
+       pair           r
+1   ii vs i -0.05804090
+2  iii vs i -0.29804555
+3   iv vs i -0.31433854
+4 iii vs ii -0.25404601
+5  iv vs ii -0.26466981
+6 iv vs iii  0.02431262
+
+> m <- lmer(rmse ~ method + (1 | id), data = df)
+
+> print(anova(m))                               # overall method effect)
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 36.332  12.111     3 31875  1398.8 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+> print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
+$emmeans
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.1202 0.000946 Inf    0.1184    0.1221
+ ii     0.1083 0.000946 Inf    0.1064    0.1101
+ iii    0.0649 0.000946 Inf    0.0631    0.0668
+ iv     0.0498 0.000946 Inf    0.0480    0.0517
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast estimate      SE  df z.ratio p.value
+ i - ii     0.0120 0.00128 Inf   9.377 <0.0001
+ i - iii    0.0553 0.00128 Inf  43.326 <0.0001
+ i - iv     0.0704 0.00128 Inf  55.145 <0.0001
+ ii - iii   0.0433 0.00128 Inf  33.949 <0.0001
+ ii - iv    0.0584 0.00128 Inf  45.768 <0.0001
+ iii - iv   0.0151 0.00128 Inf  11.819 <0.0001
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 6 tests 
+
+
+> on.exit(sink()) 
+
+data:  b and a
+V = 19932875, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.938271e-05 -4.528611e-05
+sample estimates:
+(pseudo)median 
+ -5.803073e-06 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 19603143, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.164623e-05 -1.282079e-05
+sample estimates:
+(pseudo)median 
+ -2.399692e-05 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 27438103, p-value = 0.0122
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -2.609041e-05 -2.344360e-05
+sample estimates:
+(pseudo)median 
+ -2.359735e-05 
+
+
+> ## 2) Practical impact: percent change in RMSE (median & IQR)
+> pct <- transform(wide,
++                  pct_ii_i    = 100*(rmse.ii  - rmse.i)/rmse .... [TRUNCATED] 
+
+> tmp <- sapply(pct[c("pct_ii_i","pct_iii_i","pct_iv_i","pct_iii_ii","pct_iv_ii","pct_iv_iii")],
++               \(x) c(median = median(x), IQR = IQR( .... [TRUNCATED] 
+
+> print(tmp)
+             pct_ii_i     pct_iii_i      pct_iv_i    pct_iii_ii
+median  -0.0001071198 -0.0008845099 -0.0002269416 -0.0006996486
+IQR      0.0092218565  0.0146005889  0.0085510835  0.0097853972
+q25.25% -0.0057387583 -0.0131015257 -0.0080667875 -0.0081068812
+q75.75%  0.0034830982  0.0014990633  0.0004842960  0.0016785160
+            pct_iv_ii    pct_iv_iii
+median  -0.0001606151  4.467253e-05
+IQR      0.0048582474  3.030809e-03
+q25.25% -0.0042850499 -1.636663e-03
+q75.75%  0.0005731975  1.394146e-03
+
+> ## 3) Standardized paired effect r from Wilcoxon Z
+> r_from_wilcox <- function(x, y){
++   wt <- wilcox.test(x, y, paired = TRUE, exact = FALSE)
++    .... [TRUNCATED] 
+
+> r_pairs <- lapply(pair_list, function(pr){
++   a <- wide[[paste0("rmse.", pr[1])]]
++   b <- wide[[paste0("rmse.", pr[2])]]
++   r <- r_from_wilcox(a, .... [TRUNCATED] 
+
+> r_tbl <- do.call(rbind, r_pairs)
+
+> print(r_tbl)
+       pair           r
+1   ii vs i -0.05804090
+2  iii vs i -0.29804555
+3   iv vs i -0.31433854
+4 iii vs ii -0.25404601
+5  iv vs ii -0.26466981
+6 iv vs iii  0.02431262
+
+> m <- lmer(rmse ~ method + (1 | id), data = df)
+
+> print(anova(m))                               # overall method effect)
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 36.332  12.111     3 31875  1398.8 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+> print(emmeans(m, pairwise ~ method, adjust = "holm"))  # post-hoc
+$emmeans
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.1202 0.000946 Inf    0.1184    0.1221
+ ii     0.1083 0.000946 Inf    0.1064    0.1101
+ iii    0.0649 0.000946 Inf    0.0631    0.0668
+ iv     0.0498 0.000946 Inf    0.0480    0.0517
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast estimate      SE  df z.ratio p.value
+ i - ii     0.0120 0.00128 Inf   9.377 <0.0001
+ i - iii    0.0553 0.00128 Inf  43.326 <0.0001
+ i - iv     0.0704 0.00128 Inf  55.145 <0.0001
+ ii - iii   0.0433 0.00128 Inf  33.949 <0.0001
+ ii - iv    0.0584 0.00128 Inf  45.768 <0.0001
+ iii - iv   0.0151 0.00128 Inf  11.819 <0.0001
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 6 tests 
+
+
+> on.exit(sink()) 
+
+> # on.exit(sink(), add = TRUE) 
