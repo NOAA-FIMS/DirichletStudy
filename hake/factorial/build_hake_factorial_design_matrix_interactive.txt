@@ -1,0 +1,9 @@
+# To run build_hake_factorial_design_matrix_interactive
+
+source("build_hake_factorial_design_matrix_interactive.R")
+design <- build_hake_factorial_design_matrix_interactive(
+  output_csv = "hake_factorial_design_matrix.csv",
+  legend_csv = "hake_factorial_design_legend.csv",
+  verify_against = "hake_factorial_design_matrix.csv",
+  run_verification = TRUE
+)

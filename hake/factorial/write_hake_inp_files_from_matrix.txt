@@ -1,0 +1,5 @@
+source("write_hake_inp_files_from_matrix.R")
+write_hake_inp_files_from_matrix(
+  matrix_file = "hake_factorial_design_matrix.csv",
+  output_dir = "."
+)

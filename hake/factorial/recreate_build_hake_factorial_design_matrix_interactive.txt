@@ -1,0 +1,9 @@
+# To run build_hake_factorial_design_matrix_interactive and recreate matrix
+
+source("build_hake_factorial_design_matrix_interactive.R")
+design <- build_hake_factorial_design_matrix_default(
+  output_csv = "hake_factorial_design_matrix_recreated.csv",
+  legend_csv = "hake_factorial_design_legend_recreated.csv",
+  verify_against = "hake_factorial_design_matrix.csv",
+  run_verification = TRUE
+)
