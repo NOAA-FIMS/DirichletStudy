@@ -1,0 +1,56 @@
+# Input parameters for hake.R
+
+# Set number of composition categories
+K = 3
+# K = 5
+
+# Set number of composition sample groups
+G = 2
+
+# Set mesh to sample the proportion simplex, h < 1/K
+h = 0.05
+
+# Set true theta value 
+theta_true = 10
+
+# Set coefficient of variation for lognormally-distributed theta_true
+theta_CV = 0.2
+
+# Set lower and upper bounds for the log-uniform distribution, if applicable
+Nmin = 50
+Nmax = 100
+
+# Set number of simulated data points for each simplex proportion
+nsims = 25
+
+# Set random number generator seed
+random.seed = 2356
+
+# Set multiplier for proportion overdispersion and log-scale standard deviation 
+od_mult = 1.0
+sigma = 0.5
+
+# Sample-size distribution for N_vec (composition sample sizes)
+# dist_code: 1=Poisson, 2=lognormal, 3=negative binomial, 4=log-uniform
+dist_code = 2
+
+# Common mean sample size across distributions
+mean_nsamp = 50
+
+# Lognormal sdlog (used for dist_code = 2), if applicable
+ln_sd = 1.0
+
+# Negative binomial size (used for dist_code = 3), if applicable
+nb_size = 25
+
+# Set upper bounds on proportions with hake bounds of (0.97, 0.59, 0.21)
+# p_ubound = 1.0, 1.0, 1.0 1.0 1.0
+# p_ubound = 0.5, 0.5, 0.5, 0.5, 0.5
+p_ubound = 1.0, 1.0, 1.0
+# p_ubound = 0.97, 0.59, 0.21
+
+# Set lower bounds on proportions with hake bounds of (0.36, 0.01, 0.0)
+# p_lbound = 0.25, 0.15, 0.05, 0.2, 0.1
+p_lbound = 0.0, 0.0, 0.0
+# p_lbound = 0.36, 0.01, 0.0
+
