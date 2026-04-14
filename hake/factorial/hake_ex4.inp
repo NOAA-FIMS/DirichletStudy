@@ -1,0 +1,21 @@
+# file = hake_ex4.inp
+# example_id = 4
+# design_block = Poisson
+
+K = 3
+G = 2
+h = 0.0500000000000000
+theta_true = 0.500000000000000
+theta_CV = 0.200000000000000
+Nmin = 50
+Nmax = 100
+nsims = 5
+random.seed = 2125474368
+od_mult = 1
+sigma = 0.250000000000000
+dist_code = 1
+mean_nsamp = 25
+ln_sd = 1
+nb_size = 25
+p_lbound = 0.0, 0.0, 0.0
+p_ubound = 1.0, 1.0, 1.0
