@@ -226,6 +226,8 @@ run_hake_experiments <- function(n) {
       finally = {
         restore_sinks(output_baseline = output_sink_baseline,
                       message_baseline = message_sink_baseline)
+        invisible(try(future::plan(future::sequential), silent = TRUE))
+        invisible(try(gc(), silent = TRUE))
         if (file.exists("hake.inp")) {
           safe_remove_with_retry("hake.inp")
         }
@@ -240,6 +242,11 @@ run_hake_experiments <- function(n) {
     }
 
     output_map <- build_output_map(ex_stem, ex_dir)
+
+    restore_sinks(output_baseline = output_sink_baseline,
+                  message_baseline = message_sink_baseline)
+    invisible(try(future::plan(future::sequential), silent = TRUE))
+    invisible(try(gc(), silent = TRUE))
 
     if (file.exists("hake.lst")) {
       ex_lst_path <- output_map[["hake.lst"]]
@@ -263,6 +270,7 @@ run_hake_experiments <- function(n) {
 
   restore_sinks(output_baseline = output_sink_baseline,
                 message_baseline = message_sink_baseline)
+  invisible(try(future::plan(future::sequential), silent = TRUE))
   invisible(try(gc(), silent = TRUE))
 
   if (file.exists("hake.lst")) {
