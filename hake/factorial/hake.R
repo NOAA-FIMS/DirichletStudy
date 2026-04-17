@@ -16,6 +16,14 @@ suppressWarnings(suppressPackageStartupMessages(
 suppressWarnings(suppressPackageStartupMessages(
   library(future.apply, quietly = TRUE, warn.conflicts = FALSE)))
 
+## ---- simplex_output_flag = 1 creates two simplex files --------------------
+## file1 = outprefix.csv stores results by simplex point
+## file2 = outprefix_simplex_samples.csv stores the sampled simplex points ---
+simplex_output_flag <- 0
+
+## ---- ggplot_output_flag = 1 creates all ggplot2 *.png files ---------------
+ggplot_output_flag <- 0
+
 ## ---- simplex functions ----------------------------------------------------  
 nexcom.step <- function (N, K, P, MTC, I, J) {
   if (MTC == FALSE) {
@@ -199,7 +207,8 @@ mesh <- mesh[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
 cat("Sampled simplex dimensions:", dim(mesh), "\n\n")
-write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
+if (simplex_output_flag == 1)
+  write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
 
 ## Calculate total runs using nsims
 total_runs <- nmesh * nsims
@@ -334,9 +343,11 @@ X_block_names <- as.vector(sapply(seq_len(G), function(g) c(paste0("N", g), past
 colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names, X_block_names)
 
 ## ---- write CSV -------------------------------------------------------------
-csv_path <- paste0(out_prefix, ".csv")
-write.csv(out, csv_path, row.names = FALSE)
-message("Wrote: ", csv_path)
+if (simplex_output_flag == 1) {
+  csv_path <- paste0(out_prefix, ".csv")
+  write.csv(out, csv_path, row.names = FALSE)
+  message("Wrote: ", csv_path)
+}
 
 ## ---- ternary plots (using averages for each mesh point to prevent overplotting) --------
 if (K == 3) {
@@ -369,12 +380,14 @@ if (K == 3) {
   print(p_iv)
   print(p_v)
   
-  ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
-
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
+  }
+  
   # Aggregate mean L1 norm by mesh_id for cleaner ternary plots
   out_agg_L1 <- aggregate(out[, c("L1_norm_i", "L1_norm_ii", "L1_norm_iii", "L1_norm_iv", "L1_norm_v", "p1", "p2", "p3")],
                           by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
@@ -402,12 +415,14 @@ if (K == 3) {
   print(p_L1_iv)
   print(p_L1_v)
 
-  ggsave(paste0("L1_norm_i_", out_prefix, ".png"), p_L1_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_ii_", out_prefix, ".png"), p_L1_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_iii_", out_prefix, ".png"), p_L1_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_iv_", out_prefix, ".png"), p_L1_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_v_", out_prefix, ".png"), p_L1_v, width = 6, height = 5, dpi = 300)
-
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("L1_norm_i_", out_prefix, ".png"), p_L1_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_ii_", out_prefix, ".png"), p_L1_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_iii_", out_prefix, ".png"), p_L1_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_iv_", out_prefix, ".png"), p_L1_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_v_", out_prefix, ".png"), p_L1_v, width = 6, height = 5, dpi = 300)
+  }
+  
   # Aggregate mean Linf norm by mesh_id for cleaner ternary plots
   out_agg_Linf <- aggregate(out[, c("Linf_norm_i", "Linf_norm_ii", "Linf_norm_iii", "Linf_norm_iv", "Linf_norm_v", "p1", "p2", "p3")],
                             by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
@@ -435,11 +450,13 @@ if (K == 3) {
   print(p_Linf_iv)
   print(p_Linf_v)
 
-  ggsave(paste0("Linf_norm_i_", out_prefix, ".png"), p_Linf_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_ii_", out_prefix, ".png"), p_Linf_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_iii_", out_prefix, ".png"), p_Linf_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_iv_", out_prefix, ".png"), p_Linf_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_v_", out_prefix, ".png"), p_Linf_v, width = 6, height = 5, dpi = 300)
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("Linf_norm_i_", out_prefix, ".png"), p_Linf_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_ii_", out_prefix, ".png"), p_Linf_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_iii_", out_prefix, ".png"), p_Linf_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_iv_", out_prefix, ".png"), p_Linf_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_v_", out_prefix, ".png"), p_Linf_v, width = 6, height = 5, dpi = 300)
+  }
 }
 
 print(params)
@@ -617,9 +634,10 @@ p_emm <- ggplot(emm_summary_df, aes(x = method, y = emmean, color = method)) +
 # Print and save the plots
 print(p_box)
 print(p_emm)
-ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
-
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
+}
 # 4. Extract the EMMeans for L1 norm into a clean data frame
 emm_results_L1 <- emmeans(m_L1, pairwise ~ method, adjust = "holm")
 emm_summary_df_L1 <- as.data.frame(emm_results_L1$emmeans)
@@ -658,8 +676,10 @@ p_emm_L1 <- ggplot(emm_summary_df_L1, aes(x = method, y = emmean, color = method
 # Print and save the L1 norm plots
 print(p_box_L1)
 print(p_emm_L1)
-ggsave(paste0("L1_norm_boxplot_", out_prefix, ".png"), p_box_L1, width = 6, height = 5, dpi = 300)
-ggsave(paste0("L1_norm_emmeans_", out_prefix, ".png"), p_emm_L1, width = 6, height = 5, dpi = 300)
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("L1_norm_boxplot_", out_prefix, ".png"), p_box_L1, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_emmeans_", out_prefix, ".png"), p_emm_L1, width = 6, height = 5, dpi = 300)
+}
 
 # 7. Extract the EMMeans for Linf norm into a clean data frame
 emm_results_Linf <- emmeans(m_Linf, pairwise ~ method, adjust = "holm")
@@ -699,8 +719,10 @@ p_emm_Linf <- ggplot(emm_summary_df_Linf, aes(x = method, y = emmean, color = me
 # Print and save the Linf norm plots
 print(p_box_Linf)
 print(p_emm_Linf)
-ggsave(paste0("Linf_norm_boxplot_", out_prefix, ".png"), p_box_Linf, width = 6, height = 5, dpi = 300)
-ggsave(paste0("Linf_norm_emmeans_", out_prefix, ".png"), p_emm_Linf, width = 6, height = 5, dpi = 300)
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("Linf_norm_boxplot_", out_prefix, ".png"), p_box_Linf, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_emmeans_", out_prefix, ".png"), p_emm_Linf, width = 6, height = 5, dpi = 300)
+}
 
 gc() # Clear memory
 cat("\n")
