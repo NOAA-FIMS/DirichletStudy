@@ -16,6 +16,14 @@ suppressWarnings(suppressPackageStartupMessages(
 suppressWarnings(suppressPackageStartupMessages(
   library(future.apply, quietly = TRUE, warn.conflicts = FALSE)))
 
+## ---- simplex_output_flag = 1 creates two simplex files --------------------
+## file1 = outprefix.csv stores results by simplex point
+## file2 = outprefix_simplex_samples.csv stores the sampled simplex points ---
+simplex_output_flag <- 0
+
+## ---- ggplot_output_flag = 1 creates all ggplot2 *.png files ---------------
+ggplot_output_flag <- 0
+
 ## ---- simplex functions ----------------------------------------------------  
 nexcom.step <- function (N, K, P, MTC, I, J) {
   if (MTC == FALSE) {
@@ -171,12 +179,24 @@ dist_tag    <- dist_levels[[as.integer(dist_code)]]
 base_stem   <- tools::file_path_sans_ext(basename(inp_path))
 out_prefix  <- "hake"
 
-logfile <- paste0(out_prefix, ".lst")
-sink(logfile, split = TRUE, type = "output")
-message("Logging to: ", logfile)
-start_time <- Sys.time()
-# cat("file = hake.lst", "\n\n")
-cat("Run Time Start:", format(start_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
+local({
+  logfile <- paste0(out_prefix, ".lst")
+  base_output_sink <- sink.number(type = "output")
+
+  close_log_sink <- function() {
+    while (sink.number(type = "output") > base_output_sink) {
+      sink(type = "output")
+    }
+    invisible(NULL)
+  }
+
+  sink(logfile, split = TRUE, type = "output")
+  on.exit(close_log_sink(), add = TRUE)
+
+  message("Logging to: ", logfile)
+  start_time <- Sys.time()
+  # cat("file = hake.lst", "\n\n")
+  cat("Run Time Start:", format(start_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
 
 ## ---- mesh of p_true -------------------------------------------------------
 mesh <- mk_simplex(K, h)
@@ -187,7 +207,8 @@ mesh <- mesh[keep_idx, , drop = FALSE]
 nmesh <- nrow(mesh)
 
 cat("Sampled simplex dimensions:", dim(mesh), "\n\n")
-write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
+if (simplex_output_flag == 1)
+  write.csv(mesh, file = "simplex_samples.csv", row.names = FALSE)
 
 ## Calculate total runs using nsims
 total_runs <- nmesh * nsims
@@ -322,9 +343,11 @@ X_block_names <- as.vector(sapply(seq_len(G), function(g) c(paste0("N", g), past
 colnames(out) <- c("mesh_id", "sim_id", true_names, model_block_names, X_block_names)
 
 ## ---- write CSV -------------------------------------------------------------
-csv_path <- paste0(out_prefix, ".csv")
-write.csv(out, csv_path, row.names = FALSE)
-message("Wrote: ", csv_path)
+if (simplex_output_flag == 1) {
+  csv_path <- paste0(out_prefix, ".csv")
+  write.csv(out, csv_path, row.names = FALSE)
+  message("Wrote: ", csv_path)
+}
 
 ## ---- ternary plots (using averages for each mesh point to prevent overplotting) --------
 if (K == 3) {
@@ -345,11 +368,11 @@ if (K == 3) {
       theme_bw()
   }
   
-  p_i <- plot_tern(out_agg, "rmse_i", sprintf("(i) RMSE over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
-  p_ii <- plot_tern(out_agg, "rmse_ii", sprintf("(ii) RMSE over simplex (K=3, G=%d, α0=beta)", G))
-  p_iii <- plot_tern(out_agg, "rmse_iii", sprintf("(iii) RMSE over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_i <- plot_tern(out_agg, "rmse_i", sprintf("(i) RMSE over simplex (K=3, G=%d, theta=%.1f)", G, theta_true))
+  p_ii <- plot_tern(out_agg, "rmse_ii", sprintf("(ii) RMSE over simplex (K=3, G=%d, alpha0=beta)", G))
+  p_iii <- plot_tern(out_agg, "rmse_iii", sprintf("(iii) RMSE over simplex (K=3, G=%d, alpha0=theta*N)", G))
   p_iv <- plot_tern(out_agg, "rmse_iv", sprintf("(iv) RMSE over simplex (K=3, G=%d, Multinomial)", G))
-  p_v <- plot_tern(out_agg, "rmse_v", sprintf("(v) RMSE over simplex (K=3, G=%d, DML θ estimated)", G))
+  p_v <- plot_tern(out_agg, "rmse_v", sprintf("(v) RMSE over simplex (K=3, G=%d, DML theta estimated)", G))
   
   print(p_i)
   print(p_ii)
@@ -357,12 +380,14 @@ if (K == 3) {
   print(p_iv)
   print(p_v)
   
-  ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
-
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("rmse_i_", out_prefix, ".png"), p_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_ii_", out_prefix, ".png"), p_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_iii_", out_prefix, ".png"), p_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_iv_", out_prefix, ".png"), p_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("rmse_v_", out_prefix, ".png"), p_v, width = 6, height = 5, dpi = 300)
+  }
+  
   # Aggregate mean L1 norm by mesh_id for cleaner ternary plots
   out_agg_L1 <- aggregate(out[, c("L1_norm_i", "L1_norm_ii", "L1_norm_iii", "L1_norm_iv", "L1_norm_v", "p1", "p2", "p3")],
                           by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
@@ -378,11 +403,11 @@ if (K == 3) {
       theme_bw()
   }
 
-  p_L1_i <- plot_tern_L1(out_agg_L1, "L1_norm_i", sprintf("(i) L1 norm over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
-  p_L1_ii <- plot_tern_L1(out_agg_L1, "L1_norm_ii", sprintf("(ii) L1 norm over simplex (K=3, G=%d, α0=beta)", G))
-  p_L1_iii <- plot_tern_L1(out_agg_L1, "L1_norm_iii", sprintf("(iii) L1 norm over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_L1_i <- plot_tern_L1(out_agg_L1, "L1_norm_i", sprintf("(i) L1 norm over simplex (K=3, G=%d, theta=%.1f)", G, theta_true))
+  p_L1_ii <- plot_tern_L1(out_agg_L1, "L1_norm_ii", sprintf("(ii) L1 norm over simplex (K=3, G=%d, alpha0=beta)", G))
+  p_L1_iii <- plot_tern_L1(out_agg_L1, "L1_norm_iii", sprintf("(iii) L1 norm over simplex (K=3, G=%d, alpha0=theta*N)", G))
   p_L1_iv <- plot_tern_L1(out_agg_L1, "L1_norm_iv", sprintf("(iv) L1 norm over simplex (K=3, G=%d, Multinomial)", G))
-  p_L1_v <- plot_tern_L1(out_agg_L1, "L1_norm_v", sprintf("(v) L1 norm over simplex (K=3, G=%d, DML θ estimated)", G))
+  p_L1_v <- plot_tern_L1(out_agg_L1, "L1_norm_v", sprintf("(v) L1 norm over simplex (K=3, G=%d, DML theta estimated)", G))
 
   print(p_L1_i)
   print(p_L1_ii)
@@ -390,12 +415,14 @@ if (K == 3) {
   print(p_L1_iv)
   print(p_L1_v)
 
-  ggsave(paste0("L1_norm_i_", out_prefix, ".png"), p_L1_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_ii_", out_prefix, ".png"), p_L1_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_iii_", out_prefix, ".png"), p_L1_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_iv_", out_prefix, ".png"), p_L1_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("L1_norm_v_", out_prefix, ".png"), p_L1_v, width = 6, height = 5, dpi = 300)
-
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("L1_norm_i_", out_prefix, ".png"), p_L1_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_ii_", out_prefix, ".png"), p_L1_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_iii_", out_prefix, ".png"), p_L1_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_iv_", out_prefix, ".png"), p_L1_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("L1_norm_v_", out_prefix, ".png"), p_L1_v, width = 6, height = 5, dpi = 300)
+  }
+  
   # Aggregate mean Linf norm by mesh_id for cleaner ternary plots
   out_agg_Linf <- aggregate(out[, c("Linf_norm_i", "Linf_norm_ii", "Linf_norm_iii", "Linf_norm_iv", "Linf_norm_v", "p1", "p2", "p3")],
                             by = list(mesh_id = out$mesh_id), FUN = mean, na.rm = TRUE)
@@ -411,11 +438,11 @@ if (K == 3) {
       theme_bw()
   }
 
-  p_Linf_i <- plot_tern_Linf(out_agg_Linf, "Linf_norm_i", sprintf("(i) Linf norm over simplex (K=3, G=%d, θ=%.1f)", G, theta_true))
-  p_Linf_ii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_ii", sprintf("(ii) Linf norm over simplex (K=3, G=%d, α0=beta)", G))
-  p_Linf_iii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_iii", sprintf("(iii) Linf norm over simplex (K=3, G=%d, α0=θ*N)", G))
+  p_Linf_i <- plot_tern_Linf(out_agg_Linf, "Linf_norm_i", sprintf("(i) Linf norm over simplex (K=3, G=%d, theta=%.1f)", G, theta_true))
+  p_Linf_ii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_ii", sprintf("(ii) Linf norm over simplex (K=3, G=%d, alpha0=beta)", G))
+  p_Linf_iii <- plot_tern_Linf(out_agg_Linf, "Linf_norm_iii", sprintf("(iii) Linf norm over simplex (K=3, G=%d, alpha0=theta*N)", G))
   p_Linf_iv <- plot_tern_Linf(out_agg_Linf, "Linf_norm_iv", sprintf("(iv) Linf norm over simplex (K=3, G=%d, Multinomial)", G))
-  p_Linf_v <- plot_tern_Linf(out_agg_Linf, "Linf_norm_v", sprintf("(v) Linf norm over simplex (K=3, G=%d, DML θ estimated)", G))
+  p_Linf_v <- plot_tern_Linf(out_agg_Linf, "Linf_norm_v", sprintf("(v) Linf norm over simplex (K=3, G=%d, DML theta estimated)", G))
 
   print(p_Linf_i)
   print(p_Linf_ii)
@@ -423,11 +450,13 @@ if (K == 3) {
   print(p_Linf_iv)
   print(p_Linf_v)
 
-  ggsave(paste0("Linf_norm_i_", out_prefix, ".png"), p_Linf_i, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_ii_", out_prefix, ".png"), p_Linf_ii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_iii_", out_prefix, ".png"), p_Linf_iii, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_iv_", out_prefix, ".png"), p_Linf_iv, width = 6, height = 5, dpi = 300)
-  ggsave(paste0("Linf_norm_v_", out_prefix, ".png"), p_Linf_v, width = 6, height = 5, dpi = 300)
+  if (ggplot_output_flag == 1) {
+    ggsave(paste0("Linf_norm_i_", out_prefix, ".png"), p_Linf_i, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_ii_", out_prefix, ".png"), p_Linf_ii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_iii_", out_prefix, ".png"), p_Linf_iii, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_iv_", out_prefix, ".png"), p_Linf_iv, width = 6, height = 5, dpi = 300)
+    ggsave(paste0("Linf_norm_v_", out_prefix, ".png"), p_Linf_v, width = 6, height = 5, dpi = 300)
+  }
 }
 
 print(params)
@@ -445,7 +474,7 @@ print(ft)
 
 k <- nlevels(df$method)
 W <- as.numeric(ft$statistic) / (n_obs * (k - 1))
-cat(sprintf("Kendall's W ≈ %.3f\n", W))
+cat(sprintf("Kendall's W ~= %.3f\n", W))
 
 pw <- pairwise.wilcox.test(df$rmse, df$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
 print(pw)
@@ -489,7 +518,7 @@ print(ft_L1)
 
 k_L1 <- nlevels(df_L1$method)
 W_L1 <- as.numeric(ft_L1$statistic) / (n_obs * (k_L1 - 1))
-cat(sprintf("Kendall's W for L1 norm ≈ %.3f\n", W_L1))
+cat(sprintf("Kendall's W for L1 norm ~= %.3f\n", W_L1))
 
 pw_L1 <- pairwise.wilcox.test(df_L1$L1_norm, df_L1$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
 print(pw_L1)
@@ -533,7 +562,7 @@ print(ft_Linf)
 
 k_Linf <- nlevels(df_Linf$method)
 W_Linf <- as.numeric(ft_Linf$statistic) / (n_obs * (k_Linf - 1))
-cat(sprintf("Kendall's W for Linf norm ≈ %.3f\n", W_Linf))
+cat(sprintf("Kendall's W for Linf norm ~= %.3f\n", W_Linf))
 
 pw_Linf <- pairwise.wilcox.test(df_Linf$Linf_norm, df_Linf$method, paired = TRUE, p.adjust.method = "holm", exact = FALSE)
 print(pw_Linf)
@@ -605,9 +634,10 @@ p_emm <- ggplot(emm_summary_df, aes(x = method, y = emmean, color = method)) +
 # Print and save the plots
 print(p_box)
 print(p_emm)
-ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
-ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
-
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("rmse_boxplot_", out_prefix, ".png"), p_box, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("rmse_emmeans_", out_prefix, ".png"), p_emm, width = 6, height = 5, dpi = 300)
+}
 # 4. Extract the EMMeans for L1 norm into a clean data frame
 emm_results_L1 <- emmeans(m_L1, pairwise ~ method, adjust = "holm")
 emm_summary_df_L1 <- as.data.frame(emm_results_L1$emmeans)
@@ -646,8 +676,10 @@ p_emm_L1 <- ggplot(emm_summary_df_L1, aes(x = method, y = emmean, color = method
 # Print and save the L1 norm plots
 print(p_box_L1)
 print(p_emm_L1)
-ggsave(paste0("L1_norm_boxplot_", out_prefix, ".png"), p_box_L1, width = 6, height = 5, dpi = 300)
-ggsave(paste0("L1_norm_emmeans_", out_prefix, ".png"), p_emm_L1, width = 6, height = 5, dpi = 300)
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("L1_norm_boxplot_", out_prefix, ".png"), p_box_L1, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("L1_norm_emmeans_", out_prefix, ".png"), p_emm_L1, width = 6, height = 5, dpi = 300)
+}
 
 # 7. Extract the EMMeans for Linf norm into a clean data frame
 emm_results_Linf <- emmeans(m_Linf, pairwise ~ method, adjust = "holm")
@@ -687,8 +719,10 @@ p_emm_Linf <- ggplot(emm_summary_df_Linf, aes(x = method, y = emmean, color = me
 # Print and save the Linf norm plots
 print(p_box_Linf)
 print(p_emm_Linf)
-ggsave(paste0("Linf_norm_boxplot_", out_prefix, ".png"), p_box_Linf, width = 6, height = 5, dpi = 300)
-ggsave(paste0("Linf_norm_emmeans_", out_prefix, ".png"), p_emm_Linf, width = 6, height = 5, dpi = 300)
+if (ggplot_output_flag == 1) {
+  ggsave(paste0("Linf_norm_boxplot_", out_prefix, ".png"), p_box_Linf, width = 6, height = 5, dpi = 300)
+  ggsave(paste0("Linf_norm_emmeans_", out_prefix, ".png"), p_emm_Linf, width = 6, height = 5, dpi = 300)
+}
 
 gc() # Clear memory
 cat("\n")
@@ -698,4 +732,4 @@ cat("Run Time End:", format(end_time, "%Y-%m-%d %H:%M:%S"), "\n\n")
 run_time <- end_time - start_time
 cat("Total Elapsed Time:", round(run_time, 2), attr(run_time, "units"), "\n\n")
 
-on.exit(sink())
+})
