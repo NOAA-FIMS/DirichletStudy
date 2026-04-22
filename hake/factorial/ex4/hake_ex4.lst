@@ -1,0 +1,2826 @@
+file = hake_ex4.lst
+Run Time Start: 2026-04-13 17:55:59 
+
+Sampled simplex dimensions: 231 3 
+
+--- Sample-size distribution diagnostics ---
+Sample Size Distribution = 1 (Poisson)
+Target mean = 25.000
+Realized mean = 24.959
+Realized SD = 4.996
+  0%   5%  25%  50%  75%  95% 100% 
+  10   17   21   25   28   33   51 
+--- End diagnostics ---
+
+$K
+[1] 3
+
+$G
+[1] 2
+
+$h
+[1] 0.05
+
+$theta_true
+[1] 0.5
+
+$theta_CV
+[1] 0.2
+
+$dist_code
+[1] 1
+
+$mean_nsamp
+[1] 25
+
+$ln_sd
+[1] 1
+
+$nb_size
+[1] 25
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 100
+
+$nsims
+[1] 5
+
+$random.seed
+[1] 2125474368
+
+$od_mult
+[1] 1
+
+$sigma
+[1] 0.25
+
+$p_lbound
+[1] 0 0 0
+
+$p_ubound
+[1] 1 1 1
+
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 178.06, df = 4, p-value < 2.2e-16
+
+Kendall's W ~= 0.039
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii     iv     
+ii  1.1e-06 -       -       -      
+iii < 2e-16 < 2e-16 -       -      
+iv  0.03948 6.4e-05 < 2e-16 -      
+v   0.44730 3.7e-07 < 2e-16 0.00012
+
+P value adjustment method: holm 
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392486, p-value = 2.266e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0002928115 0.0061825658
+sample estimates:
+(pseudo)median 
+   0.003085821 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 214339, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.004743647 -0.003303919
+sample estimates:
+(pseudo)median 
+   -0.00404666 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 360229, p-value = 0.01974
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -7.575665e-06  2.729661e-05
+sample estimates:
+(pseudo)median 
+  3.806069e-05 
+
+
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 325178, p-value = 0.4473
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.287280e-06  3.080254e-05
+sample estimates:
+(pseudo)median 
+ -1.801544e-05 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 210464, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.014016257 -0.009731174
+sample estimates:
+(pseudo)median 
+   -0.01180649 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 283856, p-value = 1.606e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0061964527 -0.0003586149
+sample estimates:
+(pseudo)median 
+  -0.003298517 
+
+
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 271888, p-value = 6.1e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0062988060 -0.0007230952
+sample estimates:
+(pseudo)median 
+   -0.00372833 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 458732, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003847640 0.005398298
+sample estimates:
+(pseudo)median 
+   0.004631884 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 452997, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.002820490 0.004168637
+sample estimates:
+(pseudo)median 
+    0.00348623 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 286793, p-value = 4.139e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -9.14680e-05 -2.70451e-06
+sample estimates:
+(pseudo)median 
+ -4.314402e-05 
+
+Percent change in RMSE for method X relative to method Y 
+
+             pct_ii_i  pct_iii_i      pct_iv_i       pct_v_i
+median   0.0007157579  -3.890934  0.0002867933 -0.0001831148
+IQR     47.7690216138  18.450155  0.7266567799  0.2067822795
+q25.25% -4.4553189627 -13.728110 -0.0468068334 -0.1336785096
+q75.75% 43.3137026511   4.722046  0.6798499465  0.0731037699
+        pct_iii_ii     pct_iv_ii      pct_v_ii pct_iv_iii pct_v_iii
+median   -10.85414  4.039619e-05 -5.467822e-04   5.447802  2.687605
+IQR       49.45744  3.393212e+01  3.389689e+01  22.279316 17.451401
+q25.25%  -36.41216 -2.879442e+01 -3.004076e+01  -4.762724 -3.519752
+q75.75%   13.04528  5.137696e+00  3.856125e+00  17.516592 13.931649
+             pct_v_iv
+median  -0.0004568052
+IQR      0.5549584921
+q25.25% -0.5409368635
+q75.75%  0.0140216286
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.19393 0.048483     4  4616  73.216 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i      0.0940 0.00176 Inf    0.0906    0.0975
+ ii     0.1070 0.00176 Inf    0.1035    0.1104
+ iii    0.0900 0.00176 Inf    0.0865    0.0934
+ iv     0.0944 0.00176 Inf    0.0909    0.0978
+ v      0.0938 0.00176 Inf    0.0903    0.0972
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.012932 0.00107 Inf -12.077 <0.0001
+ i - iii   0.004050 0.00107 Inf   3.782  0.0008
+ i - iv   -0.000311 0.00107 Inf  -0.290  1.0000
+ i - v     0.000272 0.00107 Inf   0.254  1.0000
+ ii - iii  0.016983 0.00107 Inf  15.860 <0.0001
+ ii - iv   0.012621 0.00107 Inf  11.787 <0.0001
+ ii - v    0.013205 0.00107 Inf  12.332 <0.0001
+ iii - iv -0.004361 0.00107 Inf  -4.073  0.0003
+ iii - v  -0.003778 0.00107 Inf  -3.528  0.0017
+ iv - v    0.000584 0.00107 Inf   0.545  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  L1_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for L1 norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_L1$L1_norm and df_L1$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for L1 norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.000872747 0.017620224
+sample estimates:
+(pseudo)median 
+   0.009557704 
+
+
+Paired Wilcoxon for L1 norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.013020551 -0.009091957
+sample estimates:
+(pseudo)median 
+   -0.01104192 
+
+
+Paired Wilcoxon for L1 norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.158547e-07  2.038886e-05
+sample estimates:
+(pseudo)median 
+  1.644686e-05 
+
+
+Paired Wilcoxon for L1 norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.894732e-05  3.232048e-05
+sample estimates:
+(pseudo)median 
+  -4.49842e-06 
+
+
+Paired Wilcoxon for L1 norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03841176 -0.02687331
+sample estimates:
+(pseudo)median 
+   -0.03251598 
+
+
+Paired Wilcoxon for L1 norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0175185820 -0.0009602463
+sample estimates:
+(pseudo)median 
+  -0.008704764 
+
+
+Paired Wilcoxon for L1 norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018526675 -0.002142358
+sample estimates:
+(pseudo)median 
+   -0.01028526 
+
+
+Paired Wilcoxon for L1 norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.01049845 0.01476459
+sample estimates:
+(pseudo)median 
+    0.01261842 
+
+
+Paired Wilcoxon for L1 norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.007825158 0.011442599
+sample estimates:
+(pseudo)median 
+   0.009650498 
+
+
+Paired Wilcoxon for L1 norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.434147e-05 -4.906863e-06
+sample estimates:
+(pseudo)median 
+ -7.765582e-05 
+
+Percent change in L1 norm for method X relative to method Y 
+
+        pct_L1_norm_ii_i pct_L1_norm_iii_i pct_L1_norm_iv_i
+median      0.0006802744          -4.22218     0.0001958928
+IQR        46.2443903581          18.70710     0.6760606455
+q25.25%    -4.5143268803         -13.99193    -0.0433855388
+q75.75%    41.7300634777           4.71517     0.6326751067
+        pct_L1_norm_v_i pct_L1_norm_iii_ii pct_L1_norm_iv_ii
+median    -0.0002230751          -10.94838      6.324079e-05
+IQR        0.1753507818           47.74849      3.295439e+01
+q25.25%   -0.0893812742          -36.27819     -2.813969e+01
+q75.75%    0.0859695076           11.47031      4.814702e+00
+        pct_L1_norm_v_ii pct_L1_norm_iv_iii pct_L1_norm_v_iii
+median      -0.000432392           5.143070          2.608986
+IQR         34.543819104          23.429786         17.517757
+q25.25%    -30.169036968          -4.968356         -3.253723
+q75.75%      4.374782136          18.461430         14.264033
+        pct_L1_norm_v_iv
+median     -0.0003785151
+IQR         0.4001125562
+q25.25%    -0.3811081910
+q75.75%     0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 1.3959 0.34898     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.253 0.00471 Inf     0.244     0.262
+ ii      0.287 0.00471 Inf     0.278     0.297
+ iii     0.242 0.00471 Inf     0.232     0.251
+ iv      0.254 0.00471 Inf     0.244     0.263
+ v       0.252 0.00471 Inf     0.243     0.261
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.034495 0.00285 Inf -12.110 <0.0001
+ i - iii   0.011234 0.00285 Inf   3.944  0.0004
+ i - iv   -0.000756 0.00285 Inf  -0.265  1.0000
+ i - v     0.000714 0.00285 Inf   0.251  1.0000
+ ii - iii  0.045729 0.00285 Inf  16.054 <0.0001
+ ii - iv   0.033739 0.00285 Inf  11.845 <0.0001
+ ii - v    0.035209 0.00285 Inf  12.361 <0.0001
+ iii - iv -0.011990 0.00285 Inf  -4.209  0.0002
+ iii - v  -0.010520 0.00285 Inf  -3.693  0.0009
+ iv - v    0.001470 0.00285 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  Linf_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for Linf norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_Linf$Linf_norm and df_Linf$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for Linf norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0004358587 0.0088101120
+sample estimates:
+(pseudo)median 
+   0.004750103 
+
+
+Paired Wilcoxon for Linf norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.006510275 -0.004545979
+sample estimates:
+(pseudo)median 
+  -0.005520958 
+
+
+Paired Wilcoxon for Linf norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.579274e-07  3.519443e-05
+sample estimates:
+(pseudo)median 
+  3.322343e-05 
+
+
+Paired Wilcoxon for Linf norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.947366e-05  4.658321e-05
+sample estimates:
+(pseudo)median 
+ -2.724921e-05 
+
+
+Paired Wilcoxon for Linf norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.01923088 -0.01346166
+sample estimates:
+(pseudo)median 
+   -0.01628302 
+
+
+Paired Wilcoxon for Linf norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0087220952 -0.0004641424
+sample estimates:
+(pseudo)median 
+   -0.00437725 
+
+
+Paired Wilcoxon for Linf norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.009288338 -0.001031977
+sample estimates:
+(pseudo)median 
+  -0.005122983 
+
+
+Paired Wilcoxon for Linf norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.005224225 0.007382295
+sample estimates:
+(pseudo)median 
+   0.006334208 
+
+
+Paired Wilcoxon for Linf norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003912579 0.005746299
+sample estimates:
+(pseudo)median 
+   0.004825281 
+
+
+Paired Wilcoxon for Linf norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.217074e-05 -3.218980e-05
+sample estimates:
+(pseudo)median 
+ -8.256206e-05 
+
+Percent change in Linf norm for method X relative to method Y 
+
+        pct_Linf_norm_ii_i pct_Linf_norm_iii_i pct_Linf_norm_iv_i
+median        0.0006802744            -4.22218       0.0001958928
+IQR          46.2443903581            18.70710       0.6760606455
+q25.25%      -4.5143268803           -13.99193      -0.0433855388
+q75.75%      41.7300634777             4.71517       0.6326751067
+        pct_Linf_norm_v_i pct_Linf_norm_iii_ii pct_Linf_norm_iv_ii
+median      -0.0002230751            -10.94838        6.324079e-05
+IQR          0.1753507818             47.74849        3.295439e+01
+q25.25%     -0.0893812742            -36.27819       -2.813969e+01
+q75.75%      0.0859695076             11.47031        4.814702e+00
+        pct_Linf_norm_v_ii pct_Linf_norm_iv_iii pct_Linf_norm_v_iii
+median        -0.000432392             5.143070            2.608986
+IQR           34.543819104            23.429786           17.517757
+q25.25%      -30.169036968            -4.968356           -3.253723
+q75.75%        4.374782136            18.461430           14.264033
+        pct_Linf_norm_v_iv
+median       -0.0003785151
+IQR           0.4001125562
+q25.25%      -0.3811081910
+q75.75%       0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.34898 0.087244     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.126 0.00235 Inf     0.122     0.131
+ ii      0.144 0.00235 Inf     0.139     0.148
+ iii     0.121 0.00235 Inf     0.116     0.125
+ iv      0.127 0.00235 Inf     0.122     0.131
+ v       0.126 0.00235 Inf     0.121     0.131
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.017247 0.00142 Inf -12.110 <0.0001
+ i - iii   0.005617 0.00142 Inf   3.944  0.0004
+ i - iv   -0.000378 0.00142 Inf  -0.265  1.0000
+ i - v     0.000357 0.00142 Inf   0.251  1.0000
+ ii - iii  0.022864 0.00142 Inf  16.054 <0.0001
+ ii - iv   0.016869 0.00142 Inf  11.845 <0.0001
+ ii - v    0.017605 0.00142 Inf  12.361 <0.0001
+ iii - iv -0.005995 0.00142 Inf  -4.209  0.0002
+ iii - v  -0.005260 0.00142 Inf  -3.693  0.0009
+ iv - v    0.000735 0.00142 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Run Time End: 2026-04-13 17:56:13 
+
+Total Elapsed Time: 14.74 secs 
+
+
+
+Sampled simplex dimensions: 231 3 
+
+--- Sample-size distribution diagnostics ---
+Sample Size Distribution = 1 (Poisson)
+Target mean = 25.000
+Realized mean = 24.959
+Realized SD = 4.996
+  0%   5%  25%  50%  75%  95% 100% 
+  10   17   21   25   28   33   51 
+--- End diagnostics ---
+
+$K
+[1] 3
+
+$G
+[1] 2
+
+$h
+[1] 0.05
+
+$theta_true
+[1] 0.5
+
+$theta_CV
+[1] 0.2
+
+$dist_code
+[1] 1
+
+$mean_nsamp
+[1] 25
+
+$ln_sd
+[1] 1
+
+$nb_size
+[1] 25
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 100
+
+$nsims
+[1] 5
+
+$random.seed
+[1] 2125474368
+
+$od_mult
+[1] 1
+
+$sigma
+[1] 0.25
+
+$p_lbound
+[1] 0 0 0
+
+$p_ubound
+[1] 1 1 1
+
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 178.06, df = 4, p-value < 2.2e-16
+
+Kendall's W ~= 0.039
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii     iv     
+ii  1.1e-06 -       -       -      
+iii < 2e-16 < 2e-16 -       -      
+iv  0.03948 6.4e-05 < 2e-16 -      
+v   0.44730 3.7e-07 < 2e-16 0.00012
+
+P value adjustment method: holm 
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392486, p-value = 2.266e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0002928115 0.0061825658
+sample estimates:
+(pseudo)median 
+   0.003085821 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 214339, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.004743647 -0.003303919
+sample estimates:
+(pseudo)median 
+   -0.00404666 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 360229, p-value = 0.01974
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -7.575665e-06  2.729661e-05
+sample estimates:
+(pseudo)median 
+  3.806069e-05 
+
+
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 325178, p-value = 0.4473
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.287280e-06  3.080254e-05
+sample estimates:
+(pseudo)median 
+ -1.801544e-05 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 210464, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.014016257 -0.009731174
+sample estimates:
+(pseudo)median 
+   -0.01180649 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 283856, p-value = 1.606e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0061964527 -0.0003586149
+sample estimates:
+(pseudo)median 
+  -0.003298517 
+
+
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 271888, p-value = 6.1e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0062988060 -0.0007230952
+sample estimates:
+(pseudo)median 
+   -0.00372833 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 458732, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003847640 0.005398298
+sample estimates:
+(pseudo)median 
+   0.004631884 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 452997, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.002820490 0.004168637
+sample estimates:
+(pseudo)median 
+    0.00348623 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 286793, p-value = 4.139e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -9.14680e-05 -2.70451e-06
+sample estimates:
+(pseudo)median 
+ -4.314402e-05 
+
+Percent change in RMSE for method X relative to method Y 
+
+             pct_ii_i  pct_iii_i      pct_iv_i       pct_v_i
+median   0.0007157579  -3.890934  0.0002867933 -0.0001831148
+IQR     47.7690216138  18.450155  0.7266567799  0.2067822795
+q25.25% -4.4553189627 -13.728110 -0.0468068334 -0.1336785096
+q75.75% 43.3137026511   4.722046  0.6798499465  0.0731037699
+        pct_iii_ii     pct_iv_ii      pct_v_ii pct_iv_iii pct_v_iii
+median   -10.85414  4.039619e-05 -5.467822e-04   5.447802  2.687605
+IQR       49.45744  3.393212e+01  3.389689e+01  22.279316 17.451401
+q25.25%  -36.41216 -2.879442e+01 -3.004076e+01  -4.762724 -3.519752
+q75.75%   13.04528  5.137696e+00  3.856125e+00  17.516592 13.931649
+             pct_v_iv
+median  -0.0004568052
+IQR      0.5549584921
+q25.25% -0.5409368635
+q75.75%  0.0140216286
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.19393 0.048483     4  4616  73.216 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i      0.0940 0.00176 Inf    0.0906    0.0975
+ ii     0.1070 0.00176 Inf    0.1035    0.1104
+ iii    0.0900 0.00176 Inf    0.0865    0.0934
+ iv     0.0944 0.00176 Inf    0.0909    0.0978
+ v      0.0938 0.00176 Inf    0.0903    0.0972
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.012932 0.00107 Inf -12.077 <0.0001
+ i - iii   0.004050 0.00107 Inf   3.782  0.0008
+ i - iv   -0.000311 0.00107 Inf  -0.290  1.0000
+ i - v     0.000272 0.00107 Inf   0.254  1.0000
+ ii - iii  0.016983 0.00107 Inf  15.860 <0.0001
+ ii - iv   0.012621 0.00107 Inf  11.787 <0.0001
+ ii - v    0.013205 0.00107 Inf  12.332 <0.0001
+ iii - iv -0.004361 0.00107 Inf  -4.073  0.0003
+ iii - v  -0.003778 0.00107 Inf  -3.528  0.0017
+ iv - v    0.000584 0.00107 Inf   0.545  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  L1_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for L1 norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_L1$L1_norm and df_L1$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for L1 norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.000872747 0.017620224
+sample estimates:
+(pseudo)median 
+   0.009557704 
+
+
+Paired Wilcoxon for L1 norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.013020551 -0.009091957
+sample estimates:
+(pseudo)median 
+   -0.01104192 
+
+
+Paired Wilcoxon for L1 norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.158547e-07  2.038886e-05
+sample estimates:
+(pseudo)median 
+  1.644686e-05 
+
+
+Paired Wilcoxon for L1 norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.894732e-05  3.232048e-05
+sample estimates:
+(pseudo)median 
+  -4.49842e-06 
+
+
+Paired Wilcoxon for L1 norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03841176 -0.02687331
+sample estimates:
+(pseudo)median 
+   -0.03251598 
+
+
+Paired Wilcoxon for L1 norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0175185820 -0.0009602463
+sample estimates:
+(pseudo)median 
+  -0.008704764 
+
+
+Paired Wilcoxon for L1 norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018526675 -0.002142358
+sample estimates:
+(pseudo)median 
+   -0.01028526 
+
+
+Paired Wilcoxon for L1 norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.01049845 0.01476459
+sample estimates:
+(pseudo)median 
+    0.01261842 
+
+
+Paired Wilcoxon for L1 norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.007825158 0.011442599
+sample estimates:
+(pseudo)median 
+   0.009650498 
+
+
+Paired Wilcoxon for L1 norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.434147e-05 -4.906863e-06
+sample estimates:
+(pseudo)median 
+ -7.765582e-05 
+
+Percent change in L1 norm for method X relative to method Y 
+
+        pct_L1_norm_ii_i pct_L1_norm_iii_i pct_L1_norm_iv_i
+median      0.0006802744          -4.22218     0.0001958928
+IQR        46.2443903581          18.70710     0.6760606455
+q25.25%    -4.5143268803         -13.99193    -0.0433855388
+q75.75%    41.7300634777           4.71517     0.6326751067
+        pct_L1_norm_v_i pct_L1_norm_iii_ii pct_L1_norm_iv_ii
+median    -0.0002230751          -10.94838      6.324079e-05
+IQR        0.1753507818           47.74849      3.295439e+01
+q25.25%   -0.0893812742          -36.27819     -2.813969e+01
+q75.75%    0.0859695076           11.47031      4.814702e+00
+        pct_L1_norm_v_ii pct_L1_norm_iv_iii pct_L1_norm_v_iii
+median      -0.000432392           5.143070          2.608986
+IQR         34.543819104          23.429786         17.517757
+q25.25%    -30.169036968          -4.968356         -3.253723
+q75.75%      4.374782136          18.461430         14.264033
+        pct_L1_norm_v_iv
+median     -0.0003785151
+IQR         0.4001125562
+q25.25%    -0.3811081910
+q75.75%     0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 1.3959 0.34898     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.253 0.00471 Inf     0.244     0.262
+ ii      0.287 0.00471 Inf     0.278     0.297
+ iii     0.242 0.00471 Inf     0.232     0.251
+ iv      0.254 0.00471 Inf     0.244     0.263
+ v       0.252 0.00471 Inf     0.243     0.261
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.034495 0.00285 Inf -12.110 <0.0001
+ i - iii   0.011234 0.00285 Inf   3.944  0.0004
+ i - iv   -0.000756 0.00285 Inf  -0.265  1.0000
+ i - v     0.000714 0.00285 Inf   0.251  1.0000
+ ii - iii  0.045729 0.00285 Inf  16.054 <0.0001
+ ii - iv   0.033739 0.00285 Inf  11.845 <0.0001
+ ii - v    0.035209 0.00285 Inf  12.361 <0.0001
+ iii - iv -0.011990 0.00285 Inf  -4.209  0.0002
+ iii - v  -0.010520 0.00285 Inf  -3.693  0.0009
+ iv - v    0.001470 0.00285 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  Linf_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for Linf norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_Linf$Linf_norm and df_Linf$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for Linf norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0004358587 0.0088101120
+sample estimates:
+(pseudo)median 
+   0.004750103 
+
+
+Paired Wilcoxon for Linf norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.006510275 -0.004545979
+sample estimates:
+(pseudo)median 
+  -0.005520958 
+
+
+Paired Wilcoxon for Linf norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.579274e-07  3.519443e-05
+sample estimates:
+(pseudo)median 
+  3.322343e-05 
+
+
+Paired Wilcoxon for Linf norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.947366e-05  4.658321e-05
+sample estimates:
+(pseudo)median 
+ -2.724921e-05 
+
+
+Paired Wilcoxon for Linf norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.01923088 -0.01346166
+sample estimates:
+(pseudo)median 
+   -0.01628302 
+
+
+Paired Wilcoxon for Linf norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0087220952 -0.0004641424
+sample estimates:
+(pseudo)median 
+   -0.00437725 
+
+
+Paired Wilcoxon for Linf norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.009288338 -0.001031977
+sample estimates:
+(pseudo)median 
+  -0.005122983 
+
+
+Paired Wilcoxon for Linf norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.005224225 0.007382295
+sample estimates:
+(pseudo)median 
+   0.006334208 
+
+
+Paired Wilcoxon for Linf norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003912579 0.005746299
+sample estimates:
+(pseudo)median 
+   0.004825281 
+
+
+Paired Wilcoxon for Linf norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.217074e-05 -3.218980e-05
+sample estimates:
+(pseudo)median 
+ -8.256206e-05 
+
+Percent change in Linf norm for method X relative to method Y 
+
+        pct_Linf_norm_ii_i pct_Linf_norm_iii_i pct_Linf_norm_iv_i
+median        0.0006802744            -4.22218       0.0001958928
+IQR          46.2443903581            18.70710       0.6760606455
+q25.25%      -4.5143268803           -13.99193      -0.0433855388
+q75.75%      41.7300634777             4.71517       0.6326751067
+        pct_Linf_norm_v_i pct_Linf_norm_iii_ii pct_Linf_norm_iv_ii
+median      -0.0002230751            -10.94838        6.324079e-05
+IQR          0.1753507818             47.74849        3.295439e+01
+q25.25%     -0.0893812742            -36.27819       -2.813969e+01
+q75.75%      0.0859695076             11.47031        4.814702e+00
+        pct_Linf_norm_v_ii pct_Linf_norm_iv_iii pct_Linf_norm_v_iii
+median        -0.000432392             5.143070            2.608986
+IQR           34.543819104            23.429786           17.517757
+q25.25%      -30.169036968            -4.968356           -3.253723
+q75.75%        4.374782136            18.461430           14.264033
+        pct_Linf_norm_v_iv
+median       -0.0003785151
+IQR           0.4001125562
+q25.25%      -0.3811081910
+q75.75%       0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.34898 0.087244     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.126 0.00235 Inf     0.122     0.131
+ ii      0.144 0.00235 Inf     0.139     0.148
+ iii     0.121 0.00235 Inf     0.116     0.125
+ iv      0.127 0.00235 Inf     0.122     0.131
+ v       0.126 0.00235 Inf     0.121     0.131
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.017247 0.00142 Inf -12.110 <0.0001
+ i - iii   0.005617 0.00142 Inf   3.944  0.0004
+ i - iv   -0.000378 0.00142 Inf  -0.265  1.0000
+ i - v     0.000357 0.00142 Inf   0.251  1.0000
+ ii - iii  0.022864 0.00142 Inf  16.054 <0.0001
+ ii - iv   0.016869 0.00142 Inf  11.845 <0.0001
+ ii - v    0.017605 0.00142 Inf  12.361 <0.0001
+ iii - iv -0.005995 0.00142 Inf  -4.209  0.0002
+ iii - v  -0.005260 0.00142 Inf  -3.693  0.0009
+ iv - v    0.000735 0.00142 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Run Time End: 2026-04-13 17:56:13 
+
+Total Elapsed Time: 14.74 secs 
+
+
+
+Sampled simplex dimensions: 231 3 
+
+--- Sample-size distribution diagnostics ---
+Sample Size Distribution = 1 (Poisson)
+Target mean = 25.000
+Realized mean = 24.959
+Realized SD = 4.996
+  0%   5%  25%  50%  75%  95% 100% 
+  10   17   21   25   28   33   51 
+--- End diagnostics ---
+
+$K
+[1] 3
+
+$G
+[1] 2
+
+$h
+[1] 0.05
+
+$theta_true
+[1] 0.5
+
+$theta_CV
+[1] 0.2
+
+$dist_code
+[1] 1
+
+$mean_nsamp
+[1] 25
+
+$ln_sd
+[1] 1
+
+$nb_size
+[1] 25
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 100
+
+$nsims
+[1] 5
+
+$random.seed
+[1] 2125474368
+
+$od_mult
+[1] 1
+
+$sigma
+[1] 0.25
+
+$p_lbound
+[1] 0 0 0
+
+$p_ubound
+[1] 1 1 1
+
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 178.06, df = 4, p-value < 2.2e-16
+
+Kendall's W ~= 0.039
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii     iv     
+ii  1.1e-06 -       -       -      
+iii < 2e-16 < 2e-16 -       -      
+iv  0.03948 6.4e-05 < 2e-16 -      
+v   0.44730 3.7e-07 < 2e-16 0.00012
+
+P value adjustment method: holm 
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392486, p-value = 2.266e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0002928115 0.0061825658
+sample estimates:
+(pseudo)median 
+   0.003085821 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 214339, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.004743647 -0.003303919
+sample estimates:
+(pseudo)median 
+   -0.00404666 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 360229, p-value = 0.01974
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -7.575665e-06  2.729661e-05
+sample estimates:
+(pseudo)median 
+  3.806069e-05 
+
+
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 325178, p-value = 0.4473
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.287280e-06  3.080254e-05
+sample estimates:
+(pseudo)median 
+ -1.801544e-05 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 210464, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.014016257 -0.009731174
+sample estimates:
+(pseudo)median 
+   -0.01180649 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 283856, p-value = 1.606e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0061964527 -0.0003586149
+sample estimates:
+(pseudo)median 
+  -0.003298517 
+
+
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 271888, p-value = 6.1e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0062988060 -0.0007230952
+sample estimates:
+(pseudo)median 
+   -0.00372833 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 458732, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003847640 0.005398298
+sample estimates:
+(pseudo)median 
+   0.004631884 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 452997, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.002820490 0.004168637
+sample estimates:
+(pseudo)median 
+    0.00348623 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 286793, p-value = 4.139e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -9.14680e-05 -2.70451e-06
+sample estimates:
+(pseudo)median 
+ -4.314402e-05 
+
+Percent change in RMSE for method X relative to method Y 
+
+             pct_ii_i  pct_iii_i      pct_iv_i       pct_v_i
+median   0.0007157579  -3.890934  0.0002867933 -0.0001831148
+IQR     47.7690216138  18.450155  0.7266567799  0.2067822795
+q25.25% -4.4553189627 -13.728110 -0.0468068334 -0.1336785096
+q75.75% 43.3137026511   4.722046  0.6798499465  0.0731037699
+        pct_iii_ii     pct_iv_ii      pct_v_ii pct_iv_iii pct_v_iii
+median   -10.85414  4.039619e-05 -5.467822e-04   5.447802  2.687605
+IQR       49.45744  3.393212e+01  3.389689e+01  22.279316 17.451401
+q25.25%  -36.41216 -2.879442e+01 -3.004076e+01  -4.762724 -3.519752
+q75.75%   13.04528  5.137696e+00  3.856125e+00  17.516592 13.931649
+             pct_v_iv
+median  -0.0004568052
+IQR      0.5549584921
+q25.25% -0.5409368635
+q75.75%  0.0140216286
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.19393 0.048483     4  4616  73.216 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i      0.0940 0.00176 Inf    0.0906    0.0975
+ ii     0.1070 0.00176 Inf    0.1035    0.1104
+ iii    0.0900 0.00176 Inf    0.0865    0.0934
+ iv     0.0944 0.00176 Inf    0.0909    0.0978
+ v      0.0938 0.00176 Inf    0.0903    0.0972
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.012932 0.00107 Inf -12.077 <0.0001
+ i - iii   0.004050 0.00107 Inf   3.782  0.0008
+ i - iv   -0.000311 0.00107 Inf  -0.290  1.0000
+ i - v     0.000272 0.00107 Inf   0.254  1.0000
+ ii - iii  0.016983 0.00107 Inf  15.860 <0.0001
+ ii - iv   0.012621 0.00107 Inf  11.787 <0.0001
+ ii - v    0.013205 0.00107 Inf  12.332 <0.0001
+ iii - iv -0.004361 0.00107 Inf  -4.073  0.0003
+ iii - v  -0.003778 0.00107 Inf  -3.528  0.0017
+ iv - v    0.000584 0.00107 Inf   0.545  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  L1_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for L1 norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_L1$L1_norm and df_L1$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for L1 norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.000872747 0.017620224
+sample estimates:
+(pseudo)median 
+   0.009557704 
+
+
+Paired Wilcoxon for L1 norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.013020551 -0.009091957
+sample estimates:
+(pseudo)median 
+   -0.01104192 
+
+
+Paired Wilcoxon for L1 norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.158547e-07  2.038886e-05
+sample estimates:
+(pseudo)median 
+  1.644686e-05 
+
+
+Paired Wilcoxon for L1 norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.894732e-05  3.232048e-05
+sample estimates:
+(pseudo)median 
+  -4.49842e-06 
+
+
+Paired Wilcoxon for L1 norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03841176 -0.02687331
+sample estimates:
+(pseudo)median 
+   -0.03251598 
+
+
+Paired Wilcoxon for L1 norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0175185820 -0.0009602463
+sample estimates:
+(pseudo)median 
+  -0.008704764 
+
+
+Paired Wilcoxon for L1 norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018526675 -0.002142358
+sample estimates:
+(pseudo)median 
+   -0.01028526 
+
+
+Paired Wilcoxon for L1 norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.01049845 0.01476459
+sample estimates:
+(pseudo)median 
+    0.01261842 
+
+
+Paired Wilcoxon for L1 norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.007825158 0.011442599
+sample estimates:
+(pseudo)median 
+   0.009650498 
+
+
+Paired Wilcoxon for L1 norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.434147e-05 -4.906863e-06
+sample estimates:
+(pseudo)median 
+ -7.765582e-05 
+
+Percent change in L1 norm for method X relative to method Y 
+
+        pct_L1_norm_ii_i pct_L1_norm_iii_i pct_L1_norm_iv_i
+median      0.0006802744          -4.22218     0.0001958928
+IQR        46.2443903581          18.70710     0.6760606455
+q25.25%    -4.5143268803         -13.99193    -0.0433855388
+q75.75%    41.7300634777           4.71517     0.6326751067
+        pct_L1_norm_v_i pct_L1_norm_iii_ii pct_L1_norm_iv_ii
+median    -0.0002230751          -10.94838      6.324079e-05
+IQR        0.1753507818           47.74849      3.295439e+01
+q25.25%   -0.0893812742          -36.27819     -2.813969e+01
+q75.75%    0.0859695076           11.47031      4.814702e+00
+        pct_L1_norm_v_ii pct_L1_norm_iv_iii pct_L1_norm_v_iii
+median      -0.000432392           5.143070          2.608986
+IQR         34.543819104          23.429786         17.517757
+q25.25%    -30.169036968          -4.968356         -3.253723
+q75.75%      4.374782136          18.461430         14.264033
+        pct_L1_norm_v_iv
+median     -0.0003785151
+IQR         0.4001125562
+q25.25%    -0.3811081910
+q75.75%     0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 1.3959 0.34898     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.253 0.00471 Inf     0.244     0.262
+ ii      0.287 0.00471 Inf     0.278     0.297
+ iii     0.242 0.00471 Inf     0.232     0.251
+ iv      0.254 0.00471 Inf     0.244     0.263
+ v       0.252 0.00471 Inf     0.243     0.261
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.034495 0.00285 Inf -12.110 <0.0001
+ i - iii   0.011234 0.00285 Inf   3.944  0.0004
+ i - iv   -0.000756 0.00285 Inf  -0.265  1.0000
+ i - v     0.000714 0.00285 Inf   0.251  1.0000
+ ii - iii  0.045729 0.00285 Inf  16.054 <0.0001
+ ii - iv   0.033739 0.00285 Inf  11.845 <0.0001
+ ii - v    0.035209 0.00285 Inf  12.361 <0.0001
+ iii - iv -0.011990 0.00285 Inf  -4.209  0.0002
+ iii - v  -0.010520 0.00285 Inf  -3.693  0.0009
+ iv - v    0.001470 0.00285 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  Linf_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for Linf norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_Linf$Linf_norm and df_Linf$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for Linf norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0004358587 0.0088101120
+sample estimates:
+(pseudo)median 
+   0.004750103 
+
+
+Paired Wilcoxon for Linf norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.006510275 -0.004545979
+sample estimates:
+(pseudo)median 
+  -0.005520958 
+
+
+Paired Wilcoxon for Linf norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.579274e-07  3.519443e-05
+sample estimates:
+(pseudo)median 
+  3.322343e-05 
+
+
+Paired Wilcoxon for Linf norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.947366e-05  4.658321e-05
+sample estimates:
+(pseudo)median 
+ -2.724921e-05 
+
+
+Paired Wilcoxon for Linf norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.01923088 -0.01346166
+sample estimates:
+(pseudo)median 
+   -0.01628302 
+
+
+Paired Wilcoxon for Linf norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0087220952 -0.0004641424
+sample estimates:
+(pseudo)median 
+   -0.00437725 
+
+
+Paired Wilcoxon for Linf norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.009288338 -0.001031977
+sample estimates:
+(pseudo)median 
+  -0.005122983 
+
+
+Paired Wilcoxon for Linf norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.005224225 0.007382295
+sample estimates:
+(pseudo)median 
+   0.006334208 
+
+
+Paired Wilcoxon for Linf norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003912579 0.005746299
+sample estimates:
+(pseudo)median 
+   0.004825281 
+
+
+Paired Wilcoxon for Linf norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.217074e-05 -3.218980e-05
+sample estimates:
+(pseudo)median 
+ -8.256206e-05 
+
+Percent change in Linf norm for method X relative to method Y 
+
+        pct_Linf_norm_ii_i pct_Linf_norm_iii_i pct_Linf_norm_iv_i
+median        0.0006802744            -4.22218       0.0001958928
+IQR          46.2443903581            18.70710       0.6760606455
+q25.25%      -4.5143268803           -13.99193      -0.0433855388
+q75.75%      41.7300634777             4.71517       0.6326751067
+        pct_Linf_norm_v_i pct_Linf_norm_iii_ii pct_Linf_norm_iv_ii
+median      -0.0002230751            -10.94838        6.324079e-05
+IQR          0.1753507818             47.74849        3.295439e+01
+q25.25%     -0.0893812742            -36.27819       -2.813969e+01
+q75.75%      0.0859695076             11.47031        4.814702e+00
+        pct_Linf_norm_v_ii pct_Linf_norm_iv_iii pct_Linf_norm_v_iii
+median        -0.000432392             5.143070            2.608986
+IQR           34.543819104            23.429786           17.517757
+q25.25%      -30.169036968            -4.968356           -3.253723
+q75.75%        4.374782136            18.461430           14.264033
+        pct_Linf_norm_v_iv
+median       -0.0003785151
+IQR           0.4001125562
+q25.25%      -0.3811081910
+q75.75%       0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.34898 0.087244     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.126 0.00235 Inf     0.122     0.131
+ ii      0.144 0.00235 Inf     0.139     0.148
+ iii     0.121 0.00235 Inf     0.116     0.125
+ iv      0.127 0.00235 Inf     0.122     0.131
+ v       0.126 0.00235 Inf     0.121     0.131
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.017247 0.00142 Inf -12.110 <0.0001
+ i - iii   0.005617 0.00142 Inf   3.944  0.0004
+ i - iv   -0.000378 0.00142 Inf  -0.265  1.0000
+ i - v     0.000357 0.00142 Inf   0.251  1.0000
+ ii - iii  0.022864 0.00142 Inf  16.054 <0.0001
+ ii - iv   0.016869 0.00142 Inf  11.845 <0.0001
+ ii - v    0.017605 0.00142 Inf  12.361 <0.0001
+ iii - iv -0.005995 0.00142 Inf  -4.209  0.0002
+ iii - v  -0.005260 0.00142 Inf  -3.693  0.0009
+ iv - v    0.000735 0.00142 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Run Time End: 2026-04-13 17:56:13 
+
+Total Elapsed Time: 14.74 secs 
+
+ Inf  12.361 <0.0001
+ iii - iv -0.005995 0.00142 Inf  -4.209  0.0002
+ iii - v  -0.005260 0.00142 Inf  -3.693  0.0009
+ iv - v    0.000735 0.00142 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Run Time End: 2026-04-13 17:56:13 
+
+Total Elapsed Time: 14.74 secs 
+
+
+
+Sampled simplex dimensions: 231 3 
+
+--- Sample-size distribution diagnostics ---
+Sample Size Distribution = 1 (Poisson)
+Target mean = 25.000
+Realized mean = 24.959
+Realized SD = 4.996
+  0%   5%  25%  50%  75%  95% 100% 
+  10   17   21   25   28   33   51 
+--- End diagnostics ---
+
+$K
+[1] 3
+
+$G
+[1] 2
+
+$h
+[1] 0.05
+
+$theta_true
+[1] 0.5
+
+$theta_CV
+[1] 0.2
+
+$dist_code
+[1] 1
+
+$mean_nsamp
+[1] 25
+
+$ln_sd
+[1] 1
+
+$nb_size
+[1] 25
+
+$Nmin
+[1] 50
+
+$Nmax
+[1] 100
+
+$nsims
+[1] 5
+
+$random.seed
+[1] 2125474368
+
+$od_mult
+[1] 1
+
+$sigma
+[1] 0.25
+
+$p_lbound
+[1] 0 0 0
+
+$p_ubound
+[1] 1 1 1
+
+
+	Friedman rank sum test
+
+data:  rmse and method and id
+Friedman chi-squared = 178.06, df = 4, p-value < 2.2e-16
+
+Kendall's W ~= 0.039
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df$rmse and df$method 
+
+    i       ii      iii     iv     
+ii  1.1e-06 -       -       -      
+iii < 2e-16 < 2e-16 -       -      
+iv  0.03948 6.4e-05 < 2e-16 -      
+v   0.44730 3.7e-07 < 2e-16 0.00012
+
+P value adjustment method: holm 
+
+Paired Wilcoxon (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392486, p-value = 2.266e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0002928115 0.0061825658
+sample estimates:
+(pseudo)median 
+   0.003085821 
+
+
+Paired Wilcoxon (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 214339, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.004743647 -0.003303919
+sample estimates:
+(pseudo)median 
+   -0.00404666 
+
+
+Paired Wilcoxon (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 360229, p-value = 0.01974
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -7.575665e-06  2.729661e-05
+sample estimates:
+(pseudo)median 
+  3.806069e-05 
+
+
+Paired Wilcoxon (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 325178, p-value = 0.4473
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.287280e-06  3.080254e-05
+sample estimates:
+(pseudo)median 
+ -1.801544e-05 
+
+
+Paired Wilcoxon (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 210464, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.014016257 -0.009731174
+sample estimates:
+(pseudo)median 
+   -0.01180649 
+
+
+Paired Wilcoxon (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 283856, p-value = 1.606e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0061964527 -0.0003586149
+sample estimates:
+(pseudo)median 
+  -0.003298517 
+
+
+Paired Wilcoxon (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 271888, p-value = 6.1e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0062988060 -0.0007230952
+sample estimates:
+(pseudo)median 
+   -0.00372833 
+
+
+Paired Wilcoxon (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 458732, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003847640 0.005398298
+sample estimates:
+(pseudo)median 
+   0.004631884 
+
+
+Paired Wilcoxon (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 452997, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.002820490 0.004168637
+sample estimates:
+(pseudo)median 
+    0.00348623 
+
+
+Paired Wilcoxon (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 286793, p-value = 4.139e-05
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -9.14680e-05 -2.70451e-06
+sample estimates:
+(pseudo)median 
+ -4.314402e-05 
+
+Percent change in RMSE for method X relative to method Y 
+
+             pct_ii_i  pct_iii_i      pct_iv_i       pct_v_i
+median   0.0007157579  -3.890934  0.0002867933 -0.0001831148
+IQR     47.7690216138  18.450155  0.7266567799  0.2067822795
+q25.25% -4.4553189627 -13.728110 -0.0468068334 -0.1336785096
+q75.75% 43.3137026511   4.722046  0.6798499465  0.0731037699
+        pct_iii_ii     pct_iv_ii      pct_v_ii pct_iv_iii pct_v_iii
+median   -10.85414  4.039619e-05 -5.467822e-04   5.447802  2.687605
+IQR       49.45744  3.393212e+01  3.389689e+01  22.279316 17.451401
+q25.25%  -36.41216 -2.879442e+01 -3.004076e+01  -4.762724 -3.519752
+q75.75%   13.04528  5.137696e+00  3.856125e+00  17.516592 13.931649
+             pct_v_iv
+median  -0.0004568052
+IQR      0.5549584921
+q25.25% -0.5409368635
+q75.75%  0.0140216286
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.19393 0.048483     4  4616  73.216 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i      0.0940 0.00176 Inf    0.0906    0.0975
+ ii     0.1070 0.00176 Inf    0.1035    0.1104
+ iii    0.0900 0.00176 Inf    0.0865    0.0934
+ iv     0.0944 0.00176 Inf    0.0909    0.0978
+ v      0.0938 0.00176 Inf    0.0903    0.0972
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.012932 0.00107 Inf -12.077 <0.0001
+ i - iii   0.004050 0.00107 Inf   3.782  0.0008
+ i - iv   -0.000311 0.00107 Inf  -0.290  1.0000
+ i - v     0.000272 0.00107 Inf   0.254  1.0000
+ ii - iii  0.016983 0.00107 Inf  15.860 <0.0001
+ ii - iv   0.012621 0.00107 Inf  11.787 <0.0001
+ ii - v    0.013205 0.00107 Inf  12.332 <0.0001
+ iii - iv -0.004361 0.00107 Inf  -4.073  0.0003
+ iii - v  -0.003778 0.00107 Inf  -3.528  0.0017
+ iv - v    0.000584 0.00107 Inf   0.545  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  L1_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for L1 norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_L1$L1_norm and df_L1$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for L1 norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.000872747 0.017620224
+sample estimates:
+(pseudo)median 
+   0.009557704 
+
+
+Paired Wilcoxon for L1 norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.013020551 -0.009091957
+sample estimates:
+(pseudo)median 
+   -0.01104192 
+
+
+Paired Wilcoxon for L1 norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.158547e-07  2.038886e-05
+sample estimates:
+(pseudo)median 
+  1.644686e-05 
+
+
+Paired Wilcoxon for L1 norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -3.894732e-05  3.232048e-05
+sample estimates:
+(pseudo)median 
+  -4.49842e-06 
+
+
+Paired Wilcoxon for L1 norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.03841176 -0.02687331
+sample estimates:
+(pseudo)median 
+   -0.03251598 
+
+
+Paired Wilcoxon for L1 norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0175185820 -0.0009602463
+sample estimates:
+(pseudo)median 
+  -0.008704764 
+
+
+Paired Wilcoxon for L1 norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018526675 -0.002142358
+sample estimates:
+(pseudo)median 
+   -0.01028526 
+
+
+Paired Wilcoxon for L1 norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.01049845 0.01476459
+sample estimates:
+(pseudo)median 
+    0.01261842 
+
+
+Paired Wilcoxon for L1 norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.007825158 0.011442599
+sample estimates:
+(pseudo)median 
+   0.009650498 
+
+
+Paired Wilcoxon for L1 norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.434147e-05 -4.906863e-06
+sample estimates:
+(pseudo)median 
+ -7.765582e-05 
+
+Percent change in L1 norm for method X relative to method Y 
+
+        pct_L1_norm_ii_i pct_L1_norm_iii_i pct_L1_norm_iv_i
+median      0.0006802744          -4.22218     0.0001958928
+IQR        46.2443903581          18.70710     0.6760606455
+q25.25%    -4.5143268803         -13.99193    -0.0433855388
+q75.75%    41.7300634777           4.71517     0.6326751067
+        pct_L1_norm_v_i pct_L1_norm_iii_ii pct_L1_norm_iv_ii
+median    -0.0002230751          -10.94838      6.324079e-05
+IQR        0.1753507818           47.74849      3.295439e+01
+q25.25%   -0.0893812742          -36.27819     -2.813969e+01
+q75.75%    0.0859695076           11.47031      4.814702e+00
+        pct_L1_norm_v_ii pct_L1_norm_iv_iii pct_L1_norm_v_iii
+median      -0.000432392           5.143070          2.608986
+IQR         34.543819104          23.429786         17.517757
+q25.25%    -30.169036968          -4.968356         -3.253723
+q75.75%      4.374782136          18.461430         14.264033
+        pct_L1_norm_v_iv
+median     -0.0003785151
+IQR         0.4001125562
+q25.25%    -0.3811081910
+q75.75%     0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+       Sum Sq Mean Sq NumDF DenDF F value    Pr(>F)    
+method 1.3959 0.34898     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.253 0.00471 Inf     0.244     0.262
+ ii      0.287 0.00471 Inf     0.278     0.297
+ iii     0.242 0.00471 Inf     0.232     0.251
+ iv      0.254 0.00471 Inf     0.244     0.263
+ v       0.252 0.00471 Inf     0.243     0.261
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.034495 0.00285 Inf -12.110 <0.0001
+ i - iii   0.011234 0.00285 Inf   3.944  0.0004
+ i - iv   -0.000756 0.00285 Inf  -0.265  1.0000
+ i - v     0.000714 0.00285 Inf   0.251  1.0000
+ ii - iii  0.045729 0.00285 Inf  16.054 <0.0001
+ ii - iv   0.033739 0.00285 Inf  11.845 <0.0001
+ ii - v    0.035209 0.00285 Inf  12.361 <0.0001
+ iii - iv -0.011990 0.00285 Inf  -4.209  0.0002
+ iii - v  -0.010520 0.00285 Inf  -3.693  0.0009
+ iv - v    0.001470 0.00285 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+	Friedman rank sum test
+
+data:  Linf_norm and method and id
+Friedman chi-squared = 207.66, df = 4, p-value < 2.2e-16
+
+Kendall's W for Linf norm ~= 0.045
+
+	Pairwise comparisons using Wilcoxon signed rank test with continuity correction 
+
+data:  df_Linf$Linf_norm and df_Linf$method 
+
+    i       ii      iii     iv   
+ii  1.1e-06 -       -       -    
+iii < 2e-16 < 2e-16 -       -    
+iv  0.097   3.7e-05 < 2e-16 -    
+v   0.366   2.3e-07 < 2e-16 0.002
+
+P value adjustment method: holm 
+
+Paired Wilcoxon for Linf norm (ii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 392574, p-value = 2.173e-07
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.0004358587 0.0088101120
+sample estimates:
+(pseudo)median 
+   0.004750103 
+
+
+Paired Wilcoxon for Linf norm (iii - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 213809, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.006510275 -0.004545979
+sample estimates:
+(pseudo)median 
+  -0.005520958 
+
+
+Paired Wilcoxon for Linf norm (iv - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 356150, p-value = 0.04866
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.579274e-07  3.519443e-05
+sample estimates:
+(pseudo)median 
+  3.322343e-05 
+
+
+Paired Wilcoxon for Linf norm (v - i):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 323541, p-value = 0.3658
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.947366e-05  4.658321e-05
+sample estimates:
+(pseudo)median 
+ -2.724921e-05 
+
+
+Paired Wilcoxon for Linf norm (iii - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 208469, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.01923088 -0.01346166
+sample estimates:
+(pseudo)median 
+   -0.01628302 
+
+
+Paired Wilcoxon for Linf norm (iv - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 282484, p-value = 9.21e-06
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.0087220952 -0.0004641424
+sample estimates:
+(pseudo)median 
+   -0.00437725 
+
+
+Paired Wilcoxon for Linf norm (v - ii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 270978, p-value = 3.881e-08
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.009288338 -0.001031977
+sample estimates:
+(pseudo)median 
+  -0.005122983 
+
+
+Paired Wilcoxon for Linf norm (iv - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 457390, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.005224225 0.007382295
+sample estimates:
+(pseudo)median 
+   0.006334208 
+
+
+Paired Wilcoxon for Linf norm (v - iii):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 454068, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ 0.003912579 0.005746299
+sample estimates:
+(pseudo)median 
+   0.004825281 
+
+
+Paired Wilcoxon for Linf norm (v - iv):
+
+	Wilcoxon signed rank test with continuity correction
+
+data:  b and a
+V = 294748, p-value = 0.000681
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -5.217074e-05 -3.218980e-05
+sample estimates:
+(pseudo)median 
+ -8.256206e-05 
+
+Percent change in Linf norm for method X relative to method Y 
+
+        pct_Linf_norm_ii_i pct_Linf_norm_iii_i pct_Linf_norm_iv_i
+median        0.0006802744            -4.22218       0.0001958928
+IQR          46.2443903581            18.70710       0.6760606455
+q25.25%      -4.5143268803           -13.99193      -0.0433855388
+q75.75%      41.7300634777             4.71517       0.6326751067
+        pct_Linf_norm_v_i pct_Linf_norm_iii_ii pct_Linf_norm_iv_ii
+median      -0.0002230751            -10.94838        6.324079e-05
+IQR          0.1753507818             47.74849        3.295439e+01
+q25.25%     -0.0893812742            -36.27819       -2.813969e+01
+q75.75%      0.0859695076             11.47031        4.814702e+00
+        pct_Linf_norm_v_ii pct_Linf_norm_iv_iii pct_Linf_norm_v_iii
+median        -0.000432392             5.143070            2.608986
+IQR           34.543819104            23.429786           17.517757
+q25.25%      -30.169036968            -4.968356           -3.253723
+q75.75%        4.374782136            18.461430           14.264033
+        pct_Linf_norm_v_iv
+median       -0.0003785151
+IQR           0.4001125562
+q25.25%      -0.3811081910
+q75.75%       0.0190043653
+Type III Analysis of Variance Table with Satterthwaite's method
+        Sum Sq  Mean Sq NumDF DenDF F value    Pr(>F)    
+method 0.34898 0.087244     4  4616  74.477 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+$emmeans
+ method emmean      SE  df asymp.LCL asymp.UCL
+ i       0.126 0.00235 Inf     0.122     0.131
+ ii      0.144 0.00235 Inf     0.139     0.148
+ iii     0.121 0.00235 Inf     0.116     0.125
+ iv      0.127 0.00235 Inf     0.122     0.131
+ v       0.126 0.00235 Inf     0.121     0.131
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate      SE  df z.ratio p.value
+ i - ii   -0.017247 0.00142 Inf -12.110 <0.0001
+ i - iii   0.005617 0.00142 Inf   3.944  0.0004
+ i - iv   -0.000378 0.00142 Inf  -0.265  1.0000
+ i - v     0.000357 0.00142 Inf   0.251  1.0000
+ ii - iii  0.022864 0.00142 Inf  16.054 <0.0001
+ ii - iv   0.016869 0.00142 Inf  11.845 <0.0001
+ ii - v    0.017605 0.00142 Inf  12.361 <0.0001
+ iii - iv -0.005995 0.00142 Inf  -4.209  0.0002
+ iii - v  -0.005260 0.00142 Inf  -3.693  0.0009
+ iv - v    0.000735 0.00142 Inf   0.516  1.0000
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Run Time End: 2026-04-13 17:56:13 
+
+Total Elapsed Time: 14.74 secs 
+
