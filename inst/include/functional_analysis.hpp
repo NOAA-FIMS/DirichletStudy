@@ -598,13 +598,14 @@ public:
     {
 
         std::vector<T> difference;
-
-        for (int i = lag; i < v.size(); i += lag)
+        if (lag < 1 || v.size() <= static_cast<size_t>(lag))
         {
-            if (i < v.size() - 1)
-            {
-                difference.push_back(v[i - lag] - v[lag]);
-            }
+            return difference;
+        }
+
+        for (size_t i = static_cast<size_t>(lag); i < v.size(); i++)
+        {
+            difference.push_back(v[i] - v[i - static_cast<size_t>(lag)]);
         }
 
         return difference;
@@ -794,7 +795,15 @@ public:
             for (int j = 0; j < this->parameters.size(); j++)
             {
                 // corr(x,y) = cov(x,y)/stdev_x*stdev_y
-                correlation[i][j] = covariance[i][j] / (covariance[i][i] * covariance[j][j]);
+                T denom = std::sqrt(covariance[i][i] * covariance[j][j]);
+                if (denom > T(0) && std::isfinite(denom))
+                {
+                    correlation[i][j] = covariance[i][j] / denom;
+                }
+                else
+                {
+                    correlation[i][j] = std::numeric_limits<T>::quiet_NaN();
+                }
             }
         }
         return correlation;
