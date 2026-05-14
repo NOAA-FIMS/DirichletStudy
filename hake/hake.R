@@ -19,10 +19,10 @@ suppressWarnings(suppressPackageStartupMessages(
 ## ---- simplex_output_flag = 1 creates two simplex files --------------------
 ## file1 = outprefix.csv stores results by simplex point
 ## file2 = outprefix_simplex_samples.csv stores the sampled simplex points ---
-simplex_output_flag <- 0
+simplex_output_flag <- 1
 
 ## ---- ggplot_output_flag = 1 creates all ggplot2 *.png files ---------------
-ggplot_output_flag <- 0
+ggplot_output_flag <- 1
 
 ## ---- simplex functions ----------------------------------------------------  
 nexcom.step <- function (N, K, P, MTC, I, J) {
@@ -595,10 +595,34 @@ if(any(grepl("singular", m_Linf@optinfo$conv$lme4$messages))) {
 print(anova(m_Linf))
 print(emmeans(m_Linf, pairwise ~ method, adjust = "holm"))
 
+standardize_emmeans_ci_names <- function(x) {
+  nms <- names(x)
+  
+  if ("lower.CL" %in% nms && "upper.CL" %in% nms) {
+    x$ci_lower <- x$lower.CL
+    x$ci_upper <- x$upper.CL
+    return(x)
+  }
+  
+  if ("asymp.LCL" %in% nms && "asymp.UCL" %in% nms) {
+    x$ci_lower <- x$asymp.LCL
+    x$ci_upper <- x$asymp.UCL
+    return(x)
+  }
+  
+  stop(
+    "Could not find confidence interval columns in emmeans output. ",
+    "Available columns are: ", paste(nms, collapse = ", ")
+  )
+}
+
 ## ---- Extract and Visualize Statistical Summaries ---------------------------
 # 1. Extract the EMMeans into a clean data frame
 emm_results <- emmeans(m, pairwise ~ method, adjust = "holm")
-emm_summary_df <- as.data.frame(emm_results$emmeans)
+
+emm_summary_df <- standardize_emmeans_ci_names(
+  as.data.frame(summary(emm_results$emmeans, infer = TRUE))
+)
 
 # Save the summary table to a CSV
 write.csv(emm_summary_df, paste0(out_prefix, "_emmeans_summary.csv"), row.names = FALSE)
@@ -620,7 +644,7 @@ p_box <- ggplot(df, aes(x = method, y = rmse, fill = method)) +
 # 3. Plot 2: Point-Range plot of the Estimated Marginal Means
 p_emm <- ggplot(emm_summary_df, aes(x = method, y = emmean, color = method)) +
   geom_point(size = 4) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, linewidth = 1) +
   scale_color_viridis_d(option = "plasma") +
   labs(
     title = "Estimated Marginal Mean RMSE (with 95% CIs)",
@@ -640,7 +664,10 @@ if (ggplot_output_flag == 1) {
 }
 # 4. Extract the EMMeans for L1 norm into a clean data frame
 emm_results_L1 <- emmeans(m_L1, pairwise ~ method, adjust = "holm")
-emm_summary_df_L1 <- as.data.frame(emm_results_L1$emmeans)
+
+emm_summary_df_L1 <- standardize_emmeans_ci_names(
+  as.data.frame(summary(emm_results_L1$emmeans, infer = TRUE))
+)
 
 # Save the L1 norm summary table to a CSV
 write.csv(emm_summary_df_L1, paste0(out_prefix, "_L1_norm_emmeans_summary.csv"), row.names = FALSE)
@@ -662,7 +689,7 @@ p_box_L1 <- ggplot(df_L1, aes(x = method, y = L1_norm, fill = method)) +
 # 6. Plot 4: Point-Range plot of the Estimated Marginal Means for L1 norm
 p_emm_L1 <- ggplot(emm_summary_df_L1, aes(x = method, y = emmean, color = method)) +
   geom_point(size = 4) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, linewidth = 1) +
   scale_color_viridis_d(option = "plasma") +
   labs(
     title = "Estimated Marginal Mean L1 Norm (with 95% CIs)",
@@ -683,7 +710,10 @@ if (ggplot_output_flag == 1) {
 
 # 7. Extract the EMMeans for Linf norm into a clean data frame
 emm_results_Linf <- emmeans(m_Linf, pairwise ~ method, adjust = "holm")
-emm_summary_df_Linf <- as.data.frame(emm_results_Linf$emmeans)
+
+emm_summary_df_Linf <- standardize_emmeans_ci_names(
+  as.data.frame(summary(emm_results_Linf$emmeans, infer = TRUE))
+)
 
 # Save the Linf norm summary table to a CSV
 write.csv(emm_summary_df_Linf, paste0(out_prefix, "_Linf_norm_emmeans_summary.csv"), row.names = FALSE)
@@ -705,7 +735,7 @@ p_box_Linf <- ggplot(df_Linf, aes(x = method, y = Linf_norm, fill = method)) +
 # 9. Plot 6: Point-Range plot of the Estimated Marginal Means for Linf norm
 p_emm_Linf <- ggplot(emm_summary_df_Linf, aes(x = method, y = emmean, color = method)) +
   geom_point(size = 4) +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 1) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, linewidth = 1) +
   scale_color_viridis_d(option = "plasma") +
   labs(
     title = "Estimated Marginal Mean Linf Norm (with 95% CIs)",
