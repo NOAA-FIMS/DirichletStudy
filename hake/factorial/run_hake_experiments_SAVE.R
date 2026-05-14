@@ -282,4 +282,4 @@ run_hake_experiments <- function(n) {
   }
 
   cat(sprintf("\n=== All %d examples processed successfully! ===\n", n))
-}
+})
