@@ -1,10 +1,26 @@
-
 # file = build_hake_factorial_design_matrix.R
-# Build a 3-level factorial design matrix for hake.R across:
+#
+# Build a 5-factor, 3-level factorial design matrix for hake.R across:
 #   1 = Poisson
 #   2 = Lognormal
 #   3 = Negative binomial
 #   4 = Log-uniform
+#
+# Scientific design revision:
+#   The five common factorial factors are:
+#     factor1 = mean_nsamp
+#     factor2 = sigma
+#     factor3 = theta_true
+#     factor4 = theta_CV
+#     factor5 = G
+#
+#   The distribution-specific spread parameters are fixed baseline values:
+#     Lognormal:          ln_sd = 1.0
+#     Negative binomial:  nb_size = 25
+#     Log-uniform:        Nmin = 25, Nmax = 100
+#
+#   These fixed spread parameters can be changed interactively in
+#   build_hake_factorial_design_matrix().
 #
 # Outputs:
 #   - hake_factorial_design_matrix.csv
@@ -14,11 +30,12 @@
 #   source("build_hake_factorial_design_matrix.R")
 #   design <- build_hake_factorial_design_matrix()
 #
-# Exact recreation of the current 972-row design:
+# Non-interactive default design:
+#   source("build_hake_factorial_design_matrix.R")
 #   design <- build_hake_factorial_design_matrix_default()
 #
 # Verification:
-#   verify_hake_factorial_design_matrix("new_matrix.csv", "hake_factorial_design_matrix.csv")
+#   verify_hake_factorial_design_matrix("new_matrix.csv", "reference_matrix.csv")
 
 fmt_num <- function(x) {
   if (length(x) != 1L) stop("fmt_num expects a scalar.")
@@ -31,10 +48,8 @@ fmt_num <- function(x) {
 }
 
 fmt_triplet_label <- function(x) paste(vapply(x, fmt_num, character(1)), collapse = "/")
-fmt_bounds <- function(x) paste(vapply(x, fmt_num, character(1)), collapse = ", ")
-fmt_pair_triplet_label <- function(a, b) {
-  paste(sprintf("(%s,%s)", vapply(a, fmt_num, character(1)), vapply(b, fmt_num, character(1))), collapse = "/")
-}
+fmt_scalar_label <- function(x) fmt_num(x)
+fmt_pair_label <- function(a, b) sprintf("(%s,%s)", fmt_num(a), fmt_num(b))
 
 parse_triplet_numeric <- function(txt, factor_name) {
   parts <- unlist(strsplit(trimws(txt), "[,[:space:]]+"))
@@ -43,6 +58,15 @@ parse_triplet_numeric <- function(txt, factor_name) {
   vals <- suppressWarnings(as.numeric(parts))
   if (anyNA(vals)) stop(sprintf("Factor '%s' contains a non-numeric entry.", factor_name))
   vals
+}
+
+parse_scalar_numeric <- function(txt, factor_name) {
+  parts <- unlist(strsplit(trimws(txt), "[,[:space:]]+"))
+  parts <- parts[nzchar(parts)]
+  if (length(parts) != 1L) stop(sprintf("Parameter '%s' must have exactly 1 value.", factor_name))
+  val <- suppressWarnings(as.numeric(parts))
+  if (anyNA(val)) stop(sprintf("Parameter '%s' contains a non-numeric entry.", factor_name))
+  val
 }
 
 prompt_yes_no <- function(prompt, default = TRUE) {
@@ -67,31 +91,69 @@ prompt_triplet_numeric <- function(factor_name, default_values = NULL, extra_not
   parse_triplet_numeric(ans, factor_name)
 }
 
-prompt_triplet_pairs <- function(default_Nmin = c(40, 25, 10), default_Nmax = c(60, 100, 250)) {
-  cat("\nLog-uniform requires 3 paired (Nmin, Nmax) levels.\n")
-  nmin <- prompt_triplet_numeric("Nmin", default_Nmin)
-  nmax <- prompt_triplet_numeric("Nmax", default_Nmax)
-  if (any(nmin >= nmax)) stop("Each Nmin value must be strictly less than its paired Nmax value.")
-  list(Nmin = nmin, Nmax = nmax)
+prompt_scalar_numeric <- function(parameter_name, default_value = NULL, extra_note = NULL) {
+  default_txt <- if (!is.null(default_value)) fmt_num(default_value) else NULL
+  msg <- paste0("Enter 1 value for ", parameter_name)
+  if (!is.null(extra_note)) msg <- paste0(msg, " (", extra_note, ")")
+  if (!is.null(default_txt)) msg <- paste0(msg, " [default: ", default_txt, "]")
+  msg <- paste0(msg, ": ")
+  ans <- readline(msg)
+  if (!nzchar(trimws(ans))) {
+    if (is.null(default_value)) stop(sprintf("No value entered for '%s'.", parameter_name))
+    return(as.numeric(default_value))
+  }
+  parse_scalar_numeric(ans, parameter_name)
+}
+
+coerce_scalar <- function(x, parameter_name) {
+  if (length(x) != 1L) {
+    stop(sprintf("Parameter '%s' must have length 1 in the common-G design.", parameter_name))
+  }
+  x <- suppressWarnings(as.numeric(x))
+  if (anyNA(x)) stop(sprintf("Parameter '%s' must be numeric.", parameter_name))
+  x
+}
+
+coerce_triplet <- function(x, factor_name, integer_required = FALSE) {
+  if (length(x) != 3L) stop(sprintf("Factor '%s' must have length 3.", factor_name))
+  x <- suppressWarnings(as.numeric(x))
+  if (anyNA(x)) stop(sprintf("Factor '%s' must be numeric.", factor_name))
+  if (integer_required && any(abs(x - round(x)) > sqrt(.Machine$double.eps))) {
+    stop(sprintf("Factor '%s' must contain integer-valued levels.", factor_name))
+  }
+  x
 }
 
 build_hake_factorial_design_matrix_from_spec <- function(
     common_by_block,
-    poisson_G,
-    lognormal_ln_sd,
-    nb_nb_size,
-    loguniform_Nmin,
-    loguniform_Nmax,
+    G_levels,
+    lognormal_ln_sd = 1.0,
+    nb_nb_size = 25,
+    loguniform_Nmin = 25,
+    loguniform_Nmax = 100,
     output_csv = "hake_factorial_design_matrix.csv",
     legend_csv = "hake_factorial_design_legend.csv",
     verify_against = NULL,
     run_verification = TRUE
 ) {
-  if (length(poisson_G) != 3L) stop("poisson_G must have length 3.")
-  if (length(lognormal_ln_sd) != 3L) stop("lognormal_ln_sd must have length 3.")
-  if (length(nb_nb_size) != 3L) stop("nb_nb_size must have length 3.")
-  if (length(loguniform_Nmin) != 3L || length(loguniform_Nmax) != 3L) stop("loguniform_Nmin and loguniform_Nmax must each have length 3.")
-  if (any(loguniform_Nmin >= loguniform_Nmax)) stop("Each log-uniform Nmin must be strictly less than its paired Nmax.")
+  G_levels <- coerce_triplet(G_levels, "G_levels", integer_required = TRUE)
+  lognormal_ln_sd <- coerce_scalar(lognormal_ln_sd, "lognormal_ln_sd")
+  nb_nb_size <- coerce_scalar(nb_nb_size, "nb_nb_size")
+  loguniform_Nmin <- coerce_scalar(loguniform_Nmin, "loguniform_Nmin")
+  loguniform_Nmax <- coerce_scalar(loguniform_Nmax, "loguniform_Nmax")
+
+  if (lognormal_ln_sd <= 0) stop("lognormal_ln_sd must be positive.")
+  if (nb_nb_size <= 0) stop("nb_nb_size must be positive.")
+  if (loguniform_Nmin < 1) stop("loguniform_Nmin must be at least 1.")
+  if (abs(loguniform_Nmin - round(loguniform_Nmin)) > sqrt(.Machine$double.eps)) {
+    stop("loguniform_Nmin must be integer-valued.")
+  }
+  if (abs(loguniform_Nmax - round(loguniform_Nmax)) > sqrt(.Machine$double.eps)) {
+    stop("loguniform_Nmax must be integer-valued.")
+  }
+  if (loguniform_Nmin >= loguniform_Nmax) {
+    stop("loguniform_Nmin must be strictly less than loguniform_Nmax.")
+  }
 
   needed_blocks <- c("Poisson", "Lognormal", "Negative binomial", "Log-uniform")
   if (!identical(sort(names(common_by_block)), sort(needed_blocks))) {
@@ -104,23 +166,29 @@ build_hake_factorial_design_matrix_from_spec <- function(
       stop(sprintf("Block '%s' in common_by_block must contain mean_nsamp, sigma, theta_true, and theta_CV.", blk))
     }
     lens <- vapply(common_by_block[[blk]], length, integer(1))
-    if (any(lens != 3L)) stop(sprintf("All common-factor triplets for block '%s' must have length 3.", blk))
+    if (any(lens != 3L)) {
+      stop(sprintf("All common-factor triplets for block '%s' must have length 3.", blk))
+    }
+    common_by_block[[blk]]$mean_nsamp <- coerce_triplet(common_by_block[[blk]]$mean_nsamp, paste(blk, "mean_nsamp"))
+    common_by_block[[blk]]$sigma <- coerce_triplet(common_by_block[[blk]]$sigma, paste(blk, "sigma"))
+    common_by_block[[blk]]$theta_true <- coerce_triplet(common_by_block[[blk]]$theta_true, paste(blk, "theta_true"))
+    common_by_block[[blk]]$theta_CV <- coerce_triplet(common_by_block[[blk]]$theta_CV, paste(blk, "theta_CV"))
   }
 
   base_fixed <- list(
     K = 3L,
-    h = 0.05,
-    nsims = 10L,
+    h = 0.10,
+    nsims = 5L,
     random.seed = sample.int(.Machine$integer.max, 1L),
     od_mult = 1.0,
     p_lbound = "0.0, 0.0, 0.0",
     p_ubound = "1.0, 1.0, 1.0"
   )
 
-  build_block <- function(design_block, dist_code, factor5_name, factor5_values, common_vals,
-                          factor5_is_pair = FALSE, factor5_pair_max = NULL) {
+  build_block <- function(design_block, dist_code, common_vals) {
     codes <- c(-1L, 0L, 1L)
-    # Match the existing matrix row order exactly:
+
+    # Row order:
     # factor5 cycles fastest, then factor4, factor3, factor2, factor1.
     grid <- expand.grid(
       level5_code = codes,
@@ -150,10 +218,10 @@ build_hake_factorial_design_matrix_from_spec <- function(
       level3_code = grid$level3_code,
       factor4 = "theta_CV",
       level4_code = grid$level4_code,
-      factor5 = factor5_name,
+      factor5 = "G",
       level5_code = grid$level5_code,
       K = as.integer(base_fixed$K),
-      G = 2L,
+      G = as.integer(round(G_levels[idx5])),
       h = base_fixed$h,
       theta_true = common_vals$theta_true[idx3],
       theta_CV = common_vals$theta_CV[idx4],
@@ -172,27 +240,25 @@ build_hake_factorial_design_matrix_from_spec <- function(
       stringsAsFactors = FALSE
     )
 
-    if (!factor5_is_pair) {
-      vals5 <- factor5_values[idx5]
-      if (identical(factor5_name, "G")) out$G <- as.integer(round(vals5))
-      if (identical(factor5_name, "ln_sd")) out$ln_sd <- vals5
-      if (identical(factor5_name, "nb_size")) out$nb_size <- vals5
-    } else {
-      nmin_vals <- factor5_values[idx5]
-      nmax_vals <- factor5_pair_max[idx5]
-      out$Nmin <- as.integer(round(nmin_vals))
-      out$Nmax <- as.integer(round(nmax_vals))
-      out$N_range_label <- sprintf("%s-%s", vapply(nmin_vals, fmt_num, character(1)), vapply(nmax_vals, fmt_num, character(1)))
+    if (dist_code == 2L) {
+      out$ln_sd <- lognormal_ln_sd
+    }
+    if (dist_code == 3L) {
+      out$nb_size <- nb_nb_size
+    }
+    if (dist_code == 4L) {
+      out$Nmin <- as.integer(round(loguniform_Nmin))
+      out$Nmax <- as.integer(round(loguniform_Nmax))
+      out$N_range_label <- sprintf("%s-%s", fmt_num(loguniform_Nmin), fmt_num(loguniform_Nmax))
     }
 
     out
   }
 
-  poisson_df <- build_block("Poisson", 1L, "G", poisson_G, common_by_block$Poisson)
-  lognormal_df <- build_block("Lognormal", 2L, "ln_sd", lognormal_ln_sd, common_by_block$Lognormal)
-  nb_df <- build_block("Negative binomial", 3L, "nb_size", nb_nb_size, common_by_block$`Negative binomial`)
-  loguniform_df <- build_block("Log-uniform", 4L, "N_range", loguniform_Nmin, common_by_block$`Log-uniform`,
-                               factor5_is_pair = TRUE, factor5_pair_max = loguniform_Nmax)
+  poisson_df <- build_block("Poisson", 1L, common_by_block$Poisson)
+  lognormal_df <- build_block("Lognormal", 2L, common_by_block$Lognormal)
+  nb_df <- build_block("Negative binomial", 3L, common_by_block$`Negative binomial`)
+  loguniform_df <- build_block("Log-uniform", 4L, common_by_block$`Log-uniform`)
 
   design <- rbind(poisson_df, lognormal_df, nb_df, loguniform_df)
   design$example_id <- seq_len(nrow(design))
@@ -208,42 +274,88 @@ build_hake_factorial_design_matrix_from_spec <- function(
   )
   design <- design[, desired_order]
 
+  expected_rows <- length(needed_blocks) * 3L^5L
+  if (nrow(design) != expected_rows) {
+    stop(sprintf("Unexpected row count: expected %d rows, found %d rows.", expected_rows, nrow(design)))
+  }
+
+  rows_by_block <- table(design$design_block)
+  if (!all(rows_by_block[needed_blocks] == 3L^5L)) {
+    stop("Each design block must contain exactly 3^5 = 243 rows.")
+  }
+
+  if (!all(design$factor5 == "G")) stop("factor5 must be G for all rows.")
+  if (!identical(sort(unique(design$G)), sort(as.integer(round(G_levels))))) {
+    stop("The G column does not contain exactly the requested G levels.")
+  }
+  for (blk in needed_blocks) {
+    g_by_block <- sort(unique(design$G[design$design_block == blk]))
+    if (!identical(g_by_block, sort(as.integer(round(G_levels))))) {
+      stop(sprintf("Block '%s' does not contain all requested G levels.", blk))
+    }
+  }
+
+  if (!all(design$ln_sd[design$dist_code == 2L] == lognormal_ln_sd)) {
+    stop("ln_sd is not constant at lognormal_ln_sd for dist_code = 2.")
+  }
+  if (!all(design$nb_size[design$dist_code == 3L] == nb_nb_size)) {
+    stop("nb_size is not constant at nb_nb_size for dist_code = 3.")
+  }
+  if (!all(design$Nmin[design$dist_code == 4L] == as.integer(round(loguniform_Nmin)))) {
+    stop("Nmin is not constant at loguniform_Nmin for dist_code = 4.")
+  }
+  if (!all(design$Nmax[design$dist_code == 4L] == as.integer(round(loguniform_Nmax)))) {
+    stop("Nmax is not constant at loguniform_Nmax for dist_code = 4.")
+  }
+
+  fixed_spread_summary <- sprintf(
+    "Fixed distribution-specific spread parameters: Lognormal ln_sd=%s; Negative binomial nb_size=%s; Log-uniform Nmin=%s, Nmax=%s",
+    fmt_num(lognormal_ln_sd), fmt_num(nb_nb_size), fmt_num(loguniform_Nmin), fmt_num(loguniform_Nmax)
+  )
+
   legend <- data.frame(
     Block = c("All blocks", "Poisson", "Lognormal", "Negative binomial", "Log-uniform"),
-    Type = c("Fixed baseline", "Factors", "Factors", "Factors", "Factors"),
+    Type = c("Fixed baseline and common fifth factor", "Factors", "Factors", "Factors", "Factors"),
     Definition = c(
-      sprintf(
-        "K=%s, h=%s, nsims=%s, random.seed=%s, od_mult=%s, p_lbound=(0,0,0), p_ubound=(1,1,1)",
-        fmt_num(base_fixed$K), fmt_num(base_fixed$h), fmt_num(base_fixed$nsims),
-        fmt_num(base_fixed$random.seed), fmt_num(base_fixed$od_mult)
+      paste0(
+        sprintf(
+          "K=%s, h=%s, nsims=%s, random.seed=%s, od_mult=%s, p_lbound=(0,0,0), p_ubound=(1,1,1)",
+          fmt_num(base_fixed$K), fmt_num(base_fixed$h), fmt_num(base_fixed$nsims),
+          fmt_num(base_fixed$random.seed), fmt_num(base_fixed$od_mult)
+        ),
+        "; common G factor: ", fmt_triplet_label(G_levels),
+        "; ", fixed_spread_summary
       ),
       paste0(
         "mean_nsamp: ", fmt_triplet_label(common_by_block$Poisson$mean_nsamp),
         "; sigma: ", fmt_triplet_label(common_by_block$Poisson$sigma),
         "; theta_true: ", fmt_triplet_label(common_by_block$Poisson$theta_true),
         "; theta_CV: ", fmt_triplet_label(common_by_block$Poisson$theta_CV),
-        "; G: ", fmt_triplet_label(poisson_G)
+        "; G: ", fmt_triplet_label(G_levels)
       ),
       paste0(
         "mean_nsamp: ", fmt_triplet_label(common_by_block$Lognormal$mean_nsamp),
         "; sigma: ", fmt_triplet_label(common_by_block$Lognormal$sigma),
         "; theta_true: ", fmt_triplet_label(common_by_block$Lognormal$theta_true),
         "; theta_CV: ", fmt_triplet_label(common_by_block$Lognormal$theta_CV),
-        "; ln_sd: ", fmt_triplet_label(lognormal_ln_sd)
+        "; G: ", fmt_triplet_label(G_levels),
+        "; fixed ln_sd: ", fmt_scalar_label(lognormal_ln_sd)
       ),
       paste0(
         "mean_nsamp: ", fmt_triplet_label(common_by_block$`Negative binomial`$mean_nsamp),
         "; sigma: ", fmt_triplet_label(common_by_block$`Negative binomial`$sigma),
         "; theta_true: ", fmt_triplet_label(common_by_block$`Negative binomial`$theta_true),
         "; theta_CV: ", fmt_triplet_label(common_by_block$`Negative binomial`$theta_CV),
-        "; nb_size: ", fmt_triplet_label(nb_nb_size)
+        "; G: ", fmt_triplet_label(G_levels),
+        "; fixed nb_size: ", fmt_scalar_label(nb_nb_size)
       ),
       paste0(
         "mean_nsamp: ", fmt_triplet_label(common_by_block$`Log-uniform`$mean_nsamp),
         "; sigma: ", fmt_triplet_label(common_by_block$`Log-uniform`$sigma),
         "; theta_true: ", fmt_triplet_label(common_by_block$`Log-uniform`$theta_true),
         "; theta_CV: ", fmt_triplet_label(common_by_block$`Log-uniform`$theta_CV),
-        "; (Nmin,Nmax): ", fmt_pair_triplet_label(loguniform_Nmin, loguniform_Nmax)
+        "; G: ", fmt_triplet_label(G_levels),
+        "; fixed (Nmin,Nmax): ", fmt_pair_label(loguniform_Nmin, loguniform_Nmax)
       )
     ),
     stringsAsFactors = FALSE
@@ -255,6 +367,9 @@ build_hake_factorial_design_matrix_from_spec <- function(
   message(sprintf("Wrote design matrix: %s", normalizePath(output_csv, winslash = "/", mustWork = FALSE)))
   message(sprintf("Wrote legend: %s", normalizePath(legend_csv, winslash = "/", mustWork = FALSE)))
   message(sprintf("Rows in design matrix: %d", nrow(design)))
+  message("Rows per design block:")
+  print(rows_by_block)
+  message(fixed_spread_summary)
 
   verification <- NULL
   if (isTRUE(run_verification) && !is.null(verify_against) && file.exists(verify_against)) {
@@ -274,28 +389,31 @@ build_hake_factorial_design_matrix <- function(
     output_csv = "hake_factorial_design_matrix.csv",
     legend_csv = "hake_factorial_design_legend.csv",
     verify_against = output_csv,
-    run_verification = TRUE
+    run_verification = FALSE
 ) {
   common_defaults <- list(
     mean_nsamp = c(25, 50, 100),
     sigma = c(0.25, 0.5, 1.0),
     theta_true = c(0.5, 1.0, 2.0),
-    theta_CV = c(0.0, 0.2, 0.6)
+    theta_CV = c(0.0, 0.2, 0.6),
+    G = c(2, 4, 8)
   )
 
-  specific_defaults <- list(
-    Poisson = list(G = c(2, 4, 8)),
-    Lognormal = list(ln_sd = c(0.5, 1.0, 1.5)),
-    `Negative binomial` = list(nb_size = c(5, 25, 100)),
-    `Log-uniform` = list(Nmin = c(40, 25, 10), Nmax = c(60, 100, 250))
+  fixed_spread_defaults <- list(
+    lognormal_ln_sd = 1.0,
+    nb_nb_size = 25,
+    loguniform_Nmin = 25,
+    loguniform_Nmax = 100
   )
 
-  cat("\nBuild a 3-level factorial design matrix for hake.R\n")
-  cat("The output will contain 4 blocks x 3^5 = 972 rows.\n")
+  cat("\nBuild a 5-factor, 3-level factorial design matrix for hake.R\n")
+  cat("The output will contain 4 sampling distributions x 3^5 = 972 rows.\n")
+  cat("The common fifth factor is G for all four sampling distributions.\n")
+  cat("Distribution-specific spread parameters are fixed baselines but can be changed below.\n")
   cat("Press Enter to accept the displayed default values.\n")
 
   use_equal_common <- prompt_yes_no(
-    "Use the same triplets for the common factors across all 4 sampling distributions?",
+    "Use the same triplets for mean_nsamp, sigma, theta_true, theta_CV, and G across all 4 sampling distributions?",
     default = TRUE
   )
 
@@ -306,6 +424,7 @@ build_hake_factorial_design_matrix <- function(
       theta_true = prompt_triplet_numeric("theta_true", common_defaults$theta_true),
       theta_CV = prompt_triplet_numeric("theta_CV", common_defaults$theta_CV)
     )
+    G_levels <- prompt_triplet_numeric("G", common_defaults$G, extra_note = "common fifth factor; integer-valued levels")
     common_by_block <- list(
       Poisson = common_triplets,
       Lognormal = common_triplets,
@@ -324,24 +443,38 @@ build_hake_factorial_design_matrix <- function(
         theta_CV = prompt_triplet_numeric("theta_CV", common_defaults$theta_CV)
       )
     }
+    G_levels <- prompt_triplet_numeric("G", common_defaults$G, extra_note = "common fifth factor; integer-valued levels")
   }
 
-  cat("\nNow enter the distribution-specific factors.\n")
-  poisson_G <- prompt_triplet_numeric("Poisson G", specific_defaults$Poisson$G)
-  lognormal_ln_sd <- prompt_triplet_numeric("Lognormal ln_sd", specific_defaults$Lognormal$ln_sd)
-  nb_nb_size <- prompt_triplet_numeric("Negative binomial nb_size", specific_defaults$`Negative binomial`$nb_size)
-  loguniform_pair <- prompt_triplet_pairs(
-    default_Nmin = specific_defaults$`Log-uniform`$Nmin,
-    default_Nmax = specific_defaults$`Log-uniform`$Nmax
+  cat("\nNow enter fixed distribution-specific spread parameters.\n")
+  lognormal_ln_sd <- prompt_scalar_numeric(
+    "Lognormal ln_sd",
+    fixed_spread_defaults$lognormal_ln_sd,
+    extra_note = "fixed for dist_code = 2"
+  )
+  nb_nb_size <- prompt_scalar_numeric(
+    "Negative binomial nb_size",
+    fixed_spread_defaults$nb_nb_size,
+    extra_note = "fixed for dist_code = 3"
+  )
+  loguniform_Nmin <- prompt_scalar_numeric(
+    "Log-uniform Nmin",
+    fixed_spread_defaults$loguniform_Nmin,
+    extra_note = "fixed for dist_code = 4"
+  )
+  loguniform_Nmax <- prompt_scalar_numeric(
+    "Log-uniform Nmax",
+    fixed_spread_defaults$loguniform_Nmax,
+    extra_note = "fixed for dist_code = 4"
   )
 
   build_hake_factorial_design_matrix_from_spec(
     common_by_block = common_by_block,
-    poisson_G = poisson_G,
+    G_levels = G_levels,
     lognormal_ln_sd = lognormal_ln_sd,
     nb_nb_size = nb_nb_size,
-    loguniform_Nmin = loguniform_pair$Nmin,
-    loguniform_Nmax = loguniform_pair$Nmax,
+    loguniform_Nmin = loguniform_Nmin,
+    loguniform_Nmax = loguniform_Nmax,
     output_csv = output_csv,
     legend_csv = legend_csv,
     verify_against = verify_against,
@@ -353,7 +486,7 @@ build_hake_factorial_design_matrix_default <- function(
     output_csv = "hake_factorial_design_matrix.csv",
     legend_csv = "hake_factorial_design_legend.csv",
     verify_against = output_csv,
-    run_verification = TRUE
+    run_verification = FALSE
 ) {
   common_triplets <- list(
     mean_nsamp = c(25, 50, 100),
@@ -369,11 +502,11 @@ build_hake_factorial_design_matrix_default <- function(
       `Negative binomial` = common_triplets,
       `Log-uniform` = common_triplets
     ),
-    poisson_G = c(2, 4, 8),
-    lognormal_ln_sd = c(0.5, 1.0, 1.5),
-    nb_nb_size = c(5, 25, 100),
-    loguniform_Nmin = c(40, 25, 10),
-    loguniform_Nmax = c(60, 100, 250),
+    G_levels = c(2, 4, 8),
+    lognormal_ln_sd = 1.0,
+    nb_nb_size = 25,
+    loguniform_Nmin = 25,
+    loguniform_Nmax = 100,
     output_csv = output_csv,
     legend_csv = legend_csv,
     verify_against = verify_against,
@@ -407,7 +540,7 @@ verify_hake_factorial_design_matrix <- function(new_file, reference_file = "hake
   ref_chr <- trim_df(ref_df)
 
   if (identical(new_chr, ref_chr)) {
-    return(list(identical = TRUE, message = "The recreated matrix exactly matches the reference file."))
+    return(list(identical = TRUE, message = "The matrices exactly match."))
   }
 
   diff_locs <- which(new_chr != ref_chr, arr.ind = TRUE)

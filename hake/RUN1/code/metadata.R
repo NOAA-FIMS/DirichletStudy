@@ -23,6 +23,8 @@
 #   Sys.setenv(HAKE_METADATA_CHUNK_N = "12")          
 #   Sys.setenv(HAKE_COMBINE_IN_MEMORY = "false")       
 #   Sys.setenv(HAKE_KEEP_ONLY_ANALYSIS_COLUMNS = "true")
+#   Sys.setenv(HAKE_WRITE_PARQUET = "false")
+#   Sys.setenv(HAKE_WRITE_CSV = "false")  
 #
 # After source("metadata.R"), useful objects/functions include:
 #   metadata_result

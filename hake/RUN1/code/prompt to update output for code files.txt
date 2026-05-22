@@ -1,0 +1,6 @@
+
+Please revise the scripts "code-E.R" and "code-G.R" to output the 
+analysis results to output files in the exact same manner used in 
+script "code-A.R" and include robust logging, error handling, 
+and file-output structure used in code-A.R.
+Check that the revised rscripts are syntactically correct. Thank you.

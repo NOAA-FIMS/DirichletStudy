@@ -58,7 +58,7 @@ source("metadata.R")
 
 acc_long <- load_metadata_table("acc_long")
 
-source("code-B.R")
+source("code-B-RE-simplex.R")
 
 ####################################################################################
 # Analysis C1: pairwise method difference, Hotelling-style MANOVA
@@ -78,7 +78,7 @@ source("metadata.R")
 
 acc_long <- load_metadata_table("acc_long")
 
-source("code-C1.R")
+source("code-C1-revised.R")
 source("code-C2.R")
 
 ####################################################################################
@@ -170,7 +170,7 @@ source("metadata.R")
 
 acc_long <- load_metadata_table("acc_long")
 
-source("code-G.R")
+source("code-G-revised.R")
 
 ####################################################################################
 # Analysis H: error-vector MANOVA

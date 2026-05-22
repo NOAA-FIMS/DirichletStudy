@@ -1,6 +1,7 @@
 # file = Exclude the Log-uniform distribution.R
-# Removes experiments using the Log-uniform distribution (4) 
-# randomly generating composition sample sizes
+# First, builds the full 4-block matrix by distribution
+# Second, removes experiments from the Log-uniform 
+# distribution block (4) for random composition sizes
 
 source("build_hake_factorial_design_matrix.R")
 

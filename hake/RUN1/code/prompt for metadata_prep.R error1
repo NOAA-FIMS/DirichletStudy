@@ -1,0 +1,20 @@
+
+When I source this script, the 972 are processed but I get the error message "> source("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN1/metadata_prep.R")
+Rows: 972 Columns: 31                                                                 
+── Column specification ──────────────────────────────────────────────────────────────
+Delimiter: ","
+chr (10): inp_file, design_block, factor1, factor2, factor3, factor4, factor5, N_r...
+dbl (21): example_id, dist_code, level1_code, level2_code, level3_code, level4_cod...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹage.
+Error: cannot allocate vector of size 2.5 Gb
+"  when the vector of results is attempted to be stored as an array. 
+Please find a way to resolve this array allocation issue, including 
+partitioning the array preparation in subarrays and then combining 
+results or using an R package that can allocate large arrays to memory. 
+Please provide practical solutions to this problem thoroughly noting 
+that the resulting metadata tables will be used for subsequent 
+multivariate analyses "A" though "H" to test the differences 
+among methods "i" through "v" and provide your ranked approaches 
+to resolving the problem of handling large vectors.

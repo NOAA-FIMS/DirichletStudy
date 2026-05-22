@@ -1,0 +1,7 @@
+Prompt to summarize code-A results
+
+Summarize the results of the MANOVA and ANOVA tests on the multivariate estimation 
+accuracy of the 5 methods. Describe all results and provide clear interpretation 
+of the significance of results. Explain the numerical differences among the factor
+effects and identify how the methods compare in terms of their estimation accuracy
+and what experimental factors produce the most and least influence on accuracy.
