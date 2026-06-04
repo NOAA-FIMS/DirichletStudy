@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <numeric>
 #include <cmath>
+#include <stdexcept>
 // #include <stxxl.h>
 
 #define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
@@ -132,11 +133,36 @@ public:
 
     void ClearData()
     {
+        this->parameters.clear();
+        this->deltas.clear();
         this->values.clear();
         this->parameter_sets.clear();
         this->derivatives.clear();
+        this->stochasticity_of_derivatives.clear();
         this->correlation.clear();
         this->covariance.clear();
+        this->lower_bound_covariance.clear();
+        this->upper_bound_covariance.clear();
+        this->central_bound_covariance.clear();
+        this->lower_bound_derivative_covariance.clear();
+        this->upper_bound_derivative_covariance.clear();
+        this->central_bound_derivative_covariance.clear();
+        this->lower_bound_correlation.clear();
+        this->upper_bound_correlation.clear();
+        this->central_bound_correlation.clear();
+        this->lower_bound_derivative_correlation.clear();
+        this->upper_bound_derivative_correlation.clear();
+        this->central_bound_derivative_correlation.clear();
+        this->derivatives_matrix.clear();
+        this->mean_parameter_values.clear();
+        this->discontinuity_sets.clear();
+        this->parameter_set_min.clear();
+        this->parameter_set_max.clear();
+        this->min_value = std::numeric_limits<T>::max();
+        this->max_value = std::numeric_limits<T>::lowest();
+        this->runtime = 0.0;
+        this->stochasticity = std::numeric_limits<T>::quiet_NaN();
+        this->is_continuous = true;
     }
 
     /**
@@ -214,6 +240,14 @@ public:
         std::cout << "done.\n";
         std::cout << "Number of parameter sets: " << parameter_sets.size() << "\n";
         std::cout << "Number of parameters per set: " << parameters.size() << "\n";
+        if (this->parameter_sets.empty())
+        {
+            throw std::runtime_error("No simplex rows were provided for functional analysis.");
+        }
+        if (this->parameters.empty())
+        {
+            throw std::runtime_error("No parameters were registered for functional analysis.");
+        }
 
         mean_parameter_values.resize(this->parameters.size());
 
