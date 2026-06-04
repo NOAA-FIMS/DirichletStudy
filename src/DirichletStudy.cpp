@@ -25,7 +25,6 @@ RCPP_MODULE(ds)
         .method("runAnalysis", &DirichletDefaultInterface::runAnalysis)
         .method("getResults", &DirichletDefaultInterface::getResults)
         .method("getId", &DirichletDefaultInterface::getId)
-        .field("verbose", &DirichletDefaultInterface::verbose)
         .field("write_output", &DirichletDefaultInterface::write_output);
 
 
@@ -37,7 +36,6 @@ RCPP_MODULE(ds)
         .method("runAnalysis", &DirichletLinearInterface::runAnalysis)
         .method("getResults", &DirichletLinearInterface::getResults)
         .method("getId", &DirichletLinearInterface::getId)
-        .field("verbose", &DirichletLinearInterface::verbose)
         .field("write_output", &DirichletLinearInterface::write_output)
         .field("theta", &DirichletLinearInterface::theta);
 
@@ -49,7 +47,6 @@ RCPP_MODULE(ds)
         .method("runAnalysis", &DirichletSaturatedInterface::runAnalysis)
         .method("getResults", &DirichletSaturatedInterface::getResults)
         .method("getId", &DirichletSaturatedInterface::getId)
-        .field("verbose", &DirichletSaturatedInterface::verbose)
         .field("write_output", &DirichletSaturatedInterface::write_output)
         .field("beta", &DirichletSaturatedInterface::beta);
 }

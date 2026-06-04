@@ -24,6 +24,17 @@ public:
     virtual bool runAnalysis() = 0;
     virtual Rcpp::List getResults() = 0;
     virtual void setCounts(const Rcpp::IntegerVector &counts) = 0;
+
+    void setVerbose(bool verbose)
+    {
+        this->verbose = verbose;
+    }
+
+    bool getVerbose() const
+    {
+        return this->verbose;
+    }
+
     virtual void makeInputValues()
     {
         if (this->verbose)
