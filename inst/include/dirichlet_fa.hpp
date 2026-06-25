@@ -328,6 +328,10 @@ public:
     {
         this->name = "dirichlet_linear";
         this->description = "Functional analysis of the Linear Dirichlet distribution.";
+        if (this->p.size() != this->x.size())
+        {
+            this->p.assign(this->x.size(), Variable(1.0 / static_cast<T>(this->x.size())));
+        }
 
         this->theta.SetName("theta");
         this->theta.SetBounds(0.00001, 5.0);
@@ -371,6 +375,10 @@ public:
     {
         this->name = "dirichlet_saturated";
         this->description = "Functional analysis of the Saturated Dirichlet distribution.";
+        if (this->p.size() != this->x.size())
+        {
+            this->p.assign(this->x.size(), Variable(1.0 / static_cast<T>(this->x.size())));
+        }
 
         this->beta.SetName("beta");
         // this->beta.SetBounds(0.00001, 5.0);
