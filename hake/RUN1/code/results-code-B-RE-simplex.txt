@@ -1,0 +1,155 @@
+Code B Linear Mixed-Effects Model results
+Output file: results-code-B-RE-simplex.txt 
+Run time: 2026-05-20 15:40:26 HST 
+
+Input checks
+------------
+Total rows analyzed:        3608550 
+Levels of Method:           5 
+Levels of Metric:           3 
+
+LMM Model Formula
+-----------------
+log_accuracy ~ method * metric + method * design_block + method * 
+    G + method * theta_true + method * theta_CV + method * sigma + 
+    method * mean_nsamp + method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x000001e12ee82610>
+
+Fitting Linear Mixed-Effects Model (lmer)...
+Model fitting complete.
+
+Type III Analysis of Variance Table with Satterthwaite's method
+--------------------------------------------------------------
+Type III Analysis of Variance Table with Satterthwaite's method
+                    Sum Sq Mean Sq NumDF   DenDF    F value    Pr(>F)    
+method                32.5     8.1     4 3560366 1.2575e+03 < 2.2e-16 ***
+metric              8847.5  4423.8     2 3560366 6.8472e+05 < 2.2e-16 ***
+design_block          13.3     6.6     2   48099 1.0286e+03 < 2.2e-16 ***
+G                    242.0   121.0     2   48099 1.8726e+04 < 2.2e-16 ***
+theta_true             7.3     3.7     2   48099 5.6711e+02 < 2.2e-16 ***
+theta_CV               0.4     0.2     2   48099 2.7220e+01 1.532e-12 ***
+sigma                348.5   174.3     2   48099 2.6973e+04 < 2.2e-16 ***
+mean_nsamp            19.2     9.6     2   48099 1.4853e+03 < 2.2e-16 ***
+p1                     0.0     0.0     1   48099 1.7460e+00   0.18639    
+p2                     0.0     0.0     1   48099 1.0360e+00   0.30876    
+method:metric         48.7     6.1     8 3560366 9.4319e+02 < 2.2e-16 ***
+method:design_block   13.7     1.7     8 3560366 2.6573e+02 < 2.2e-16 ***
+method:G              13.9     1.7     8 3560366 2.6834e+02 < 2.2e-16 ***
+method:theta_true      4.2     0.5     8 3560366 8.1608e+01 < 2.2e-16 ***
+method:theta_CV        0.1     0.0     8 3560366 2.0943e+00   0.03277 *  
+method:sigma          99.6    12.5     8 3560366 1.9278e+03 < 2.2e-16 ***
+method:mean_nsamp     18.4     2.3     8 3560366 3.5601e+02 < 2.2e-16 ***
+method:p1              0.0     0.0     4 3560366 1.4163e+00   0.22558    
+method:p2              0.1     0.0     4 3560366 2.7370e+00   0.02716 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Post-hoc: Estimated Marginal Means (Pairwise Comparisons by Metric)
+------------------------------------------------------------------
+$emmeans
+metric = rmse:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.07898 0.000215 Inf   0.07856   0.07941
+ ii     0.09247 0.000215 Inf   0.09205   0.09289
+ iii    0.07445 0.000215 Inf   0.07403   0.07488
+ iv     0.07484 0.000215 Inf   0.07442   0.07527
+ v      0.07407 0.000215 Inf   0.07364   0.07449
+
+metric = L1_norm:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.19416 0.000215 Inf   0.19373   0.19458
+ ii     0.22452 0.000215 Inf   0.22409   0.22494
+ iii    0.18417 0.000215 Inf   0.18375   0.18459
+ iv     0.18528 0.000215 Inf   0.18486   0.18570
+ v      0.18348 0.000215 Inf   0.18306   0.18390
+
+metric = Linf_norm:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.10434 0.000215 Inf   0.10392   0.10477
+ ii     0.12154 0.000215 Inf   0.12112   0.12196
+ iii    0.09830 0.000215 Inf   0.09788   0.09872
+ iv     0.09889 0.000215 Inf   0.09847   0.09931
+ v      0.09790 0.000215 Inf   0.09748   0.09832
+
+Results are averaged over the levels of: design_block, G, theta_true, theta_CV, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+metric = rmse:
+ contrast  estimate       SE  df  z.ratio p.value
+ i - ii   -0.013487 0.000232 Inf  -58.195 <0.0001
+ i - iii   0.004530 0.000232 Inf   19.545 <0.0001
+ i - iv    0.004140 0.000232 Inf   17.863 <0.0001
+ i - v     0.004918 0.000232 Inf   21.220 <0.0001
+ ii - iii  0.018017 0.000232 Inf   77.740 <0.0001
+ ii - iv   0.017627 0.000232 Inf   76.058 <0.0001
+ ii - v    0.018405 0.000232 Inf   79.416 <0.0001
+ iii - iv -0.000390 0.000232 Inf   -1.682  0.1850
+ iii - v   0.000388 0.000232 Inf    1.675  0.1850
+ iv - v    0.000778 0.000232 Inf    3.357  0.0024
+
+metric = L1_norm:
+ contrast  estimate       SE  df  z.ratio p.value
+ i - ii   -0.030360 0.000232 Inf -130.998 <0.0001
+ i - iii   0.009986 0.000232 Inf   43.087 <0.0001
+ i - iv    0.008877 0.000232 Inf   38.304 <0.0001
+ i - v     0.010678 0.000232 Inf   46.075 <0.0001
+ ii - iii  0.040346 0.000232 Inf  174.085 <0.0001
+ ii - iv   0.039237 0.000232 Inf  169.302 <0.0001
+ ii - v    0.041038 0.000232 Inf  177.073 <0.0001
+ iii - iv -0.001109 0.000232 Inf   -4.783 <0.0001
+ iii - v   0.000692 0.000232 Inf    2.988  0.0028
+ iv - v    0.001801 0.000232 Inf    7.771 <0.0001
+
+metric = Linf_norm:
+ contrast  estimate       SE  df  z.ratio p.value
+ i - ii   -0.017193 0.000232 Inf  -74.185 <0.0001
+ i - iii   0.006046 0.000232 Inf   26.085 <0.0001
+ i - iv    0.005457 0.000232 Inf   23.548 <0.0001
+ i - v     0.006446 0.000232 Inf   27.815 <0.0001
+ ii - iii  0.023238 0.000232 Inf  100.271 <0.0001
+ ii - iv   0.022650 0.000232 Inf   97.733 <0.0001
+ ii - v    0.023639 0.000232 Inf  102.000 <0.0001
+ iii - iv -0.000588 0.000232 Inf   -2.537  0.0223
+ iii - v   0.000401 0.000232 Inf    1.729  0.0838
+ iv - v    0.000989 0.000232 Inf    4.267 <0.0001
+
+Results are averaged over the levels of: design_block, G, theta_true, theta_CV, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Post-hoc: Marginal Means for Methods (Averaged over Metrics)
+-----------------------------------------------------------
+$emmeans
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.1258 0.000169 Inf    0.1255    0.1262
+ ii     0.1462 0.000169 Inf    0.1458    0.1465
+ iii    0.1190 0.000169 Inf    0.1186    0.1193
+ iv     0.1197 0.000169 Inf    0.1193    0.1200
+ v      0.1185 0.000169 Inf    0.1182    0.1188
+
+Results are averaged over the levels of: metric, design_block, G, theta_true, theta_CV, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate       SE  df  z.ratio p.value
+ i - ii   -0.020347 0.000134 Inf -152.062 <0.0001
+ i - iii   0.006854 0.000134 Inf   51.221 <0.0001
+ i - iv    0.006158 0.000134 Inf   46.023 <0.0001
+ i - v     0.007347 0.000134 Inf   54.912 <0.0001
+ ii - iii  0.027200 0.000134 Inf  203.283 <0.0001
+ ii - iv   0.026505 0.000134 Inf  198.085 <0.0001
+ ii - v    0.027694 0.000134 Inf  206.973 <0.0001
+ iii - iv -0.000696 0.000134 Inf   -5.198 <0.0001
+ iii - v   0.000494 0.000134 Inf    3.690  0.0002
+ iv - v    0.001189 0.000134 Inf    8.888 <0.0001
+
+Results are averaged over the levels of: metric, design_block, G, theta_true, theta_CV, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Analysis completed successfully.

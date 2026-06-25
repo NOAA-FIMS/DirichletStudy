@@ -1,4 +1,4 @@
-# file = hake.inp
+# file = hake_multinomial_om.inp
 # example_id = 2
 # design_block = Poisson
 # dist_code = 1
@@ -7,7 +7,8 @@
 
 K = 3
 G = 4
-h = 0.0300000000000000
+multinomial_om_flag = 1
+h = 0.10
 theta_true = 0.500000000000000
 theta_CV = 0
 Nmin = 50
@@ -20,5 +21,5 @@ dist_code = 1
 mean_nsamp = 25
 ln_sd = 1
 nb_size = 25
-p_lbound = 0.36, 0.01, 0.0
-p_ubound = 0.97, 0.59, 0.21
+p_lbound = 0.0, 0.0, 0.0
+p_ubound = 1.0, 1.0, 1.0

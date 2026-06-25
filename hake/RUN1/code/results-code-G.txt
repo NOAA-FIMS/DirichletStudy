@@ -1,0 +1,351 @@
+Code G: Revised Rank-Based Accuracy Analysis
+Output file: results-code-G-revised.txt 
+Figure output directory: figures-code-G 
+Run time: 2026-05-20 12:14:59 HST 
+
+Computing ranks within dataset_id and metric.
+
+Rank interpretation:
+  Rank 1 is the lowest accuracy error and therefore the best method.
+  Pairwise rank contrasts use A - B; negative estimates favor A.
+
+Descriptive Statistics: Mean Rank and Probability of Being Best
+----------------------------------------------------------------
+      metric method mean_rank prob_best      n
+1       rmse      i  2.870320 0.2353909 240570
+2       rmse     ii  3.498173 0.2732718 240570
+3       rmse    iii  2.807511 0.2191919 240570
+4       rmse     iv  2.999830 0.1610467 240570
+5       rmse      v  2.824166 0.1111028 240570
+6    L1_norm      i  2.875165 0.2333832 240570
+7    L1_norm     ii  3.494580 0.2715135 240570
+8    L1_norm    iii  2.797294 0.2213160 240570
+9    L1_norm     iv  3.006877 0.1604814 240570
+10   L1_norm      v  2.826084 0.1133101 240570
+11 Linf_norm      i  2.875171 0.2333832 240570
+12 Linf_norm     ii  3.494575 0.2715135 240570
+13 Linf_norm    iii  2.797294 0.2213160 240570
+14 Linf_norm     iv  3.006875 0.1604814 240570
+15 Linf_norm      v  2.826084 0.1133101 240570
+
+Checking rank concordance among metrics.
+           rmse L1_norm Linf_norm
+rmse      1.000   0.928     0.928
+L1_norm   0.928   1.000     1.000
+Linf_norm 0.928   1.000     1.000
+
+Metric-specific paired rank contrasts.
+--------------------------------------
+      metric contrast    estimate          SE     df     t_value       p_value
+1       rmse   i - ii -0.62785260 0.005341389 240569 -117.544824  0.000000e+00
+2       rmse  i - iii  0.06280916 0.004628281 240569   13.570731  6.188815e-42
+3       rmse   i - iv -0.12950908 0.004457805 240569  -29.052207 3.025749e-185
+4       rmse    i - v  0.04615497 0.003575529 240569   12.908570  4.146386e-38
+5       rmse ii - iii  0.69066176 0.005122758 240569  134.822239  0.000000e+00
+6       rmse  ii - iv  0.49834352 0.005026804 240569   99.137251  0.000000e+00
+7       rmse   ii - v  0.67400757 0.004933001 240569  136.632347  0.000000e+00
+8       rmse iii - iv -0.19231824 0.003957058 240569  -48.601314  0.000000e+00
+9       rmse  iii - v -0.01665420 0.003717758 240569   -4.479635  7.480529e-06
+10      rmse   iv - v  0.17566405 0.003602953 240569   48.755581  0.000000e+00
+11   L1_norm   i - ii -0.61941431 0.005329838 240569 -116.216348  0.000000e+00
+12   L1_norm  i - iii  0.07787131 0.004617314 240569   16.865067  8.848711e-64
+13   L1_norm   i - iv -0.13171218 0.004455897 240569  -29.559072 1.109922e-191
+14   L1_norm    i - v  0.04908135 0.003582798 240569   13.699167  1.065640e-42
+15   L1_norm ii - iii  0.69728561 0.005110158 240569  136.450880  0.000000e+00
+16   L1_norm  ii - iv  0.48770212 0.005025540 240569   97.044718  0.000000e+00
+17   L1_norm   ii - v  0.66849566 0.004932557 240569  135.527207  0.000000e+00
+18   L1_norm iii - iv -0.20958349 0.003964578 240569  -52.864007  0.000000e+00
+19   L1_norm  iii - v -0.02878996 0.003728274 240569   -7.722061  1.149011e-14
+20   L1_norm   iv - v  0.18079353 0.003634288 240569   49.746619  0.000000e+00
+21 Linf_norm   i - ii -0.61940392 0.005329845 240569 -116.214244  0.000000e+00
+22 Linf_norm  i - iii  0.07787754 0.004617325 240569   16.866377  8.655016e-64
+23 Linf_norm   i - iv -0.13170387 0.004455905 240569  -29.557155 1.174483e-191
+24 Linf_norm    i - v  0.04908758 0.003582820 240569   13.700823  1.041624e-42
+25 Linf_norm ii - iii  0.69728146 0.005110155 240569  136.450162  0.000000e+00
+26 Linf_norm  ii - iv  0.48770005 0.005025528 240569   97.044546  0.000000e+00
+27 Linf_norm   ii - v  0.66849150 0.004932544 240569  135.526709  0.000000e+00
+28 Linf_norm iii - iv -0.20958141 0.003964571 240569  -52.863585  0.000000e+00
+29 Linf_norm  iii - v -0.02878996 0.003728274 240569   -7.722061  1.149011e-14
+30 Linf_norm   iv - v  0.18079145 0.003634284 240569   49.746098  0.000000e+00
+   n_pairs                  interpretation  p_value_holm
+1   240570   i has lower mean rank than ii  0.000000e+00
+2   240570  iii has lower mean rank than i  1.856644e-41
+3   240570   i has lower mean rank than iv 1.210300e-184
+4   240570    v has lower mean rank than i  8.292773e-38
+5   240570 iii has lower mean rank than ii  0.000000e+00
+6   240570  iv has lower mean rank than ii  0.000000e+00
+7   240570   v has lower mean rank than ii  0.000000e+00
+8   240570 iii has lower mean rank than iv  0.000000e+00
+9   240570  iii has lower mean rank than v  7.480529e-06
+10  240570   v has lower mean rank than iv  0.000000e+00
+11  240570   i has lower mean rank than ii  0.000000e+00
+12  240570  iii has lower mean rank than i  2.654613e-63
+13  240570   i has lower mean rank than iv 4.439688e-191
+14  240570    v has lower mean rank than i  2.131280e-42
+15  240570 iii has lower mean rank than ii  0.000000e+00
+16  240570  iv has lower mean rank than ii  0.000000e+00
+17  240570   v has lower mean rank than ii  0.000000e+00
+18  240570 iii has lower mean rank than iv  0.000000e+00
+19  240570  iii has lower mean rank than v  1.149011e-14
+20  240570   v has lower mean rank than iv  0.000000e+00
+21  240570   i has lower mean rank than ii  0.000000e+00
+22  240570  iii has lower mean rank than i  2.596505e-63
+23  240570   i has lower mean rank than iv 4.697931e-191
+24  240570    v has lower mean rank than i  2.083249e-42
+25  240570 iii has lower mean rank than ii  0.000000e+00
+26  240570  iv has lower mean rank than ii  0.000000e+00
+27  240570   v has lower mean rank than ii  0.000000e+00
+28  240570 iii has lower mean rank than iv  0.000000e+00
+29  240570  iii has lower mean rank than v  1.149011e-14
+30  240570   v has lower mean rank than iv  0.000000e+00
+
+Creating metric-adjusted composite rank by averaging ranks over metrics.
+
+Composite Rank Summary by Method
+--------------------------------
+  method mean_composite_rank sd_composite_rank mean_probability_best      n
+1      i            2.873552          1.406268             0.2340525 240570
+2     ii            3.495776          1.739725             0.2720996 240570
+3    iii            2.800700          1.302768             0.2206080 240570
+4     iv            3.004527          1.246248             0.1606698 240570
+5      v            2.825444          1.045677             0.1125743 240570
+
+Composite paired rank contrasts.
+--------------------------------
+   contrast    estimate          SE     df     t_value       p_value n_pairs
+1    i - ii -0.62222361 0.005280088 240569 -117.843418  0.000000e+00  240570
+2   i - iii  0.07285267 0.004540118 240569   16.046425  6.490376e-58  240570
+3    i - iv -0.13097505 0.004381123 240569  -29.895310 5.192140e-196  240570
+4     i - v  0.04810797 0.003503381 240569   13.731868  6.791213e-43  240570
+5  ii - iii  0.69507628 0.005047529 240569  137.706252  0.000000e+00  240570
+6   ii - iv  0.49124856 0.004965333 240569   98.935672  0.000000e+00  240570
+7    ii - v  0.67033157 0.004873608 240569  137.543183  0.000000e+00  240570
+8  iii - iv -0.20382771 0.003858331 240569  -52.827953  0.000000e+00  240570
+9   iii - v -0.02474470 0.003627046 240569   -6.822275  8.982018e-12  240570
+10   iv - v  0.17908301 0.003521732 240569   50.850838  0.000000e+00  240570
+                    interpretation  p_value_holm
+1    i has lower mean rank than ii  0.000000e+00
+2   iii has lower mean rank than i  1.947113e-57
+3    i has lower mean rank than iv 2.076856e-195
+4     v has lower mean rank than i  1.358243e-42
+5  iii has lower mean rank than ii  0.000000e+00
+6   iv has lower mean rank than ii  0.000000e+00
+7    v has lower mean rank than ii  0.000000e+00
+8  iii has lower mean rank than iv  0.000000e+00
+9   iii has lower mean rank than v  8.982018e-12
+10   v has lower mean rank than iv  0.000000e+00
+
+Fitting metric-adjusted fixed-effect rank model.
+Random intercepts are intentionally not used because ranks are fixed within ranking blocks.
+
+Composite Rank Model ANOVA Table
+--------------------------------
+Analysis of Variance Table
+
+Response: mean_rank
+                         Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                    4   79868 19966.9 10759.0240 < 2.2e-16 ***
+design_block              2       0     0.0     0.0000  1.000000    
+G                         1       0     0.0     0.0000  1.000000    
+theta_true                1       0     0.0     0.0000  1.000000    
+theta_CV                  1       0     0.0     0.0000  1.000000    
+sigma                     1       0     0.0     0.0000  1.000000    
+mean_nsamp                1       0     0.0     0.0000  1.000000    
+p1                        1       0     0.0     0.0000  1.000000    
+p2                        1       0     0.0     0.0000  1.000000    
+method:design_block       8    2319   289.8   156.1795 < 2.2e-16 ***
+method:G                  4    5592  1398.1   753.3669 < 2.2e-16 ***
+method:theta_true         4      77    19.3    10.4177 1.953e-08 ***
+method:theta_CV           4      49    12.2     6.5841 2.707e-05 ***
+method:sigma              4    6583  1645.8   886.8180 < 2.2e-16 ***
+method:mean_nsamp         4    1975   493.8   266.0627 < 2.2e-16 ***
+method:p1                 4      21     5.2     2.8115  0.023936 *  
+method:p2                 4      33     8.2     4.4082  0.001456 ** 
+Residuals           1202800 2232193     1.9                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Estimated marginal mean composite ranks by method.
+ method emmean      SE      df lower.CL upper.CL
+ i       2.874 0.00278 1202800    2.868    2.879
+ ii      3.496 0.00278 1202800    3.490    3.501
+ iii     2.801 0.00278 1202800    2.795    2.806
+ iv      3.005 0.00278 1202800    2.999    3.010
+ v       2.825 0.00278 1202800    2.820    2.831
+
+Results are averaged over the levels of: design_block 
+Confidence level used: 0.95 
+
+Pairwise EMM contrasts for composite ranks.
+ contrast estimate      SE      df  t.ratio p.value
+ i - ii    -0.6222 0.00393 1202800 -158.410 <0.0001
+ i - iii    0.0729 0.00393 1202800   18.547 <0.0001
+ i - iv    -0.1310 0.00393 1202800  -33.345 <0.0001
+ i - v      0.0481 0.00393 1202800   12.248 <0.0001
+ ii - iii   0.6951 0.00393 1202800  176.958 <0.0001
+ ii - iv    0.4912 0.00393 1202800  125.066 <0.0001
+ ii - v     0.6703 0.00393 1202800  170.658 <0.0001
+ iii - iv  -0.2038 0.00393 1202800  -51.892 <0.0001
+ iii - v   -0.0247 0.00393 1202800   -6.300 <0.0001
+ iv - v     0.1791 0.00393 1202800   45.592 <0.0001
+
+Results are averaged over the levels of: design_block 
+P value adjustment: holm method for 10 tests 
+
+Metric-specific fixed-effect rank models and EMM contrasts.
+----------------------------------------------------------
+
+Metric: rmse 
+Analysis of Variance Table
+
+Response: rank
+                         Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                    4   80101 20025.2 10432.1281 < 2.2e-16 ***
+design_block              2       0     0.0     0.0000 1.0000000    
+G                         1       0     0.0     0.0000 1.0000000    
+theta_true                1       0     0.0     0.0000 1.0000000    
+theta_CV                  1       0     0.0     0.0000 1.0000000    
+sigma                     1       0     0.0     0.0000 1.0000000    
+mean_nsamp                1       0     0.0     0.0000 1.0000000    
+p1                        1       0     0.0     0.0000 1.0000000    
+p2                        1       0     0.0     0.0000 1.0000000    
+method:design_block       8    2234   279.3   145.5028 < 2.2e-16 ***
+method:G                  4    5402  1350.5   703.5217 < 2.2e-16 ***
+method:theta_true         4      69    17.1     8.9267 3.326e-07 ***
+method:theta_CV           4      46    11.6     6.0398 7.422e-05 ***
+method:sigma              4    6933  1733.3   902.9375 < 2.2e-16 ***
+method:mean_nsamp         4    1937   484.4   252.3220 < 2.2e-16 ***
+method:p1                 4      16     4.1     2.1440 0.0726182 .  
+method:p2                 4      40    10.0     5.2023 0.0003455 ***
+Residuals           1202800 2308861     1.9                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+ method emmean      SE      df lower.CL upper.CL
+ i       2.870 0.00282 1202800    2.865    2.876
+ ii      3.498 0.00282 1202800    3.493    3.504
+ iii     2.808 0.00282 1202800    2.802    2.813
+ iv      3.000 0.00282 1202800    2.994    3.005
+ v       2.824 0.00282 1202800    2.819    2.830
+
+Results are averaged over the levels of: design_block 
+Confidence level used: 0.95 
+ contrast estimate      SE      df  t.ratio p.value
+ i - ii    -0.6279 0.00399 1202800 -157.167 <0.0001
+ i - iii    0.0628 0.00399 1202800   15.723 <0.0001
+ i - iv    -0.1295 0.00399 1202800  -32.419 <0.0001
+ i - v      0.0462 0.00399 1202800   11.554 <0.0001
+ ii - iii   0.6907 0.00399 1202800  172.890 <0.0001
+ ii - iv    0.4983 0.00399 1202800  124.748 <0.0001
+ ii - v     0.6740 0.00399 1202800  168.721 <0.0001
+ iii - iv  -0.1923 0.00399 1202800  -48.142 <0.0001
+ iii - v   -0.0167 0.00399 1202800   -4.169 <0.0001
+ iv - v     0.1757 0.00399 1202800   43.973 <0.0001
+
+Results are averaged over the levels of: design_block 
+P value adjustment: holm method for 10 tests 
+
+Metric: L1_norm 
+Analysis of Variance Table
+
+Response: rank
+                         Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                    4   79767 19941.8 10387.0881 < 2.2e-16 ***
+design_block              2       0     0.0     0.0000  1.000000    
+G                         1       0     0.0     0.0000  1.000000    
+theta_true                1       0     0.0     0.0000  1.000000    
+theta_CV                  1       0     0.0     0.0000  1.000000    
+sigma                     1       0     0.0     0.0000  1.000000    
+mean_nsamp                1       0     0.0     0.0000  1.000000    
+p1                        1       0     0.0     0.0000  1.000000    
+p2                        1       0     0.0     0.0000  1.000000    
+method:design_block       8    2363   295.4   153.8633 < 2.2e-16 ***
+method:G                  4    5698  1424.4   741.9381 < 2.2e-16 ***
+method:theta_true         4      82    20.5    10.7025 1.134e-08 ***
+method:theta_CV           4      50    12.6     6.5522 2.872e-05 ***
+method:sigma              4    6413  1603.1   835.0288 < 2.2e-16 ***
+method:mean_nsamp         4    1998   499.4   260.1185 < 2.2e-16 ***
+method:p1                 4      24     6.0     3.1324  0.013818 *  
+method:p2                 4      30     7.4     3.8539  0.003913 ** 
+Residuals           1202800 2309217     1.9                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+ method emmean      SE      df lower.CL upper.CL
+ i       2.875 0.00282 1202800    2.870    2.881
+ ii      3.495 0.00282 1202800    3.489    3.500
+ iii     2.797 0.00282 1202800    2.792    2.803
+ iv      3.007 0.00282 1202800    3.001    3.012
+ v       2.826 0.00282 1202800    2.821    2.832
+
+Results are averaged over the levels of: design_block 
+Confidence level used: 0.95 
+ contrast estimate    SE      df  t.ratio p.value
+ i - ii    -0.6194 0.004 1202800 -155.043 <0.0001
+ i - iii    0.0779 0.004 1202800   19.492 <0.0001
+ i - iv    -0.1317 0.004 1202800  -32.968 <0.0001
+ i - v      0.0491 0.004 1202800   12.285 <0.0001
+ ii - iii   0.6973 0.004 1202800  174.534 <0.0001
+ ii - iv    0.4877 0.004 1202800  122.074 <0.0001
+ ii - v     0.6685 0.004 1202800  167.328 <0.0001
+ iii - iv  -0.2096 0.004 1202800  -52.460 <0.0001
+ iii - v   -0.0288 0.004 1202800   -7.206 <0.0001
+ iv - v     0.1808 0.004 1202800   45.254 <0.0001
+
+Results are averaged over the levels of: design_block 
+P value adjustment: holm method for 10 tests 
+
+Metric: Linf_norm 
+Analysis of Variance Table
+
+Response: rank
+                         Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                    4   79766 19941.5 10386.9082 < 2.2e-16 ***
+design_block              2       0     0.0     0.0000  1.000000    
+G                         1       0     0.0     0.0000  1.000000    
+theta_true                1       0     0.0     0.0000  1.000000    
+theta_CV                  1       0     0.0     0.0000  1.000000    
+sigma                     1       0     0.0     0.0000  1.000000    
+mean_nsamp                1       0     0.0     0.0000  1.000000    
+p1                        1       0     0.0     0.0000  1.000000    
+p2                        1       0     0.0     0.0000  1.000000    
+method:design_block       8    2363   295.4   153.8518 < 2.2e-16 ***
+method:G                  4    5698  1424.5   741.9656 < 2.2e-16 ***
+method:theta_true         4      82    20.5    10.7029 1.133e-08 ***
+method:theta_CV           4      50    12.6     6.5540 2.863e-05 ***
+method:sigma              4    6413  1603.2   835.0679 < 2.2e-16 ***
+method:mean_nsamp         4    1997   499.3   260.0720 < 2.2e-16 ***
+method:p1                 4      24     6.0     3.1370  0.013709 *  
+method:p2                 4      30     7.4     3.8567  0.003893 ** 
+Residuals           1202800 2309218     1.9                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+ method emmean      SE      df lower.CL upper.CL
+ i       2.875 0.00282 1202800    2.870    2.881
+ ii      3.495 0.00282 1202800    3.489    3.500
+ iii     2.797 0.00282 1202800    2.792    2.803
+ iv      3.007 0.00282 1202800    3.001    3.012
+ v       2.826 0.00282 1202800    2.821    2.832
+
+Results are averaged over the levels of: design_block 
+Confidence level used: 0.95 
+ contrast estimate    SE      df  t.ratio p.value
+ i - ii    -0.6194 0.004 1202800 -155.040 <0.0001
+ i - iii    0.0779 0.004 1202800   19.493 <0.0001
+ i - iv    -0.1317 0.004 1202800  -32.966 <0.0001
+ i - v      0.0491 0.004 1202800   12.287 <0.0001
+ ii - iii   0.6973 0.004 1202800  174.533 <0.0001
+ ii - iv    0.4877 0.004 1202800  122.074 <0.0001
+ ii - v     0.6685 0.004 1202800  167.327 <0.0001
+ iii - iv  -0.2096 0.004 1202800  -52.459 <0.0001
+ iii - v   -0.0288 0.004 1202800   -7.206 <0.0001
+ iv - v     0.1808 0.004 1202800   45.253 <0.0001
+
+Results are averaged over the levels of: design_block 
+P value adjustment: holm method for 10 tests 
+
+Generating visualization plots.
+Saved plot: figures-code-G/code_G_probability_best_by_metric.png 
+Saved plot: figures-code-G/code_G_composite_mean_rank.png 
+Saved plot: figures-code-G/code_G_rank_distribution_by_metric.png 
+Saved plot: figures-code-G/code_G_composite_rank_residuals.png 
+
+Analysis completed successfully.

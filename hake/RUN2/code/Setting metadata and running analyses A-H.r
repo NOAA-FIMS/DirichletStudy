@@ -27,7 +27,7 @@ source("metadata.R")
 rm(list = ls())
 gc()
 
-setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
+# setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
 
 Sys.setenv(HAKE_RUN_ON_SOURCE = "false")
 Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
@@ -49,7 +49,7 @@ source("code-A.R")
 rm(list = ls())
 gc()
 
-setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
+# setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
 
 Sys.setenv(HAKE_RUN_ON_SOURCE = "false")
 Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
@@ -57,9 +57,9 @@ Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
 source("metadata.R")
 
 acc_long <- load_metadata_table("acc_long")
-# acc_mv   <- make_acc_mv_from_long(acc_long)
+acc_mv   <- make_acc_mv_from_long(acc_long)
 
-# rm(acc_long)
+rm(acc_long)
 gc()
 
 source("code-B.R")
@@ -75,7 +75,7 @@ source("code-B-RE-simplex.R")
 rm(list = ls())
 gc()
 
-setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
+# setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
 
 Sys.setenv(HAKE_RUN_ON_SOURCE = "false")
 Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
@@ -115,7 +115,7 @@ source("code-D2.R")
 rm(list = ls())
 gc()
 
-setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
+# setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
 
 Sys.setenv(HAKE_RUN_ON_SOURCE = "false")
 Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
@@ -167,7 +167,7 @@ source("code-F.R")
 rm(list = ls())
 gc()
 
-setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
+# setwd("C:/Users/Jon.Brodziak/Desktop/Dirichlet Study/hake/RUN2")
 
 Sys.setenv(HAKE_RUN_ON_SOURCE = "false")
 Sys.setenv(HAKE_METADATA_OUTDIR = file.path(getwd(), "metadata_output"))
@@ -176,7 +176,7 @@ source("metadata.R")
 
 acc_long <- load_metadata_table("acc_long")
 
-source("code-G-revised.R")
+source("code-G.R")
 
 ####################################################################################
 # Analysis H: error-vector MANOVA

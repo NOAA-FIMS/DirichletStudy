@@ -323,7 +323,18 @@ run_one <- function(p_true, N_row) {
 
 # Run the simulation over all expanded combinations using parallel processing
 message("Starting parallel simulation...")
-plan(multisession)
+
+## Safe future parallel setup for Windows batch runs
+options(
+  parallelly.makeNodePSOCK.timeout = 300,
+  parallelly.makeNodePSOCK.connectTimeout = 300
+)
+
+n_workers <- as.integer(Sys.getenv("HAKE_N_WORKERS", unset = "4"))
+n_workers <- max(1L, min(n_workers, future::availableCores()))
+
+future::plan(future::multisession, workers = n_workers)
+
 res_mat <- do.call(rbind, future_lapply(seq_len(total_runs), function(i) {
   c(mesh_id_vec[i], sim_id_vec[i], run_one(p_true = mesh_expanded[i, ], N_row = N_vec[i, ]))
 }, future.seed = TRUE))

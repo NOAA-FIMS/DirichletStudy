@@ -1,0 +1,5 @@
+"Block","Type","Definition"
+"All selected blocks","Fixed baseline and common fifth factor","K=3, h=0.0300000000000000, nsims=5, random.seed=2146764845, od_mult=1, p_lbound=(0,0,0), p_ubound=(1,1,1); selected blocks: Poisson, Lognormal, Negative binomial; common G factor: 1/2/3; Fixed distribution-specific spread parameters: Lognormal ln_sd=1; Negative binomial nb_size=25; Log-uniform Nmin=50, Nmax=100"
+"Poisson","Factors","mean_nsamp: 100/200/400; sigma: 0.250000000000000/0.500000000000000/1; theta_true: 0.500000000000000/1/2; theta_CV: 0/0.200000000000000/0.600000000000000; G: 1/2/3"
+"Lognormal","Factors","mean_nsamp: 100/200/400; sigma: 0.250000000000000/0.500000000000000/1; theta_true: 0.500000000000000/1/2; theta_CV: 0/0.200000000000000/0.600000000000000; G: 1/2/3; fixed ln_sd: 1"
+"Negative binomial","Factors","mean_nsamp: 100/200/400; sigma: 0.250000000000000/0.500000000000000/1; theta_true: 0.500000000000000/1/2; theta_CV: 0/0.200000000000000/0.600000000000000; G: 1/2/3; fixed nb_size: 25"

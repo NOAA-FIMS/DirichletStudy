@@ -1,0 +1,320 @@
+Code E: Generalized Additive Model (GAM) Analysis
+Output file: results-code-E.txt 
+Figure output directory: figures-code-E 
+Run time: 2026-06-07 04:32:10 HST 
+
+Rows in original acc_long: 7217100 
+Rows in aggregated acc_gam: 1443420 
+Fitting Global GAM with spatial splines s(p1, p2) by method.
+Global GAM Summary:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ metric * method + s(p1, p2, by = method, k = 20) + design_block + 
+    G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)                    3.077e-02  4.380e-03    7.025 2.15e-12 ***
+metricL1_norm                  1.379e-01  2.596e-04  531.006  < 2e-16 ***
+metricLinf_norm                3.032e-02  2.596e-04  116.803  < 2e-16 ***
+methodii                       3.212e-02  6.701e-03    4.794 1.64e-06 ***
+methodiii                      2.216e-03  5.427e-03    0.408    0.683    
+methodiv                       7.433e-05  5.653e-03    0.013    0.990    
+methodv                        4.541e-03  5.638e-03    0.805    0.421    
+design_blockNegative binomial -9.311e-03  1.161e-04  -80.199  < 2e-16 ***
+design_blockPoisson           -9.334e-03  1.161e-04  -80.394  < 2e-16 ***
+G                             -2.973e-02  5.805e-05 -512.071  < 2e-16 ***
+theta_true                    -3.621e-03  5.805e-05  -62.379  < 2e-16 ***
+theta_CV                       9.186e-04  5.805e-05   15.824  < 2e-16 ***
+sigma                          5.654e-02  5.805e-05  973.900  < 2e-16 ***
+mean_nsamp                    -3.791e-04  5.805e-05   -6.530 6.57e-11 ***
+metricL1_norm:methodii         9.988e-03  3.672e-04   27.204  < 2e-16 ***
+metricLinf_norm:methodii       2.086e-03  3.672e-04    5.681 1.34e-08 ***
+metricL1_norm:methodiii       -2.071e-02  3.672e-04  -56.395  < 2e-16 ***
+metricLinf_norm:methodiii     -5.205e-03  3.672e-04  -14.176  < 2e-16 ***
+metricL1_norm:methodiv        -2.008e-02  3.672e-04  -54.702  < 2e-16 ***
+metricLinf_norm:methodiv      -5.026e-03  3.672e-04  -13.688  < 2e-16 ***
+metricL1_norm:methodv         -1.910e-02  3.672e-04  -52.012  < 2e-16 ***
+metricLinf_norm:methodv       -4.715e-03  3.672e-04  -12.841  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                     edf Ref.df    F p-value    
+s(p1,p2):methodi   17.25  18.23 4687  <2e-16 ***
+s(p1,p2):methodii  17.77  18.59 2825  <2e-16 ***
+s(p1,p2):methodiii 16.26  17.39 2595  <2e-16 ***
+s(p1,p2):methodiv  16.60  17.69 2297  <2e-16 ***
+s(p1,p2):methodv   16.58  17.67 2405  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.673   Deviance explained = 67.3%
+fREML = -2.0878e+06  Scale est. = 0.016215  n = 1443420
+
+GAM ANOVA Table:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ metric * method + s(p1, p2, by = method, k = 20) + design_block + 
+    G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric Terms:
+              df         F  p-value
+metric         2 1.557e+05  < 2e-16
+method         4 8.113e+00 1.55e-06
+design_block   2 4.298e+03  < 2e-16
+G              1 2.622e+05  < 2e-16
+theta_true     1 3.891e+03  < 2e-16
+theta_CV       1 2.504e+02  < 2e-16
+sigma          1 9.485e+05  < 2e-16
+mean_nsamp     1 4.265e+01 6.57e-11
+metric:method  8 1.615e+03  < 2e-16
+
+Approximate significance of smooth terms:
+                     edf Ref.df    F p-value
+s(p1,p2):methodi   17.25  18.23 4687  <2e-16
+s(p1,p2):methodii  17.77  18.59 2825  <2e-16
+s(p1,p2):methodiii 16.26  17.39 2595  <2e-16
+s(p1,p2):methodiv  16.60  17.69 2297  <2e-16
+s(p1,p2):methodv   16.58  17.67 2405  <2e-16
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  4.080835e-06 -1.841727e-11  4.339638e-07  7.080276e-08  2.694615e-06
+[6] -1.496344e-05
+
+$hess
+           [,1]          [,2]          [,3]          [,4]          [,5]
+   6.166064e+00 -1.968609e-13  1.061322e-14 -5.447352e-14  1.409873e-12
+  -1.760816e-14  6.824437e+00 -1.682960e-25  4.173512e-26  5.262907e-25
+   1.850749e-13  4.408836e-26  3.581467e+00 -1.818497e-26 -1.276445e-24
+   2.135706e-14  9.725768e-26 -1.429196e-25  3.668330e+00  1.270730e-25
+   4.528494e-13  1.017256e-25 -4.134369e-25  9.637581e-26  2.878541e+00
+d -7.622750e+00 -7.885565e+00 -7.130877e+00 -7.299767e+00 -7.289162e+00
+           [,6]
+      -7.622750
+      -7.885565
+      -7.130877
+      -7.299767
+      -7.289162
+d 721694.000015
+
+Model rank =  117 / 117 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                     k'  edf k-index p-value
+s(p1,p2):methodi   19.0 17.2    0.98    0.15
+s(p1,p2):methodii  19.0 17.8    0.98    0.14
+s(p1,p2):methodiii 19.0 16.3    0.98    0.17
+s(p1,p2):methodiv  19.0 16.6    0.98    0.14
+s(p1,p2):methodv   19.0 16.6    0.98    0.20
+Saved GAM diagnostic plot: figures-code-E/code_E_global_gam_check.png 
+Saved method surface panel: figures-code-E/code_E_global_method_surfaces_panel.png 
+Saved method surface plot: figures-code-E/code_E_global_surface_method_i.png 
+Saved method surface plot: figures-code-E/code_E_global_surface_method_ii.png 
+Saved method surface plot: figures-code-E/code_E_global_surface_method_iii.png 
+Saved method surface plot: figures-code-E/code_E_global_surface_method_iv.png 
+Saved method surface plot: figures-code-E/code_E_global_surface_method_v.png 
+
+Smooth terms in fit_gam:
+[1] "s(p1,p2):methodi"   "s(p1,p2):methodii"  "s(p1,p2):methodiii"
+[4] "s(p1,p2):methodiv"  "s(p1,p2):methodv"  
+
+Drawing method-specific smooth terms with gratia.
+Saved gratia smooth plot: figures-code-E/code_E_global_gratia_smooths.png 
+
+Running gratia model appraisal.
+Saved gratia appraisal plot: figures-code-E/code_E_global_gratia_appraise.png 
+
+Drawing categorical parametric effects with gratia.
+Saved parametric-term plot: figures-code-E/code_E_global_parametric_terms.png 
+
+Analyzing difference between Method 'v' and Method 'iii'.
+Rows in original diff_v_iii: 288684 
+Rows in aggregated diff_gam: 288684 
+Difference GAM Summary (Method v - iii):
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ metric + s(p1, p2, by = metric, k = 20) + design_block + 
+    G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                   -0.0114331  0.0005547 -20.610  < 2e-16 ***
+metricL1_norm                  0.0080946  0.0016040   5.046 4.50e-07 ***
+metricLinf_norm                0.0023172  0.0008951   2.589  0.00963 ** 
+design_blockNegative binomial -0.0015069  0.0000962 -15.664  < 2e-16 ***
+design_blockPoisson           -0.0014998  0.0000962 -15.590  < 2e-16 ***
+G                              0.0028941  0.0000481  60.166  < 2e-16 ***
+theta_true                    -0.0010528  0.0000481 -21.886  < 2e-16 ***
+theta_CV                       0.0002267  0.0000481   4.713 2.44e-06 ***
+sigma                          0.0049614  0.0000481 103.144  < 2e-16 ***
+mean_nsamp                     0.0018724  0.0000481  38.926  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                           edf Ref.df     F p-value    
+s(p1,p2):metricrmse      11.98  13.49 13.16  <2e-16 ***
+s(p1,p2):metricL1_norm   15.98  17.12 78.27  <2e-16 ***
+s(p1,p2):metricLinf_norm 13.55  14.88 23.02  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.0801   Deviance explained = 8.03%
+fREML = -7.0407e+05  Scale est. = 0.0004453  n = 288684
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  2.011724e-12  1.759754e-09 -3.179679e-13 -1.658918e-09
+
+$hess
+           [,1]          [,2]          [,3]          [,4]
+   1.788859e+00  5.563858e-15  4.225644e-16     -4.991086
+   6.808416e-15  3.366846e+00  3.127673e-27     -6.988826
+   9.765411e-17 -2.951356e-28  3.545894e+00     -5.773183
+d -4.991086e+00 -6.988826e+00 -5.773183e+00 144334.000000
+
+Model rank =  67 / 67 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                           k'  edf k-index p-value
+s(p1,p2):metricrmse      19.0 12.0    0.99    0.40
+s(p1,p2):metricL1_norm   19.0 16.0    0.99    0.42
+s(p1,p2):metricLinf_norm 19.0 13.5    0.99    0.50
+Saved difference GAM diagnostic plot: figures-code-E/code_E_diff_v_iii_gam_check.png 
+Saved difference-GAM surface panel: figures-code-E/code_E_diff_v_iii_metric_surfaces_panel.png 
+Saved difference-GAM metric surface plot: figures-code-E/code_E_diff_v_iii_surface_metric_rmse.png 
+Saved difference-GAM metric surface plot: figures-code-E/code_E_diff_v_iii_surface_metric_l1_norm.png 
+Saved difference-GAM metric surface plot: figures-code-E/code_E_diff_v_iii_surface_metric_linf_norm.png 
+Saved difference-GAM gratia smooth plot: figures-code-E/code_E_diff_v_iii_gratia_smooths.png 
+Saved difference-GAM gratia appraisal plot: figures-code-E/code_E_diff_v_iii_gratia_appraise.png 
+
+Analyzing signed directional log-ratio: Method 'v' relative to Method 'iii'.
+Directional comparison epsilon: 1.569974e-03 
+Response definition: y = log((v + eps) / (iii + eps)).
+Sign convention: y > 0 means Method v has larger error than Method iii; y < 0 means Method v has smaller error than Method iii.
+Rows in signed_v_iii: 288684 
+Rows in aggregated signed_gam: 288684 
+Signed log-ratio GAM Summary (Method v / Method iii):
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ metric + s(p1, p2, by = metric, k = 20) + design_block + 
+    G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                    0.0107554  0.0059607   1.804   0.0712 .  
+metricL1_norm                  0.0075567  0.0095056   0.795   0.4266    
+metricLinf_norm                0.0072042  0.0094562   0.762   0.4461    
+design_blockNegative binomial  0.0078937  0.0005651  13.968   <2e-16 ***
+design_blockPoisson            0.0095297  0.0005651  16.863   <2e-16 ***
+G                              0.0023568  0.0002826   8.341   <2e-16 ***
+theta_true                    -0.0023857  0.0002826  -8.443   <2e-16 ***
+theta_CV                       0.0002878  0.0002826   1.018   0.3085    
+sigma                         -0.0044905  0.0002826 -15.892   <2e-16 ***
+mean_nsamp                     0.0125505  0.0002826  44.417   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                           edf Ref.df     F p-value    
+s(p1,p2):metricrmse      14.52  15.76 48.80  <2e-16 ***
+s(p1,p2):metricL1_norm   15.35  16.53 64.12  <2e-16 ***
+s(p1,p2):metricLinf_norm 15.32  16.51 62.90  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.0189   Deviance explained = 1.91%
+fREML = -1.9292e+05  Scale est. = 0.015366  n = 288684
+
+Signed log-ratio GAM ANOVA Table:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+y ~ metric + s(p1, p2, by = metric, k = 20) + design_block + 
+    G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric Terms:
+             df        F p-value
+metric        2    0.441   0.644
+design_block  2  162.617  <2e-16
+G             1   69.567  <2e-16
+theta_true    1   71.289  <2e-16
+theta_CV      1    1.037   0.308
+sigma         1  252.560  <2e-16
+mean_nsamp    1 1972.838  <2e-16
+
+Approximate significance of smooth terms:
+                           edf Ref.df     F p-value
+s(p1,p2):metricrmse      14.52  15.76 48.80  <2e-16
+s(p1,p2):metricL1_norm   15.35  16.53 64.12  <2e-16
+s(p1,p2):metricLinf_norm 15.32  16.51 62.90  <2e-16
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  2.557954e-13  1.894733e-10  8.380674e-11 -4.365575e-10
+
+$hess
+           [,1]          [,2]          [,3]          [,4]
+   4.238320e+00 -9.066454e-15  2.938166e-15     -6.257555
+   1.970564e-15  4.143908e+00 -6.022571e-28     -6.674586
+  -9.605898e-16 -2.660200e-27  4.137825e+00     -6.661373
+d -6.257555e+00 -6.674586e+00 -6.661373e+00 144334.000000
+
+Model rank =  67 / 67 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                           k'  edf k-index p-value
+s(p1,p2):metricrmse      19.0 14.5    0.98    0.34
+s(p1,p2):metricL1_norm   19.0 15.3    0.98    0.34
+s(p1,p2):metricLinf_norm 19.0 15.3    0.98    0.28
+Saved signed log-ratio GAM diagnostic plot: figures-code-E/code_E_signed_v_over_iii_gam_check.png 
+Saved signed log-ratio gratia smooth plot: figures-code-E/code_E_signed_v_over_iii_gratia_smooths.png 
+Saved signed log-ratio gratia appraisal plot: figures-code-E/code_E_signed_v_over_iii_gratia_appraise.png 
+
+Signed directional prediction-grid summary.
+# A tibble: 3 × 8
+  metric    prediction_grid_cells percent_positive_cells
+  <fct>                     <int>                  <dbl>
+1 rmse                      17454                   80.7
+2 L1_norm                   17454                   75.3
+3 Linf_norm                 17454                   75.7
+# ℹ 5 more variables: percent_negative_cells <dbl>, min_log_ratio <dbl>,
+#   max_log_ratio <dbl>, min_percent_error_difference <dbl>,
+#   max_percent_error_difference <dbl>
+Saved signed directional prediction grid: figures-code-E/code_E_signed_v_over_iii_prediction_grid.csv 
+Saved signed directional full surface panel: figures-code-E/code_E_signed_v_over_iii_surface_panel.png 
+Saved signed positive-region panel: figures-code-E/code_E_signed_v_over_iii_positive_regions_panel.png 
+Saved signed negative-region panel: figures-code-E/code_E_signed_v_over_iii_negative_regions_panel.png 
+Saved signed positive-region metric plot: figures-code-E/code_E_signed_v_over_iii_positive_region_metric_rmse.png 
+Saved signed negative-region metric plot: figures-code-E/code_E_signed_v_over_iii_negative_region_metric_rmse.png 
+Saved signed positive-region metric plot: figures-code-E/code_E_signed_v_over_iii_positive_region_metric_l1_norm.png 
+Saved signed negative-region metric plot: figures-code-E/code_E_signed_v_over_iii_negative_region_metric_l1_norm.png 
+Saved signed positive-region metric plot: figures-code-E/code_E_signed_v_over_iii_positive_region_metric_linf_norm.png 
+Saved signed negative-region metric plot: figures-code-E/code_E_signed_v_over_iii_negative_region_metric_linf_norm.png 
+
+Analysis completed successfully.

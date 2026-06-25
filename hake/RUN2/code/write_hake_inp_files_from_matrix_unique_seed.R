@@ -5,25 +5,29 @@
 #
 # Compatibility:
 #   This version is compatible with build_hake_factorial_design_matrix.R,
-#   where G is the common fifth factor for all four sampling distributions:
+#   where G is the common fifth factor for the selected sampling distributions:
 #     1 = Poisson
 #     2 = Lognormal
 #     3 = Negative binomial
-#     4 = Log-uniform
+#
+#   Optional support for Log-uniform, dist_code = 4, is retained when the
+#   matrix includes a Log-uniform block and expected_blocks includes "Log-uniform".
 #
 #   The revised common-G design fixes the distribution-specific spread parameters
 #   by default at:
 #     lognormal ln_sd = 1.0
 #     negative-binomial nb_size = 25
-#     log-uniform Nmin = 25
+#     log-uniform Nmin = 50
 #     log-uniform Nmax = 100
 #
 # Usage:
-#   source("write_hake_inp_files_from_matrix_unique_seed.R")
-#   write_hake_inp_files_from_matrix(
-#     matrix_file = "hake_factorial_design_matrix.csv",
-#     output_dir = ".",
-#     validate_common_G = FALSE)
+# source("write_hake_inp_files_from_matrix_unique_seed.R")
+# manifest <- write_hake_inp_files_from_matrix(
+#  matrix_file = "hake_factorial_design_matrix.csv",
+#  output_dir = ".",
+#  validate_common_G = TRUE,
+#  random_seed_generator_seed = 11131
+# )
 #
 # Notes:
 #   - Each output file is written in "key = value" format expected by hake.R.
@@ -42,7 +46,8 @@ write_hake_inp_files_from_matrix <- function(matrix_file = "hake_factorial_desig
                                              overwrite = TRUE,
                                              verbose = TRUE,
                                              validate_common_G = TRUE,
-                                             expected_G_levels = c(2, 4, 8),
+                                             expected_G_levels = c(1, 2, 3),
+                                             expected_blocks = c("Poisson", "Lognormal", "Negative binomial"),
                                              expected_lognormal_ln_sd = 1.0,
                                              expected_nb_size = 25,
                                              expected_loguniform_Nmin = 25,
@@ -136,7 +141,19 @@ write_hake_inp_files_from_matrix <- function(matrix_file = "hake_factorial_desig
       return(invisible(design))
     }
 
-    expected_blocks <- c("Poisson", "Lognormal", "Negative binomial", "Log-uniform")
+    allowed_blocks <- c("Poisson", "Lognormal", "Negative binomial", "Log-uniform")
+    expected_blocks <- as.character(expected_blocks)
+    if (length(expected_blocks) < 1L) {
+      stop("expected_blocks must contain at least one sampling-distribution block.")
+    }
+    if (any(!expected_blocks %in% allowed_blocks)) {
+      stop(
+        "expected_blocks contains unsupported block names: ",
+        paste(setdiff(expected_blocks, allowed_blocks), collapse = ", "),
+        ". Supported names are: ", paste(allowed_blocks, collapse = ", ")
+      )
+    }
+
     observed_blocks <- sort(unique(design$design_block))
     if (!identical(observed_blocks, sort(expected_blocks))) {
       stop(
@@ -149,8 +166,8 @@ write_hake_inp_files_from_matrix <- function(matrix_file = "hake_factorial_desig
     expected_n <- length(expected_blocks) * 3L^5L
     if (nrow(design) != expected_n) {
       stop(sprintf(
-        "Common-G design should have %d rows = 4 distributions x 3^5, but found %d rows.",
-        expected_n, nrow(design)
+        "Common-G design should have %d rows = %d distributions x 3^5, but found %d rows.",
+        expected_n, length(expected_blocks), nrow(design)
       ))
     }
 
@@ -194,14 +211,16 @@ write_hake_inp_files_from_matrix <- function(matrix_file = "hake_factorial_desig
       ))
     }
 
-    if (!all(design$Nmin[design$dist_code == 4L] == expected_loguniform_Nmin)) {
+    if (any(design$dist_code == 4L) &&
+        !all(design$Nmin[design$dist_code == 4L] == expected_loguniform_Nmin)) {
       stop(sprintf(
         "For dist_code = 4, Nmin must be constant at %s. If you changed this baseline in the design builder, pass expected_loguniform_Nmin accordingly.",
         expected_loguniform_Nmin
       ))
     }
 
-    if (!all(design$Nmax[design$dist_code == 4L] == expected_loguniform_Nmax)) {
+    if (any(design$dist_code == 4L) &&
+        !all(design$Nmax[design$dist_code == 4L] == expected_loguniform_Nmax)) {
       stop(sprintf(
         "For dist_code = 4, Nmax must be constant at %s. If you changed this baseline in the design builder, pass expected_loguniform_Nmax accordingly.",
         expected_loguniform_Nmax

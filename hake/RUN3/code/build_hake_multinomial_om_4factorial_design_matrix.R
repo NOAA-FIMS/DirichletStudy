@@ -22,7 +22,7 @@
 #   The distribution-specific spread parameters are fixed baseline values:
 #     Lognormal:          ln_sd = 1.0
 #     Negative binomial:  nb_size = 25
-#     Log-uniform:        Nmin = 25, Nmax = 100
+#     Log-uniform:        Nmin = 50, Nmax = 100
 #
 # Outputs:
 #   - hake_factorial_design_matrix.csv
@@ -138,7 +138,7 @@ build_hake_factorial_design_matrix_from_spec <- function(
     G_levels,
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100,
     theta_CV_default = 0.0,
     output_csv = "hake_factorial_design_matrix.csv",
@@ -421,16 +421,16 @@ build_hake_factorial_design_matrix <- function(
     include_loguniform = FALSE
 ) {
   common_defaults <- list(
-    mean_nsamp = c(100, 200, 400),
+    mean_nsamp = c(25, 50, 100),
     sigma = c(0.25, 0.5, 1.0),
     theta_true = c(0.5, 1.0, 2.0),
-    G = c(1, 2, 3)
+    G = c(2, 4, 8)
   )
 
   fixed_spread_defaults <- list(
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100
   )
 
@@ -546,10 +546,10 @@ build_hake_factorial_design_matrix_default <- function(
 
   build_hake_factorial_design_matrix_from_spec(
     common_by_block = common_by_block,
-    G_levels = c(1, 2, 3),
+    G_levels = c(2, 4, 8),
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100,
     theta_CV_default = 0.0,
     output_csv = output_csv,

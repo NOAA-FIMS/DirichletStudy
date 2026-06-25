@@ -17,7 +17,7 @@
 #   The distribution-specific spread parameters are fixed baseline values:
 #     Lognormal:          ln_sd = 1.0
 #     Negative binomial:  nb_size = 25
-#     Log-uniform:        Nmin = 25, Nmax = 100
+#     Log-uniform:        Nmin = 50, Nmax = 100
 #
 #   These fixed spread parameters can be changed interactively in
 #   build_hake_factorial_design_matrix().
@@ -129,7 +129,7 @@ build_hake_factorial_design_matrix_from_spec <- function(
     G_levels,
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100,
     output_csv = "hake_factorial_design_matrix.csv",
     legend_csv = "hake_factorial_design_legend.csv",
@@ -402,7 +402,7 @@ build_hake_factorial_design_matrix <- function(
   fixed_spread_defaults <- list(
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100
   )
 
@@ -505,7 +505,7 @@ build_hake_factorial_design_matrix_default <- function(
     G_levels = c(2, 4, 8),
     lognormal_ln_sd = 1.0,
     nb_nb_size = 25,
-    loguniform_Nmin = 25,
+    loguniform_Nmin = 50,
     loguniform_Nmax = 100,
     output_csv = output_csv,
     legend_csv = legend_csv,

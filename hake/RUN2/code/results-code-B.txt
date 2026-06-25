@@ -1,0 +1,455 @@
+Code B revised mixed-model results
+Output file: results-code-B.txt 
+Run time: 2026-06-04 13:56:42 HST 
+Input data object: acc_mv 
+Metrics: rmse, L1, Linf 
+Run emmeans: FALSE 
+Save models: FALSE 
+Keep models in returned object: FALSE 
+
+Input checks
+------------
+Rows analyzed: 2405700 
+Method counts:
+
+     i     ii    iii     iv      v 
+481140 481140 481140 481140 481140 
+Design block counts:
+
+        Lognormal Negative binomial           Poisson 
+           801900            801900            801900 
+Number of simplex_id levels: 96228 
+Object size of model data: 0.2 Gb 
+
+Mixed model for rmse
+====================
+Formula:
+log1p(rmse) ~ method * design_block + method * G + method * theta_true + 
+    method * theta_CV + method * sigma + method * mean_nsamp + 
+    method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x000002278e079ab8>
+
+Fitting lme4::lmer model using ML and calc.derivs = FALSE...
+Model fitting complete.
+
+Model summary for rmse
+----------------------
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: 
+log1p(rmse) ~ method * design_block + method * G + method * theta_true +  
+    method * theta_CV + method * sigma + method * mean_nsamp +  
+    method * p1 + method * p2 + (1 | simplex_id)
+   Data: data
+Control: lme4::lmerControl(optimizer = "bobyqa", calc.derivs = FALSE,  
+    check.rankX = "message+drop.cols", check.conv.singular = "message")
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+ -5983268  -5982291   2991711  -5983422   2405623 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6592 -0.5517 -0.1430  0.3296  8.1142 
+
+Random effects:
+ Groups     Name        Variance  Std.Dev.
+ simplex_id (Intercept) 0.0005203 0.02281 
+ Residual               0.0046140 0.06793 
+Number of obs: 2405700, groups:  simplex_id, 96228
+
+Fixed effects:
+                                          Estimate Std. Error  t value
+(Intercept)                              2.401e-01  2.101e-03  114.286
+methodii                                -2.161e-02  2.376e-03   -9.098
+methodiii                               -6.961e-02  2.376e-03  -29.299
+methodiv                                -6.839e-02  2.376e-03  -28.785
+methodv                                 -7.705e-02  2.376e-03  -32.431
+design_blockNegative binomial           -5.631e-05  3.000e-04   -0.188
+design_blockPoisson                      2.315e-04  3.000e-04    0.772
+G2                                      -3.791e-02  3.000e-04 -126.367
+G3                                      -5.120e-02  3.000e-04 -170.682
+theta_true1                             -1.528e-03  3.000e-04   -5.095
+theta_true2                             -2.686e-03  3.000e-04   -8.953
+theta_CV0.2                              2.416e-04  3.000e-04    0.805
+theta_CV0.6                              6.806e-04  3.000e-04    2.269
+sigma0.5                                 1.335e-02  3.000e-04   44.499
+sigma1                                   5.272e-02  3.000e-04  175.750
+mean_nsamp200                            2.806e-03  3.000e-04    9.355
+mean_nsamp400                            1.014e-02  3.000e-04   33.801
+p1                                      -1.849e-01  2.316e-03  -79.832
+p2                                      -6.897e-02  2.332e-03  -29.574
+methodii:design_blockNegative binomial  -2.871e-03  3.392e-04   -8.462
+methodiii:design_blockNegative binomial -9.136e-03  3.392e-04  -26.931
+methodiv:design_blockNegative binomial  -9.147e-03  3.392e-04  -26.963
+methodv:design_blockNegative binomial   -8.632e-03  3.392e-04  -25.446
+methodii:design_blockPoisson            -2.625e-03  3.392e-04   -7.737
+methodiii:design_blockPoisson           -9.792e-03  3.392e-04  -28.866
+methodiv:design_blockPoisson            -9.760e-03  3.392e-04  -28.772
+methodv:design_blockPoisson             -9.150e-03  3.392e-04  -26.974
+methodii:G2                              2.182e-02  3.392e-04   64.318
+methodiii:G2                             1.210e-02  3.392e-04   35.662
+methodiv:G2                              1.103e-02  3.392e-04   32.528
+methodv:G2                               1.099e-02  3.392e-04   32.410
+methodii:G3                              1.709e-02  3.392e-04   50.391
+methodiii:G3                             1.372e-02  3.392e-04   40.431
+methodiv:G3                              1.273e-02  3.392e-04   37.516
+methodv:G3                               1.326e-02  3.392e-04   39.083
+methodii:theta_true1                    -2.266e-03  3.392e-04   -6.680
+methodiii:theta_true1                   -1.180e-03  3.392e-04   -3.480
+methodiv:theta_true1                    -1.479e-03  3.392e-04   -4.359
+methodv:theta_true1                     -1.504e-03  3.392e-04   -4.432
+methodii:theta_true2                    -3.467e-03  3.392e-04  -10.220
+methodiii:theta_true2                   -1.879e-03  3.392e-04   -5.539
+methodiv:theta_true2                    -2.330e-03  3.392e-04   -6.867
+methodv:theta_true2                     -2.277e-03  3.392e-04   -6.713
+methodii:theta_CV0.2                    -6.269e-05  3.392e-04   -0.185
+methodiii:theta_CV0.2                   -1.871e-04  3.392e-04   -0.551
+methodiv:theta_CV0.2                    -1.616e-04  3.392e-04   -0.476
+methodv:theta_CV0.2                     -2.115e-04  3.392e-04   -0.623
+methodii:theta_CV0.6                     1.020e-03  3.392e-04    3.006
+methodiii:theta_CV0.6                    4.556e-04  3.392e-04    1.343
+methodiv:theta_CV0.6                     4.917e-04  3.392e-04    1.450
+methodv:theta_CV0.6                      5.403e-04  3.392e-04    1.593
+methodii:sigma0.5                        1.537e-02  3.392e-04   45.311
+methodiii:sigma0.5                       1.394e-02  3.392e-04   41.096
+methodiv:sigma0.5                        1.400e-02  3.392e-04   41.263
+methodv:sigma0.5                         1.338e-02  3.392e-04   39.439
+methodii:sigma1                          3.233e-02  3.392e-04   95.309
+methodiii:sigma1                         2.614e-02  3.392e-04   77.051
+methodiv:sigma1                          2.603e-02  3.392e-04   76.737
+methodv:sigma1                           2.601e-02  3.392e-04   76.659
+methodii:mean_nsamp200                   1.060e-03  3.392e-04    3.124
+methodiii:mean_nsamp200                 -7.797e-03  3.392e-04  -22.985
+methodiv:mean_nsamp200                  -8.185e-03  3.392e-04  -24.129
+methodv:mean_nsamp200                   -7.838e-03  3.392e-04  -23.105
+methodii:mean_nsamp400                   2.936e-03  3.392e-04    8.655
+methodiii:mean_nsamp400                 -1.792e-02  3.392e-04  -52.820
+methodiv:mean_nsamp400                  -1.849e-02  3.392e-04  -54.495
+methodv:mean_nsamp400                   -1.581e-02  3.392e-04  -46.613
+methodii:p1                              1.452e-02  2.619e-03    5.545
+methodiii:p1                             5.927e-02  2.619e-03   22.633
+methodiv:p1                              6.145e-02  2.619e-03   23.468
+methodv:p1                               6.917e-02  2.619e-03   26.414
+methodii:p2                             -2.018e-02  2.637e-03   -7.651
+methodiii:p2                             2.744e-02  2.637e-03   10.406
+methodiv:p2                              2.377e-02  2.637e-03    9.013
+methodv:p2                               3.632e-02  2.637e-03   13.771
+
+Sequential ANOVA table for rmse
+-------------------------------
+Note: This is the lme4 sequential ANOVA table for fixed effects. It avoids lmerTest Satterthwaite/Kenward-Roger calculations, which can trigger large dense matrix operations for this dataset.
+
+Analysis of Variance Table
+                    npar Sum Sq Mean Sq    F value
+method                 4 318.29  79.572 17245.8183
+design_block           2   5.08   2.540   550.4245
+G                      2 173.10  86.550 18758.2730
+theta_true             2   2.33   1.164   252.2195
+theta_CV               2   0.18   0.089    19.3030
+sigma                  2 610.38 305.191 66144.7917
+mean_nsamp             2   0.51   0.254    54.9481
+p1                     1 123.90 123.898 26852.7460
+p2                     1   5.35   5.350  1159.4835
+method:design_block    8   8.48   1.060   229.6948
+method:G               8  23.78   2.972   644.2011
+method:theta_true      8   0.53   0.066    14.2380
+method:theta_CV        8   0.06   0.008     1.6984
+method:sigma           8  51.55   6.444  1396.6599
+method:mean_nsamp      8  35.15   4.393   952.2115
+method:p1              4  11.40   2.851   617.8122
+method:p2              4   2.84   0.709   153.6293
+
+Random-effect variance for rmse
+-------------------------------
+ Groups     Name        Variance   Std.Dev.
+ simplex_id (Intercept) 0.00052029 0.022810
+ Residual               0.00461399 0.067926
+
+Mixed model for L1
+==================
+Formula:
+log1p(L1) ~ method * design_block + method * G + method * theta_true + 
+    method * theta_CV + method * sigma + method * mean_nsamp + 
+    method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x00000227e1bf0320>
+
+Fitting lme4::lmer model using ML and calc.derivs = FALSE...
+Model fitting complete.
+
+Model summary for L1
+--------------------
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: 
+log1p(L1) ~ method * design_block + method * G + method * theta_true +  
+    method * theta_CV + method * sigma + method * mean_nsamp +  
+    method * p1 + method * p2 + (1 | simplex_id)
+   Data: data
+Control: lme4::lmerControl(optimizer = "bobyqa", calc.derivs = FALSE,  
+    check.rankX = "message+drop.cols", check.conv.singular = "message")
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+ -2406234  -2405257   1203194  -2406388   2405623 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6045 -0.5808 -0.1340  0.3920  7.1072 
+
+Random effects:
+ Groups     Name        Variance Std.Dev.
+ simplex_id (Intercept) 0.002459 0.04959 
+ Residual               0.020368 0.14272 
+Number of obs: 2405700, groups:  simplex_id, 96228
+
+Fixed effects:
+                                          Estimate Std. Error  t value
+(Intercept)                              0.5869555  0.0044697  131.318
+methodii                                -0.0468439  0.0049915   -9.385
+methodiii                               -0.1470356  0.0049915  -29.457
+methodiv                                -0.1456087  0.0049915  -29.171
+methodv                                 -0.1689889  0.0049915  -33.855
+design_blockNegative binomial           -0.0014389  0.0006382   -2.255
+design_blockPoisson                     -0.0008548  0.0006382   -1.339
+G2                                      -0.0809584  0.0006382 -126.849
+G3                                      -0.1102786  0.0006382 -172.789
+theta_true1                             -0.0038240  0.0006382   -5.992
+theta_true2                             -0.0066447  0.0006382  -10.411
+theta_CV0.2                              0.0006136  0.0006382    0.961
+theta_CV0.6                              0.0017461  0.0006382    2.736
+sigma0.5                                 0.0337231  0.0006382   52.839
+sigma1                                   0.1218162  0.0006382  190.867
+mean_nsamp200                            0.0042344  0.0006382    6.635
+mean_nsamp400                            0.0182716  0.0006382   28.629
+p1                                      -0.4559021  0.0049267  -92.538
+p2                                      -0.2011591  0.0049619  -40.541
+methodii:design_blockNegative binomial  -0.0060323  0.0007127   -8.464
+methodiii:design_blockNegative binomial -0.0195013  0.0007127  -27.361
+methodiv:design_blockNegative binomial  -0.0194505  0.0007127  -27.290
+methodv:design_blockNegative binomial   -0.0182280  0.0007127  -25.575
+methodii:design_blockPoisson            -0.0055124  0.0007127   -7.734
+methodiii:design_blockPoisson           -0.0208589  0.0007127  -29.266
+methodiv:design_blockPoisson            -0.0206998  0.0007127  -29.043
+methodv:design_blockPoisson             -0.0192627  0.0007127  -27.027
+methodii:G2                              0.0473003  0.0007127   66.365
+methodiii:G2                             0.0233683  0.0007127   32.787
+methodiv:G2                              0.0211882  0.0007127   29.728
+methodv:G2                               0.0210923  0.0007127   29.594
+methodii:G3                              0.0374745  0.0007127   52.579
+methodiii:G3                             0.0259282  0.0007127   36.378
+methodiv:G3                              0.0239576  0.0007127   33.614
+methodv:G3                               0.0251968  0.0007127   35.352
+methodii:theta_true1                    -0.0048351  0.0007127   -6.784
+methodiii:theta_true1                   -0.0024727  0.0007127   -3.469
+methodiv:theta_true1                    -0.0032176  0.0007127   -4.514
+methodv:theta_true1                     -0.0031607  0.0007127   -4.435
+methodii:theta_true2                    -0.0074872  0.0007127  -10.505
+methodiii:theta_true2                   -0.0039573  0.0007127   -5.552
+methodiv:theta_true2                    -0.0051132  0.0007127   -7.174
+methodv:theta_true2                     -0.0048916  0.0007127   -6.863
+methodii:theta_CV0.2                    -0.0000851  0.0007127   -0.119
+methodiii:theta_CV0.2                   -0.0004396  0.0007127   -0.617
+methodiv:theta_CV0.2                    -0.0003769  0.0007127   -0.529
+methodv:theta_CV0.2                     -0.0004743  0.0007127   -0.665
+methodii:theta_CV0.6                     0.0020676  0.0007127    2.901
+methodiii:theta_CV0.6                    0.0009418  0.0007127    1.321
+methodiv:theta_CV0.6                     0.0010288  0.0007127    1.443
+methodv:theta_CV0.6                      0.0010792  0.0007127    1.514
+methodii:sigma0.5                        0.0330618  0.0007127   46.387
+methodiii:sigma0.5                       0.0301171  0.0007127   42.256
+methodiv:sigma0.5                        0.0302817  0.0007127   42.487
+methodv:sigma0.5                         0.0290408  0.0007127   40.746
+methodii:sigma1                          0.0665881  0.0007127   93.426
+methodiii:sigma1                         0.0558267  0.0007127   78.328
+methodiv:sigma1                          0.0558120  0.0007127   78.307
+methodv:sigma1                           0.0556511  0.0007127   78.081
+methodii:mean_nsamp200                   0.0015703  0.0007127    2.203
+methodiii:mean_nsamp200                 -0.0161134  0.0007127  -22.608
+methodiv:mean_nsamp200                  -0.0170102  0.0007127  -23.866
+methodv:mean_nsamp200                   -0.0161757  0.0007127  -22.695
+methodii:mean_nsamp400                   0.0047146  0.0007127    6.615
+methodiii:mean_nsamp400                 -0.0368648  0.0007127  -51.723
+methodiv:mean_nsamp400                  -0.0381608  0.0007127  -53.542
+methodv:mean_nsamp400                   -0.0326547  0.0007127  -45.816
+methodii:p1                              0.0295971  0.0055018    5.380
+methodiii:p1                             0.1249643  0.0055018   22.713
+methodiv:p1                              0.1312995  0.0055018   23.865
+methodv:p1                               0.1530853  0.0055018   27.825
+methodii:p2                             -0.0339206  0.0055411   -6.122
+methodiii:p2                             0.0634133  0.0055411   11.444
+methodiv:p2                              0.0566115  0.0055411   10.217
+methodv:p2                               0.0885230  0.0055411   15.976
+
+Sequential ANOVA table for L1
+-----------------------------
+Note: This is the lme4 sequential ANOVA table for fixed effects. It avoids lmerTest Satterthwaite/Kenward-Roger calculations, which can trigger large dense matrix operations for this dataset.
+
+Analysis of Variance Table
+                    npar  Sum Sq Mean Sq    F value
+method                 4 1401.88  350.47 17207.0582
+design_block           2   26.45   13.23   649.4040
+G                      2  796.48  398.24 19552.5309
+theta_true             2   12.09    6.04   296.7635
+theta_CV               2    0.91    0.46    22.3635
+sigma                  2 2926.34 1463.17 71837.4724
+mean_nsamp             2    2.83    1.41    69.4610
+p1                     1  629.15  629.15 30889.3365
+p2                     1   45.62   45.62  2239.5977
+method:design_block    8   38.27    4.78   234.8782
+method:G               8  107.18   13.40   657.8048
+method:theta_true      8    2.46    0.31    15.0671
+method:theta_CV        8    0.26    0.03     1.5865
+method:sigma           8  226.99   28.37  1393.0606
+method:mean_nsamp      8  143.81   17.98   882.6063
+method:p1              4   44.26   11.07   543.2924
+method:p2              4   13.42    3.35   164.7023
+
+Random-effect variance for L1
+-----------------------------
+ Groups     Name        Variance  Std.Dev.
+ simplex_id (Intercept) 0.0024593 0.049591
+ Residual               0.0203678 0.142716
+
+Mixed model for Linf
+====================
+Formula:
+log1p(Linf) ~ method * design_block + method * G + method * theta_true + 
+    method * theta_CV + method * sigma + method * mean_nsamp + 
+    method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x000002281b59c260>
+
+Fitting lme4::lmer model using ML and calc.derivs = FALSE...
+Model fitting complete.
+
+Model summary for Linf
+----------------------
+Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: 
+log1p(Linf) ~ method * design_block + method * G + method * theta_true +  
+    method * theta_CV + method * sigma + method * mean_nsamp +  
+    method * p1 + method * p2 + (1 | simplex_id)
+   Data: data
+Control: lme4::lmerControl(optimizer = "bobyqa", calc.derivs = FALSE,  
+    check.rankX = "message+drop.cols", check.conv.singular = "message")
+
+      AIC       BIC    logLik -2*log(L)  df.resid 
+ -4901590  -4900613   2450872  -4901744   2405623 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.5626 -0.5599 -0.1401  0.3477  7.5864 
+
+Random effects:
+ Groups     Name        Variance  Std.Dev.
+ simplex_id (Intercept) 0.0008282 0.02878 
+ Residual               0.0072302 0.08503 
+Number of obs: 2405700, groups:  simplex_id, 96228
+
+Fixed effects:
+                                          Estimate Std. Error  t value
+(Intercept)                              3.344e-01  2.637e-03  126.815
+methodii                                -2.887e-02  2.974e-03   -9.708
+methodiii                               -9.380e-02  2.974e-03  -31.541
+methodiv                                -9.281e-02  2.974e-03  -31.208
+methodv                                 -1.060e-01  2.974e-03  -35.649
+design_blockNegative binomial           -2.983e-04  3.766e-04   -0.792
+design_blockPoisson                      7.628e-05  3.766e-04    0.203
+G2                                      -4.807e-02  3.766e-04 -127.656
+G3                                      -6.484e-02  3.766e-04 -172.192
+theta_true1                             -2.059e-03  3.766e-04   -5.468
+theta_true2                             -3.565e-03  3.766e-04   -9.468
+theta_CV0.2                              3.664e-04  3.766e-04    0.973
+theta_CV0.6                              9.395e-04  3.766e-04    2.495
+sigma0.5                                 1.755e-02  3.766e-04   46.598
+sigma1                                   6.791e-02  3.766e-04  180.347
+mean_nsamp200                            3.245e-03  3.766e-04    8.618
+mean_nsamp400                            1.233e-02  3.766e-04   32.741
+p1                                      -2.643e-01  2.907e-03  -90.911
+p2                                      -1.178e-01  2.928e-03  -40.242
+methodii:design_blockNegative binomial  -3.675e-03  4.246e-04   -8.654
+methodiii:design_blockNegative binomial -1.159e-02  4.246e-04  -27.286
+methodiv:design_blockNegative binomial  -1.157e-02  4.246e-04  -27.244
+methodv:design_blockNegative binomial   -1.088e-02  4.246e-04  -25.610
+methodii:design_blockPoisson            -3.379e-03  4.246e-04   -7.956
+methodiii:design_blockPoisson           -1.240e-02  4.246e-04  -29.211
+methodiv:design_blockPoisson            -1.233e-02  4.246e-04  -29.025
+methodv:design_blockPoisson             -1.151e-02  4.246e-04  -27.095
+methodii:G2                              2.791e-02  4.246e-04   65.717
+methodiii:G2                             1.499e-02  4.246e-04   35.298
+methodiv:G2                              1.367e-02  4.246e-04   32.201
+methodv:G2                               1.368e-02  4.246e-04   32.207
+methodii:G3                              2.187e-02  4.246e-04   51.498
+methodiii:G3                             1.671e-02  4.246e-04   39.350
+methodiv:G3                              1.551e-02  4.246e-04   36.522
+methodv:G3                               1.635e-02  4.246e-04   38.495
+methodii:theta_true1                    -2.870e-03  4.246e-04   -6.758
+methodiii:theta_true1                   -1.487e-03  4.246e-04   -3.503
+methodiv:theta_true1                    -1.912e-03  4.246e-04   -4.502
+methodv:theta_true1                     -1.899e-03  4.246e-04   -4.472
+methodii:theta_true2                    -4.453e-03  4.246e-04  -10.487
+methodiii:theta_true2                   -2.374e-03  4.246e-04   -5.590
+methodiv:theta_true2                    -3.022e-03  4.246e-04   -7.115
+methodv:theta_true2                     -2.908e-03  4.246e-04   -6.848
+methodii:theta_CV0.2                    -1.009e-04  4.246e-04   -0.238
+methodiii:theta_CV0.2                   -2.686e-04  4.246e-04   -0.633
+methodiv:theta_CV0.2                    -2.335e-04  4.246e-04   -0.550
+methodv:theta_CV0.2                     -2.906e-04  4.246e-04   -0.684
+methodii:theta_CV0.6                     1.259e-03  4.246e-04    2.964
+methodiii:theta_CV0.6                    5.649e-04  4.246e-04    1.330
+methodiv:theta_CV0.6                     6.126e-04  4.246e-04    1.443
+methodv:theta_CV0.6                      6.667e-04  4.246e-04    1.570
+methodii:sigma0.5                        1.950e-02  4.246e-04   45.913
+methodiii:sigma0.5                       1.765e-02  4.246e-04   41.555
+methodiv:sigma0.5                        1.775e-02  4.246e-04   41.788
+methodv:sigma0.5                         1.700e-02  4.246e-04   40.043
+methodii:sigma1                          4.055e-02  4.246e-04   95.483
+methodiii:sigma1                         3.297e-02  4.246e-04   77.637
+methodiv:sigma1                          3.295e-02  4.246e-04   77.584
+methodv:sigma1                           3.303e-02  4.246e-04   77.791
+methodii:mean_nsamp200                   1.126e-03  4.246e-04    2.653
+methodiii:mean_nsamp200                 -9.865e-03  4.246e-04  -23.232
+methodiv:mean_nsamp200                  -1.038e-02  4.246e-04  -24.447
+methodv:mean_nsamp200                   -9.884e-03  4.246e-04  -23.275
+methodii:mean_nsamp400                   3.201e-03  4.246e-04    7.538
+methodiii:mean_nsamp400                 -2.266e-02  4.246e-04  -53.351
+methodiv:mean_nsamp400                  -2.340e-02  4.246e-04  -55.115
+methodv:mean_nsamp400                   -1.997e-02  4.246e-04  -47.021
+methodii:p1                              1.913e-02  3.278e-03    5.835
+methodiii:p1                             8.128e-02  3.278e-03   24.797
+methodiv:p1                              8.469e-02  3.278e-03   25.836
+methodv:p1                               9.686e-02  3.278e-03   29.550
+methodii:p2                             -2.167e-02  3.301e-03   -6.564
+methodiii:p2                             4.201e-02  3.301e-03   12.724
+methodiv:p2                              3.809e-02  3.301e-03   11.538
+methodv:p2                               5.613e-02  3.301e-03   17.000
+
+Sequential ANOVA table for Linf
+-------------------------------
+Note: This is the lme4 sequential ANOVA table for fixed effects. It avoids lmerTest Satterthwaite/Kenward-Roger calculations, which can trigger large dense matrix operations for this dataset.
+
+Analysis of Variance Table
+                    npar Sum Sq Mean Sq    F value
+method                 4 507.87  126.97 17560.7974
+design_block           2   8.51    4.26   588.6176
+G                      2 277.67  138.83 19202.1905
+theta_true             2   3.94    1.97   272.3369
+theta_CV               2   0.30    0.15    20.8252
+sigma                  2 987.97  493.99 68323.1626
+mean_nsamp             2   0.83    0.41    57.2570
+p1                     1 205.35  205.35 28401.5188
+p2                     1  15.46   15.46  2138.7724
+method:design_block    8  13.49    1.69   233.1460
+method:G               8  38.14    4.77   659.4334
+method:theta_true      8   0.87    0.11    14.9775
+method:theta_CV        8   0.10    0.01     1.7009
+method:sigma           8  81.77   10.22  1413.6946
+method:mean_nsamp      8  54.89    6.86   948.9713
+method:p1              4  17.66    4.42   610.6718
+method:p2              4   5.59    1.40   193.1638
+
+Random-effect variance for Linf
+-------------------------------
+ Groups     Name        Variance   Std.Dev.
+ simplex_id (Intercept) 0.00082817 0.028778
+ Residual               0.00723015 0.085030
+
+Analysis status
+---------------
+All requested metric models completed successfully.
