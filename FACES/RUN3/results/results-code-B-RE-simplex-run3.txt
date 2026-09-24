@@ -1,0 +1,156 @@
+Code B Linear Mixed-Effects Model results
+Output file: results-code-B-RE-simplex-run3.txt 
+Run time: 2026-06-04 12:45:47 HST 
+
+Input checks
+------------
+Total rows analyzed:        1202850 
+Levels of Method:           5 
+Levels of Metric:           3 
+
+LMM Model Formula
+-----------------
+log_accuracy ~ method * metric + method * design_block + method * 
+    G + method * theta_true + method * sigma + method * mean_nsamp + 
+    method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x0000019f98e201c0>
+
+Fitting Linear Mixed-Effects Model (lmer)...
+Model fitting complete.
+
+Type III Analysis of Variance Table with Satterthwaite's method
+--------------------------------------------------------------
+Type III Analysis of Variance Table with Satterthwaite's method
+                     Sum Sq Mean Sq NumDF   DenDF    F value    Pr(>F)    
+method                10.63    2.66     4 1186750 4.2538e+02 < 2.2e-16 ***
+metric              2484.67 1242.34     2 1186750 1.9893e+05 < 2.2e-16 ***
+design_block           3.72    1.86     2   16025 2.9787e+02 < 2.2e-16 ***
+G                     63.99   32.00     2   16025 5.1234e+03 < 2.2e-16 ***
+theta_true             0.01    0.01     2   16025 8.9360e-01  0.409191    
+sigma                150.47   75.23     2   16025 1.2047e+04 < 2.2e-16 ***
+mean_nsamp             1.55    0.78     2   16025 1.2433e+02 < 2.2e-16 ***
+p1                     0.00    0.00     1   16025 5.6310e-01  0.453045    
+p2                     0.00    0.00     1   16025 3.5700e-02  0.850205    
+method:metric         12.44    1.56     8 1186750 2.4907e+02 < 2.2e-16 ***
+method:design_block    7.52    0.94     8 1186750 1.5055e+02 < 2.2e-16 ***
+method:G              10.48    1.31     8 1186750 2.0984e+02 < 2.2e-16 ***
+method:theta_true      0.09    0.01     8 1186750 1.7061e+00  0.091383 .  
+method:sigma          60.14    7.52     8 1186750 1.2037e+03 < 2.2e-16 ***
+method:mean_nsamp      9.34    1.17     8 1186750 1.8703e+02 < 2.2e-16 ***
+method:p1              0.04    0.01     4 1186750 1.4585e+00  0.211893    
+method:p2              0.09    0.02     4 1186750 3.4939e+00  0.007373 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Post-hoc: Estimated Marginal Means (Pairwise Comparisons by Metric)
+------------------------------------------------------------------
+$emmeans
+metric = rmse:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.07508 0.000362 Inf   0.07437   0.07579
+ ii     0.08294 0.000362 Inf   0.08223   0.08365
+ iii    0.06737 0.000362 Inf   0.06666   0.06808
+ iv     0.06795 0.000362 Inf   0.06723   0.06866
+ v      0.06743 0.000362 Inf   0.06672   0.06814
+
+metric = L1_norm:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.18427 0.000362 Inf   0.18356   0.18498
+ ii     0.20218 0.000362 Inf   0.20147   0.20289
+ iii    0.16725 0.000362 Inf   0.16654   0.16796
+ iv     0.16872 0.000362 Inf   0.16801   0.16943
+ v      0.16760 0.000362 Inf   0.16689   0.16831
+
+metric = Linf_norm:
+ method  emmean       SE  df asymp.LCL asymp.UCL
+ i      0.09918 0.000362 Inf   0.09847   0.09989
+ ii     0.10906 0.000362 Inf   0.10834   0.10977
+ iii    0.08894 0.000362 Inf   0.08823   0.08965
+ iv     0.08975 0.000362 Inf   0.08904   0.09046
+ v      0.08913 0.000362 Inf   0.08842   0.08984
+
+Results are averaged over the levels of: design_block, G, theta_true, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+metric = rmse:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii   -7.85e-03 0.000395 Inf -19.900 <0.0001
+ i - iii   7.71e-03 0.000395 Inf  19.541 <0.0001
+ i - iv    7.14e-03 0.000395 Inf  18.090 <0.0001
+ i - v     7.66e-03 0.000395 Inf  19.405 <0.0001
+ ii - iii  1.56e-02 0.000395 Inf  39.441 <0.0001
+ ii - iv   1.50e-02 0.000395 Inf  37.990 <0.0001
+ ii - v    1.55e-02 0.000395 Inf  39.305 <0.0001
+ iii - iv -5.73e-04 0.000395 Inf  -1.451  0.4405
+ iii - v  -5.36e-05 0.000395 Inf  -0.136  0.8920
+ iv - v    5.19e-04 0.000395 Inf   1.315  0.4405
+
+metric = L1_norm:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii   -1.79e-02 0.000395 Inf -45.369 <0.0001
+ i - iii   1.70e-02 0.000395 Inf  43.140 <0.0001
+ i - iv    1.56e-02 0.000395 Inf  39.406 <0.0001
+ i - v     1.67e-02 0.000395 Inf  42.238 <0.0001
+ ii - iii  3.49e-02 0.000395 Inf  88.509 <0.0001
+ ii - iv   3.35e-02 0.000395 Inf  84.775 <0.0001
+ ii - v    3.46e-02 0.000395 Inf  87.607 <0.0001
+ iii - iv -1.47e-03 0.000395 Inf  -3.734  0.0006
+ iii - v  -3.56e-04 0.000395 Inf  -0.902  0.3671
+ iv - v    1.12e-03 0.000395 Inf   2.832  0.0092
+
+metric = Linf_norm:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii   -9.88e-03 0.000395 Inf -25.028 <0.0001
+ i - iii   1.02e-02 0.000395 Inf  25.936 <0.0001
+ i - iv    9.43e-03 0.000395 Inf  23.895 <0.0001
+ i - v     1.00e-02 0.000395 Inf  25.457 <0.0001
+ ii - iii  2.01e-02 0.000395 Inf  50.963 <0.0001
+ ii - iv   1.93e-02 0.000395 Inf  48.923 <0.0001
+ ii - v    1.99e-02 0.000395 Inf  50.485 <0.0001
+ iii - iv -8.05e-04 0.000395 Inf  -2.041  0.1239
+ iii - v  -1.89e-04 0.000395 Inf  -0.479  0.6321
+ iv - v    6.16e-04 0.000395 Inf   1.562  0.2367
+
+Results are averaged over the levels of: design_block, G, theta_true, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+Post-hoc: Marginal Means for Methods (Averaged over Metrics)
+-----------------------------------------------------------
+$emmeans
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.1195 0.000282 Inf    0.1190    0.1201
+ ii     0.1314 0.000282 Inf    0.1308    0.1319
+ iii    0.1079 0.000282 Inf    0.1073    0.1084
+ iv     0.1088 0.000282 Inf    0.1083    0.1094
+ v      0.1081 0.000282 Inf    0.1075    0.1086
+
+Results are averaged over the levels of: metric, design_block, G, theta_true, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii   -0.011879 0.000228 Inf -52.132 <0.0001
+ i - iii   0.011658 0.000228 Inf  51.163 <0.0001
+ i - iv    0.010707 0.000228 Inf  46.991 <0.0001
+ i - v     0.011458 0.000228 Inf  50.287 <0.0001
+ ii - iii  0.023537 0.000228 Inf 103.295 <0.0001
+ ii - iv   0.022586 0.000228 Inf  99.124 <0.0001
+ ii - v    0.023337 0.000228 Inf 102.420 <0.0001
+ iii - iv -0.000951 0.000228 Inf  -4.172 <0.0001
+ iii - v  -0.000199 0.000228 Inf  -0.875  0.3813
+ iv - v    0.000751 0.000228 Inf   3.296  0.0020
+
+Results are averaged over the levels of: metric, design_block, G, theta_true, sigma, mean_nsamp 
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+
+How much variance was explained by the random effect Groups     Name        Variance   Std.Dev.
+ simplex_id (Intercept) 0.00085768 0.029286
+ Residual               0.00624519 0.079026
+Analysis completed successfully.

@@ -1,0 +1,178 @@
+Code E: Generalized Additive Model Analysis
+Maximum global-GAM rows: 500000 
+Maximum difference-GAM rows: 300000 
+Sampling seed: 20731 
+
+Input type: disk-backed Arrow dataset
+Number of partitions: 61 
+
+Global GAM rows analyzed: 500000 
+Difference GAM rows analyzed: 28431 
+
+Global GAM Summary:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(accuracy) ~ metric * method + s(p1, p2, by = method, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)                    0.2092313  0.0029457   71.029  < 2e-16 ***
+metricLinf                    -0.0859738  0.0006620 -129.879  < 2e-16 ***
+metricrmse                    -0.1110987  0.0006603 -168.256  < 2e-16 ***
+methodii                       0.0321743  0.0034294    9.382  < 2e-16 ***
+methodiii                     -0.0100479  0.0033334   -3.014 0.002576 ** 
+methodiv                      -0.0081176  0.0033835   -2.399 0.016433 *  
+methodv                       -0.0085501  0.0032336   -2.644 0.008191 ** 
+design_blockNegative binomial -0.0130109  0.0002955  -44.025  < 2e-16 ***
+design_blockPoisson           -0.0134838  0.0002964  -45.488  < 2e-16 ***
+G                             -0.0330791  0.0001479 -223.647  < 2e-16 ***
+theta_true                    -0.0066227  0.0001479  -44.788  < 2e-16 ***
+theta_CV                       0.0012153  0.0001479    8.219  < 2e-16 ***
+sigma                          0.0415570  0.0001478  281.126  < 2e-16 ***
+mean_nsamp                    -0.0093332  0.0001478  -63.145  < 2e-16 ***
+metricLinf:methodii           -0.0144033  0.0009364  -15.382  < 2e-16 ***
+metricrmse:methodii           -0.0172520  0.0009343  -18.464  < 2e-16 ***
+metricLinf:methodiii           0.0034896  0.0009360    3.728 0.000193 ***
+metricrmse:methodiii           0.0056155  0.0009352    6.005 1.92e-09 ***
+metricLinf:methodiv            0.0024679  0.0009361    2.636 0.008382 ** 
+metricrmse:methodiv            0.0045833  0.0009348    4.903 9.44e-07 ***
+metricLinf:methodv             0.0027937  0.0009358    2.985 0.002832 ** 
+metricrmse:methodv             0.0046553  0.0009344    4.982 6.28e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                      edf Ref.df      F  p-value    
+s(p1,p2):methodi   10.681  11.67  3.633 7.70e-05 ***
+s(p1,p2):methodii   9.606  11.05  4.421 5.64e-06 ***
+s(p1,p2):methodiii  9.280  10.82  7.897  < 2e-16 ***
+s(p1,p2):methodiv   9.463  10.95  6.586  < 2e-16 ***
+s(p1,p2):methodv    8.840  10.48 13.655  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.384   Deviance explained = 38.4%
+fREML = -5.2048e+05  Scale est. = 0.0072946  n = 500000
+
+GAM ANOVA Table:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(accuracy) ~ metric * method + s(p1, p2, by = method, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric Terms:
+              df        F p-value
+metric         2 15551.80  <2e-16
+method         4    94.83  <2e-16
+design_block   2  1335.60  <2e-16
+G              1 50017.95  <2e-16
+theta_true     1  2006.00  <2e-16
+theta_CV       1    67.55  <2e-16
+sigma          1 79031.57  <2e-16
+mean_nsamp     1  3987.31  <2e-16
+metric:method  8   117.38  <2e-16
+
+Approximate significance of smooth terms:
+                      edf Ref.df      F  p-value
+s(p1,p2):methodi   10.681 11.669  3.633 7.70e-05
+s(p1,p2):methodii   9.606 11.048  4.421 5.64e-06
+s(p1,p2):methodiii  9.280 10.817  7.897  < 2e-16
+s(p1,p2):methodiv   9.463 10.949  6.586  < 2e-16
+s(p1,p2):methodv    8.840 10.478 13.655  < 2e-16
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  2.030421e-07  4.957132e-10  5.590119e-10  4.443104e-10  1.357536e-11
+[6] -3.197929e-07
+
+$hess
+           [,1]          [,2]          [,3]          [,4]          [,5]
+   3.768052e+00 -1.538332e-06  9.032402e-08  7.994153e-07  8.705555e-07
+  -1.538332e-06  3.540208e+00  4.595805e-07 -1.550922e-07 -1.706747e-06
+   9.032402e-08  4.595805e-07  3.492531e+00  1.040137e-06 -1.188368e-07
+   7.994153e-07 -1.550922e-07  1.040137e-06  3.104418e+00 -3.962017e-07
+   8.705555e-07 -1.706747e-06 -1.188368e-07 -3.962017e-07  3.481317e+00
+d -4.340405e+00 -3.803177e+00 -3.640187e+00 -3.731328e+00 -3.419821e+00
+           [,6]
+      -4.340405
+      -3.803177
+      -3.640187
+      -3.731328
+      -3.419821
+d 249984.000000
+
+Model rank =  167 / 167 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                      k'   edf k-index p-value
+s(p1,p2):methodi   29.00 10.68    0.98    0.14
+s(p1,p2):methodii  29.00  9.61    0.98    0.17
+s(p1,p2):methodiii 29.00  9.28    0.98    0.15
+s(p1,p2):methodiv  29.00  9.46    0.98    0.18
+s(p1,p2):methodv   29.00  8.84    0.98    0.16
+Difference GAM Summary (Method v - iii):
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(abs(diff)) ~ metric + s(p1, p2, by = metric, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                    2.857e-03  6.038e-04   4.731 2.24e-06 ***
+metricLinf                    -6.404e-03  4.419e-04 -14.492  < 2e-16 ***
+metricrmse                    -8.209e-03  4.419e-04 -18.576  < 2e-16 ***
+design_blockNegative binomial -1.518e-03  1.887e-04  -8.047 8.79e-16 ***
+design_blockPoisson           -1.506e-03  1.887e-04  -7.984 1.47e-15 ***
+G                              1.789e-04  9.433e-05   1.897 0.057870 .  
+theta_true                    -1.215e-03  9.433e-05 -12.880  < 2e-16 ***
+theta_CV                       3.345e-04  9.433e-05   3.546 0.000392 ***
+sigma                          6.240e-03  9.433e-05  66.151  < 2e-16 ***
+mean_nsamp                     4.972e-06  9.433e-05   0.053 0.957964    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                      edf Ref.df     F p-value
+s(p1,p2):metricL1   6.961  8.713 0.350   0.964
+s(p1,p2):metricLinf 2.000  2.001 0.266   0.766
+s(p1,p2):metricrmse 2.003  2.006 0.127   0.882
+
+R-sq.(adj) =  0.191   Deviance explained = 19.1%
+fREML = -83090  Scale est. = 0.00016866  n = 28431
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  1.739109e-07 -1.000792e-04 -1.140139e-03 -6.908070e-04
+
+$hess
+           [,1]          [,2]          [,3]          [,4]
+   1.138648e+00 -3.196382e-23  3.392104e-22 -2.480264e+00
+  -2.119687e-23  1.000621e-04 -5.221589e-39 -5.519729e-05
+  -1.365319e-22 -4.651107e-39  1.138545e-03 -2.760051e-04
+d -2.480264e+00 -5.519729e-05 -2.760051e-04  1.420750e+04
+
+Model rank =  97 / 97 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                       k'   edf k-index p-value
+s(p1,p2):metricL1   29.00  6.96    1.02    0.57
+s(p1,p2):metricLinf 29.00  2.00    1.02    0.65
+s(p1,p2):metricrmse 29.00  2.00    1.02    0.62
+
+Analysis completed successfully.

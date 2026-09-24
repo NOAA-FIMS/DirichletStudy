@@ -1,0 +1,313 @@
+Code A memory-safe MANOVA, ANOVA, and EMM results
+Run time: 2026-08-24 13:51:23 HST 
+Maximum sampled acc_mv rows: 500000 
+Sampling seed: 20260730 
+
+Rows analyzed: 500000 
+
+MANOVA Pillai test
+                        Df   Pillai approx F num Df den Df    Pr(>F)    
+method                   4 0.017273   1088.8      8 999850 < 2.2e-16 ***
+design_block             2 0.006423    805.3      4 999850 < 2.2e-16 ***
+G                        2 0.118379  15726.0      4 999850 < 2.2e-16 ***
+theta_true               2 0.004648    582.2      4 999850 < 2.2e-16 ***
+theta_CV                 2 0.000317     39.6      4 999850 < 2.2e-16 ***
+sigma                    2 0.170355  23273.6      4 999850 < 2.2e-16 ***
+mean_nsamp               2 0.015442   1945.0      4 999850 < 2.2e-16 ***
+p1                       1 0.000006      1.5      2 499924    0.2202    
+p2                       1 0.000003      0.8      2 499924    0.4275    
+method:design_block      8 0.000696     21.7     16 999850 < 2.2e-16 ***
+method:G                 8 0.001961     61.3     16 999850 < 2.2e-16 ***
+method:theta_true        8 0.000180      5.6     16 999850 2.586e-12 ***
+method:theta_CV          8 0.000043      1.3     16 999850    0.1616    
+method:sigma             8 0.005976    187.3     16 999850 < 2.2e-16 ***
+method:mean_nsamp        8 0.000932     29.1     16 999850 < 2.2e-16 ***
+method:p1                4 0.000008      0.5      8 999850    0.8770    
+method:p2                4 0.000036      2.3      8 999850    0.0197 *  
+Residuals           499925                                              
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Univariate ANOVA results
+ Response log_rmse :
+                        Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                   4   24.14   6.034  2179.5506 < 2.2e-16 ***
+design_block             2    8.24   4.119  1487.9639 < 2.2e-16 ***
+G                        2  165.80  82.902 29945.5019 < 2.2e-16 ***
+theta_true               2    4.77   2.384   861.1373 < 2.2e-16 ***
+theta_CV                 2    0.39   0.193    69.8187 < 2.2e-16 ***
+sigma                    2  247.12 123.560 44632.0647 < 2.2e-16 ***
+mean_nsamp               2   12.91   6.455  2331.5592 < 2.2e-16 ***
+p1                       1    0.01   0.008     3.0208    0.0822 .  
+p2                       1    0.00   0.002     0.8995    0.3429    
+method:design_block      8    0.95   0.118    42.7220 < 2.2e-16 ***
+method:G                 8    0.83   0.104    37.5108 < 2.2e-16 ***
+method:theta_true        8    0.22   0.028    10.0159 4.621e-14 ***
+method:theta_CV          8    0.02   0.003     1.0689    0.3816    
+method:sigma             8    6.53   0.817   295.0690 < 2.2e-16 ***
+method:mean_nsamp        8    1.22   0.152    54.9496 < 2.2e-16 ***
+method:p1                4    0.00   0.000     0.1716    0.9530    
+method:p2                4    0.01   0.003     0.9959    0.4082    
+Residuals           499925 1384.00   0.003                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+ Response log_L1 :
+                        Df Sum Sq Mean Sq    F value    Pr(>F)    
+method                   4  120.2   30.05  2174.8840 < 2.2e-16 ***
+design_block             2   43.2   21.61  1563.6780 < 2.2e-16 ***
+G                        2  877.1  438.55 31737.4970 < 2.2e-16 ***
+theta_true               2   26.6   13.28   960.8267 < 2.2e-16 ***
+theta_CV                 2    2.1    1.03    74.4520 < 2.2e-16 ***
+sigma                    2 1314.5  657.23 47563.4262 < 2.2e-16 ***
+mean_nsamp               2   75.1   37.53  2716.3359 < 2.2e-16 ***
+p1                       1    0.0    0.04     3.0145   0.08252 .  
+p2                       1    0.0    0.01     0.7221   0.39544    
+method:design_block      8    4.7    0.59    42.7313 < 2.2e-16 ***
+method:G                 8    3.8    0.47    34.1951 < 2.2e-16 ***
+method:theta_true        8    1.1    0.13     9.7449 1.261e-13 ***
+method:theta_CV          8    0.1    0.01     1.0389   0.40364    
+method:sigma             8   29.6    3.70   267.6864 < 2.2e-16 ***
+method:mean_nsamp        8    5.8    0.72    52.0598 < 2.2e-16 ***
+method:p1                4    0.0    0.00     0.2419   0.91468    
+method:p2                4    0.0    0.01     0.7461   0.56041    
+Residuals           499925 6907.9    0.01                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Linf model summary
+
+Call:
+lm(formula = formula_linf, data = acc_mv_model)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.20483 -0.04164 -0.00894  0.03024  0.61216 
+
+Coefficients:
+                                          Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)                              1.255e-01  1.037e-03  121.030  < 2e-16 ***
+methodii                                 1.059e-02  1.468e-03    7.211 5.54e-13 ***
+methodiii                               -4.039e-03  1.466e-03   -2.755 0.005864 ** 
+methodiv                                -1.298e-03  1.465e-03   -0.886 0.375717    
+methodv                                 -2.633e-03  1.466e-03   -1.796 0.072447 .  
+design_blockNegative binomial           -6.289e-03  5.243e-04  -11.995  < 2e-16 ***
+design_blockPoisson                     -6.446e-03  5.260e-04  -12.255  < 2e-16 ***
+G4                                      -2.615e-02  5.239e-04  -49.924  < 2e-16 ***
+G8                                      -5.839e-02  5.244e-04 -111.348  < 2e-16 ***
+theta_true1                             -4.321e-03  5.257e-04   -8.220  < 2e-16 ***
+theta_true2                             -6.687e-03  5.241e-04  -12.760  < 2e-16 ***
+theta_CV0.2                             -6.180e-04  5.245e-04   -1.178 0.238759    
+theta_CV0.6                              1.127e-03  5.249e-04    2.147 0.031762 *  
+sigma0.5                                 1.018e-02  5.258e-04   19.356  < 2e-16 ***
+sigma1                                   4.891e-02  5.241e-04   93.313  < 2e-16 ***
+mean_nsamp50                            -8.563e-03  5.248e-04  -16.316  < 2e-16 ***
+mean_nsamp100                           -9.099e-03  5.248e-04  -17.339  < 2e-16 ***
+p1                                       6.232e-04  1.194e-03    0.522 0.601733    
+p2                                       1.202e-03  1.196e-03    1.005 0.314957    
+methodii:design_blockNegative binomial  -5.363e-04  7.417e-04   -0.723 0.469669    
+methodiii:design_blockNegative binomial -7.770e-03  7.410e-04  -10.487  < 2e-16 ***
+methodiv:design_blockNegative binomial  -8.310e-03  7.415e-04  -11.207  < 2e-16 ***
+methodv:design_blockNegative binomial   -6.331e-03  7.417e-04   -8.536  < 2e-16 ***
+methodii:design_blockPoisson            -1.436e-03  7.442e-04   -1.930 0.053654 .  
+methodiii:design_blockPoisson           -8.900e-03  7.436e-04  -11.968  < 2e-16 ***
+methodiv:design_blockPoisson            -9.369e-03  7.438e-04  -12.597  < 2e-16 ***
+methodv:design_blockPoisson             -6.365e-03  7.439e-04   -8.556  < 2e-16 ***
+methodii:G4                             -8.656e-03  7.421e-04  -11.665  < 2e-16 ***
+methodiii:G4                            -5.595e-03  7.413e-04   -7.548 4.42e-14 ***
+methodiv:G4                             -7.348e-03  7.415e-04   -9.911  < 2e-16 ***
+methodv:G4                              -8.198e-03  7.419e-04  -11.050  < 2e-16 ***
+methodii:G8                             -2.719e-03  7.423e-04   -3.663 0.000249 ***
+methodiii:G8                             2.295e-03  7.414e-04    3.095 0.001967 ** 
+methodiv:G8                              1.440e-03  7.428e-04    1.939 0.052462 .  
+methodv:G8                               1.697e-03  7.421e-04    2.286 0.022233 *  
+methodii:theta_true1                    -4.534e-03  7.437e-04   -6.096 1.09e-09 ***
+methodiii:theta_true1                   -1.501e-03  7.433e-04   -2.019 0.043485 *  
+methodiv:theta_true1                    -1.846e-03  7.444e-04   -2.480 0.013144 *  
+methodv:theta_true1                     -2.297e-03  7.437e-04   -3.088 0.002013 ** 
+methodii:theta_true2                    -6.820e-03  7.416e-04   -9.196  < 2e-16 ***
+methodiii:theta_true2                   -3.234e-03  7.407e-04   -4.366 1.26e-05 ***
+methodiv:theta_true2                    -3.677e-03  7.416e-04   -4.959 7.10e-07 ***
+methodv:theta_true2                     -3.645e-03  7.415e-04   -4.915 8.87e-07 ***
+methodii:theta_CV0.2                     5.099e-04  7.427e-04    0.687 0.492360    
+methodiii:theta_CV0.2                    1.022e-03  7.416e-04    1.378 0.168238    
+methodiv:theta_CV0.2                     1.642e-04  7.421e-04    0.221 0.824896    
+methodv:theta_CV0.2                      7.543e-05  7.423e-04    0.102 0.919061    
+methodii:theta_CV0.6                     1.560e-03  7.424e-04    2.101 0.035627 *  
+methodiii:theta_CV0.6                    1.861e-03  7.416e-04    2.510 0.012084 *  
+methodiv:theta_CV0.6                     1.321e-03  7.424e-04    1.779 0.075272 .  
+methodv:theta_CV0.6                      1.337e-03  7.428e-04    1.800 0.071940 .  
+methodii:sigma0.5                        1.760e-02  7.432e-04   23.682  < 2e-16 ***
+methodiii:sigma0.5                       1.252e-02  7.434e-04   16.839  < 2e-16 ***
+methodiv:sigma0.5                        1.309e-02  7.443e-04   17.584  < 2e-16 ***
+methodv:sigma0.5                         1.214e-02  7.432e-04   16.337  < 2e-16 ***
+methodii:sigma1                          3.485e-02  7.421e-04   46.966  < 2e-16 ***
+methodiii:sigma1                         2.281e-02  7.406e-04   30.799  < 2e-16 ***
+methodiv:sigma1                          2.278e-02  7.414e-04   30.723  < 2e-16 ***
+methodv:sigma1                           1.985e-02  7.418e-04   26.756  < 2e-16 ***
+methodii:mean_nsamp50                   -2.046e-04  7.433e-04   -0.275 0.783127    
+methodiii:mean_nsamp50                  -3.633e-03  7.425e-04   -4.893 9.95e-07 ***
+methodiv:mean_nsamp50                   -3.648e-03  7.436e-04   -4.906 9.28e-07 ***
+methodv:mean_nsamp50                    -3.538e-03  7.432e-04   -4.761 1.93e-06 ***
+methodii:mean_nsamp100                  -2.151e-03  7.423e-04   -2.898 0.003761 ** 
+methodiii:mean_nsamp100                 -1.039e-02  7.409e-04  -14.020  < 2e-16 ***
+methodiv:mean_nsamp100                  -1.165e-02  7.415e-04  -15.717  < 2e-16 ***
+methodv:mean_nsamp100                   -1.065e-02  7.422e-04  -14.346  < 2e-16 ***
+methodii:p1                             -2.821e-03  1.693e-03   -1.666 0.095698 .  
+methodiii:p1                            -1.907e-03  1.690e-03   -1.128 0.259252    
+methodiv:p1                             -1.722e-03  1.693e-03   -1.017 0.309099    
+methodv:p1                              -1.943e-03  1.690e-03   -1.149 0.250455    
+methodii:p2                             -3.015e-03  1.691e-03   -1.783 0.074663 .  
+methodiii:p2                            -2.197e-03  1.692e-03   -1.299 0.194072    
+methodiv:p2                             -1.513e-03  1.692e-03   -0.894 0.371417    
+methodv:p2                              -2.002e-03  1.693e-03   -1.183 0.236954    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.06775 on 499925 degrees of freedom
+Multiple R-squared:  0.2575,	Adjusted R-squared:  0.2574 
+F-statistic:  2343 on 74 and 499925 DF,  p-value: < 2.2e-16
+
+
+Linf ANOVA table
+Analysis of Variance Table
+
+Response: log_Linf
+                        Df  Sum Sq Mean Sq    F value    Pr(>F)    
+method                   4   39.95   9.988  2175.9045 < 2.2e-16 ***
+design_block             2   13.78   6.888  1500.4826 < 2.2e-16 ***
+G                        2  279.28 139.640 30419.7497 < 2.2e-16 ***
+theta_true               2    8.18   4.092   891.4705 < 2.2e-16 ***
+theta_CV                 2    0.65   0.324    70.4779 < 2.2e-16 ***
+sigma                    2  415.58 207.790 45265.8773 < 2.2e-16 ***
+mean_nsamp               2   22.42  11.212  2442.3867 < 2.2e-16 ***
+p1                       1    0.01   0.014     3.0631   0.08009 .  
+p2                       1    0.00   0.004     0.8321   0.36167    
+method:design_block      8    1.56   0.195    42.4360 < 2.2e-16 ***
+method:G                 8    1.41   0.176    38.4478 < 2.2e-16 ***
+method:theta_true        8    0.38   0.047    10.2469 1.962e-14 ***
+method:theta_CV          8    0.04   0.005     1.0854   0.36974    
+method:sigma             8   10.67   1.333   290.4210 < 2.2e-16 ***
+method:mean_nsamp        8    2.05   0.257    55.8915 < 2.2e-16 ***
+method:p1                4    0.00   0.001     0.2208   0.92694    
+method:p2                4    0.02   0.004     0.8706   0.48056    
+Residuals           499925 2294.87   0.005                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Post-hoc reference condition
+$design_block
+[1] Negative binomial
+Levels: Lognormal Negative binomial Poisson
+
+$G
+[1] 4
+Levels: 2 4 8
+
+$theta_true
+[1] 2
+Levels: 0.5 1 2
+
+$theta_CV
+[1] 0.6
+Levels: 0 0.2 0.6
+
+$sigma
+[1] 1
+Levels: 0.25 0.5 1
+
+$mean_nsamp
+[1] 100
+Levels: 25 50 100
+
+$p1
+[1] 0.3331718
+
+$p2
+[1] 0.3337957
+
+
+Estimated marginal means: log_rmse 
+ method emmean       SE    df lower.CL upper.CL t.ratio p.value
+ i      0.0970 0.000593 5e+05   0.0958   0.0982 163.564 <0.0001
+ ii     0.1185 0.000593 5e+05   0.1173   0.1196 199.770 <0.0001
+ iii    0.0915 0.000593 5e+05   0.0903   0.0926 154.303 <0.0001
+ iv     0.0902 0.000593 5e+05   0.0891   0.0914 152.203 <0.0001
+ v      0.0883 0.000595 5e+05   0.0871   0.0895 148.531 <0.0001
+
+Confidence level used: 0.95 
+
+Pairwise comparisons: log_rmse 
+ contrast estimate       SE    df  lower.CL upper.CL t.ratio p.value
+ i - ii   -0.02146 0.000839 5e+05 -0.023811 -0.01910 -25.587 <0.0001
+ i - iii   0.00554 0.000838 5e+05  0.003189  0.00790   6.611 <0.0001
+ i - iv    0.00675 0.000839 5e+05  0.004396  0.00910   8.049 <0.0001
+ i - v     0.00869 0.000840 5e+05  0.006334  0.01105  10.349 <0.0001
+ ii - iii  0.02700 0.000838 5e+05  0.024647  0.02935  32.205 <0.0001
+ ii - iv   0.02821 0.000839 5e+05  0.025853  0.03056  33.638 <0.0001
+ ii - v    0.03015 0.000840 5e+05  0.027791  0.03251  35.904 <0.0001
+ iii - iv  0.00121 0.000838 5e+05 -0.001146  0.00356   1.440  0.1500
+ iii - v   0.00315 0.000840 5e+05  0.000791  0.00550   3.750  0.0005
+ iv - v    0.00194 0.000840 5e+05 -0.000416  0.00430   2.312  0.0416
+
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 10 estimates 
+P value adjustment: holm method for 10 tests 
+
+Estimated marginal means: log_L1 
+ method emmean      SE    df lower.CL upper.CL t.ratio p.value
+ i       0.236 0.00132 5e+05    0.233    0.238 177.899 <0.0001
+ ii      0.282 0.00132 5e+05    0.279    0.285 212.854 <0.0001
+ iii     0.223 0.00132 5e+05    0.221    0.226 168.494 <0.0001
+ iv      0.220 0.00132 5e+05    0.218    0.223 166.387 <0.0001
+ v       0.216 0.00133 5e+05    0.214    0.219 162.857 <0.0001
+
+Confidence level used: 0.95 
+
+Pairwise comparisons: log_L1 
+ contrast estimate      SE    df lower.CL upper.CL t.ratio p.value
+ i - ii    -0.0463 0.00187 5e+05 -0.05154 -0.04102 -24.700 <0.0001
+ i - iii    0.0126 0.00187 5e+05  0.00733  0.01784   6.719 <0.0001
+ i - iv     0.0153 0.00187 5e+05  0.01002  0.02054   8.157 <0.0001
+ i - v      0.0194 0.00188 5e+05  0.01411  0.02465  10.330 <0.0001
+ ii - iii   0.0589 0.00187 5e+05  0.05360  0.06412  31.426 <0.0001
+ ii - iv    0.0616 0.00187 5e+05  0.05630  0.06682  32.859 <0.0001
+ ii - v     0.0657 0.00188 5e+05  0.06039  0.07092  35.000 <0.0001
+ iii - iv   0.0027 0.00187 5e+05 -0.00256  0.00796   1.440  0.1497
+ iii - v    0.0068 0.00188 5e+05  0.00153  0.01206   3.623  0.0009
+ iv - v     0.0041 0.00188 5e+05 -0.00117  0.00936   2.184  0.0579
+
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 10 estimates 
+P value adjustment: holm method for 10 tests 
+
+Estimated marginal means: log_Linf 
+ method emmean       SE    df lower.CL upper.CL t.ratio p.value
+ i       0.128 0.000764 5e+05    0.126    0.129 167.485 <0.0001
+ ii      0.155 0.000764 5e+05    0.153    0.156 202.723 <0.0001
+ iii     0.120 0.000763 5e+05    0.119    0.122 157.456 <0.0001
+ iv      0.119 0.000764 5e+05    0.117    0.120 155.368 <0.0001
+ v       0.116 0.000766 5e+05    0.115    0.118 151.925 <0.0001
+
+Confidence level used: 0.95 
+
+Pairwise comparisons: log_Linf 
+ contrast estimate      SE    df  lower.CL upper.CL t.ratio p.value
+ i - ii   -0.02689 0.00108 5e+05 -0.029923 -0.02386 -24.902 <0.0001
+ i - iii   0.00772 0.00108 5e+05  0.004694  0.01076   7.155 <0.0001
+ i - iv    0.00927 0.00108 5e+05  0.006238  0.01230   8.583 <0.0001
+ i - v     0.01159 0.00108 5e+05  0.008551  0.01462  10.715 <0.0001
+ ii - iii  0.03462 0.00108 5e+05  0.031586  0.03765  32.064 <0.0001
+ ii - iv   0.03616 0.00108 5e+05  0.033129  0.03919  33.488 <0.0001
+ ii - v    0.03848 0.00108 5e+05  0.035443  0.04151  35.586 <0.0001
+ iii - iv  0.00154 0.00108 5e+05 -0.001486  0.00457   1.430  0.1526
+ iii - v   0.00386 0.00108 5e+05  0.000827  0.00690   3.572  0.0011
+ iv - v    0.00232 0.00108 5e+05 -0.000718  0.00535   2.143  0.0642
+
+Confidence level used: 0.95 
+Conf-level adjustment: bonferroni method for 10 estimates 
+P value adjustment: holm method for 10 tests 
+
+Analysis completed successfully.
+Saved: code-A-model-results.rds
