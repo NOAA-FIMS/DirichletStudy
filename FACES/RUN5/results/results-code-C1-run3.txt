@@ -1,0 +1,208 @@
+Code C1: Pairwise Hotelling's T^2 / MANOVA results
+Output file: results-code-C1-run3.txt 
+Run time: 2026-09-10 14:32:10 HST 
+Transformation: log(accuracy + eps), eps = 1e-06 
+Contrast direction: target method minus reference method
+Negative log-differences imply lower error for the target method.
+
+==================================================================
+Comparison: ii_vs_i 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 3.8375162e+02 
+
+          Df    Pillai approx F num Df den Df       Pr(>F)
+Intercept  1 0.1083508 127.8362      3   3156 3.769864e-78
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse          0.14518315   1.1562513            15.625131
+     L1          0.14347426   1.1542771            15.427710
+   Linf          0.14348378   1.1542881            15.428809
+
+==================================================================
+Comparison: iii_vs_i 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.4887119e+02 
+
+          Df      Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.045018746 49.592304      3   3156 2.5886006e-31
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse        -0.066415486  0.93574200           -6.4258004
+     L1        -0.067329124  0.93488746           -6.5112543
+   Linf        -0.067336615  0.93488045           -6.5119546
+
+==================================================================
+Comparison: iv_vs_i 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.096049e+02 
+
+          Df      Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.033542886 36.511828      3   3156 3.4390945e-23
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse        -0.055398758  0.94610781           -5.3892195
+     L1        -0.056815648  0.94476822           -5.5231777
+   Linf        -0.056604303  0.94496792           -5.5032084
+
+==================================================================
+Comparison: v_vs_i 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.1666533e+02 
+
+          Df      Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.035626644 38.863816      3   3156 1.1751838e-24
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse        -0.054281487  0.94716545           -5.2834546
+     L1        -0.055048340  0.94643940           -5.3560604
+   Linf        -0.055020917  0.94646535           -5.3534650
+
+==================================================================
+Comparison: iii_vs_ii 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.126269e+03 
+
+          Df     Pillai  approx F num Df den Df         Pr(>F)
+Intercept  1 0.26288475 375.18524      3   3156 2.1514613e-208
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse         -0.21159863  0.80928945           -19.071055
+     L1         -0.21080338  0.80993330           -19.006670
+   Linf         -0.21082040  0.80991952           -19.008048
+
+==================================================================
+Comparison: iv_vs_ii 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.0521737e+03 
+
+          Df     Pillai  approx F num Df den Df         Pr(>F)
+Intercept  1 0.24991219 350.50246      3   3156 1.8959476e-196
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse         -0.20058190  0.81825447           -18.174553
+     L1         -0.20028990  0.81849343           -18.150657
+   Linf         -0.20008809  0.81865864           -18.134136
+
+==================================================================
+Comparison: v_vs_ii 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 1.0342299e+03 
+
+          Df     Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.24670162 344.52497      3   3156 1.592572e-193
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse         -0.19946463  0.81916919           -18.083081
+     L1         -0.19852260  0.81994124           -18.005876
+   Linf         -0.19850470  0.81995592           -18.004408
+
+==================================================================
+Comparison: iv_vs_iii 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 4.7169201e+01 
+
+          Df      Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.014716602 15.713109      3   3156 3.8367581e-10
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse         0.011016729   1.0110776            1.1077636
+     L1         0.010513476   1.0105689            1.0568936
+   Linf         0.010732311   1.0107901            1.0790109
+
+==================================================================
+Comparison: v_vs_iii 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 3.1195464e+01 
+
+          Df       Pillai  approx F num Df den Df        Pr(>F)
+Intercept  1 0.0097816093 10.391903      3   3156 8.3873127e-07
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse         0.012133999   1.0122079            1.2207915
+     L1         0.012280783   1.0123565            1.2356502
+   Linf         0.012315697   1.0123918            1.2391848
+
+==================================================================
+Comparison: v_vs_iv 
+==================================================================
+Equivalent MANOVA formula: cbind(rmse, L1, Linf) ~ 1
+Null hypothesis: mean log-difference vector = (0, 0, 0)
+
+Pairwise one-sample Hotelling's T^2 / Pillai test
+Complete paired rows: 3159 
+Response dimension: 3 
+Hotelling T^2: 7.0612024e+00 
+
+          Df       Pillai  approx F num Df den Df      Pr(>F)
+Intercept  1 0.0022309845 2.3522435      3   3156 0.070322021
+
+Mean log-differences and relative error changes
+ metric mean_log_difference error_ratio percent_error_change
+   rmse        0.0011172701   1.0011179           0.11178945
+     L1        0.0017673078   1.0017689           0.17688704
+   Linf        0.0015833861   1.0015846           0.15846403
+
+Analysis completed successfully.

@@ -1,0 +1,244 @@
+"experiment","file","distribution","rmse_best","l1_best","linf_best","rmse_i","rmse_ii","rmse_iii","rmse_iv","rmse_v","l1_i","l1_ii","l1_iii","l1_iv","l1_v","linf_i","linf_ii","linf_iii","linf_iv","linf_v","rmse_friedman_chisq","rmse_friedman_df","rmse_friedman_p","rmse_kendall_w","rmse_anova_f","rmse_anova_p","l1_friedman_chisq","l1_friedman_df","l1_friedman_p","l1_kendall_w","l1_anova_f","l1_anova_p","linf_friedman_chisq","linf_friedman_df","linf_friedman_p","linf_kendall_w","linf_anova_f","linf_anova_p"
+1,"hake_ex1.lst","Poisson","(ii)","(ii)","(ii)",NA,0.0063,1,0.9018,0.8278,NA,0.0057,1,0.8921,1,NA,0.0057,1,0.8921,1,11.914,4,NA,NA,NA,NA,11.655,4,NA,NA,NA,NA,11.655,4,NA,NA,NA,NA
+2,"hake_ex2.lst","Poisson","(iv)","(iv)","(iv)",NA,1,1,0.371,0.996,NA,1,1,0.383,0.514,NA,1,1,0.383,0.514,11.102,4,NA,NA,NA,NA,11.569,4,NA,NA,NA,NA,11.569,4,NA,NA,NA,NA
+3,"hake_ex3.lst","Poisson","(ii)","(ii)","(ii)",NA,0.8,0.8,1,1,NA,0.91,0.91,1,1,NA,0.91,0.91,1,1,6.56,4,NA,NA,NA,NA,4.4554,4,NA,NA,NA,NA,4.4554,4,NA,NA,NA,NA
+4,"hake_ex4.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.7815,4,NA,NA,NA,NA,4.1846,4,NA,NA,NA,NA,4.1846,4,NA,NA,NA,NA
+5,"hake_ex5.lst","Poisson","(iii)","(iii)","(iii)",NA,0.498,0.3496,1,1,NA,0.5185,0.3659,1,1,NA,0.5185,0.3659,1,1,10.068,4,NA,NA,NA,NA,14.092,4,NA,NA,NA,NA,14.092,4,NA,NA,NA,NA
+6,"hake_ex6.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,0.78769,4,NA,NA,NA,NA,1.8215,4,NA,NA,NA,NA,1.8215,4,NA,NA,NA,NA
+7,"hake_ex7.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,0.54,1,1,1,NA,0.54,1,1,1,6.2769,4,NA,NA,NA,NA,7.5446,4,NA,NA,NA,NA,7.5446,4,NA,NA,NA,NA
+8,"hake_ex8.lst","Poisson","(iii)","(iii)","(iii)",NA,0.6562,0.2396,0.9067,0.9018,NA,0.6392,0.1238,1,0.5584,NA,0.6392,0.1238,1,0.5584,14.658,4,NA,NA,NA,NA,13.391,4,NA,NA,NA,NA,13.391,4,NA,NA,NA,NA
+9,"hake_ex9.lst","Poisson","(iii)","(iii)","(iii)",NA,1,0.56,1,1,NA,1,0.51,1,1,NA,1,0.51,1,1,2.3631,4,NA,NA,NA,NA,1.6738,4,NA,NA,NA,NA,1.6738,4,NA,NA,NA,NA
+10,"hake_ex10.lst","Poisson","(iii)","(iii)","(iii)",NA,0.566,0.2358,1,1,NA,0.5358,0.3016,0.7434,1,NA,0.5358,0.3016,0.7434,1,11.975,4,NA,NA,NA,NA,10.929,4,NA,NA,NA,NA,10.929,4,NA,NA,NA,NA
+11,"hake_ex11.lst","Poisson","(ii)","(ii)","(ii)",NA,0.074,1,1,1,NA,0.1,0.801,1,1,NA,0.1,0.801,1,1,16.578,4,NA,NA,NA,NA,15.077,4,NA,NA,NA,NA,15.077,4,NA,NA,NA,NA
+12,"hake_ex12.lst","Poisson","(ii)","(ii)","(ii)",NA,0.025,1,1,0.972,NA,0.034,0.914,1,1,NA,0.034,0.914,1,1,9.5754,4,NA,NA,NA,NA,7.8523,4,NA,NA,NA,NA,7.8523,4,NA,NA,NA,NA
+13,"hake_ex13.lst","Poisson","(iii)","(ii)","(ii)",NA,1,0.93,1,1,NA,1,1,1,1,NA,1,1,1,1,5.5015,4,NA,NA,NA,NA,2.3754,4,NA,NA,NA,NA,2.3754,4,NA,NA,NA,NA
+14,"hake_ex14.lst","Poisson","(iii)","(iii)","(iii)",NA,0.547,0.111,1,1,NA,0.372,0.29,1,1,NA,0.372,0.29,1,1,8.96,4,NA,NA,NA,NA,10.991,4,NA,NA,NA,NA,10.991,4,NA,NA,NA,NA
+15,"hake_ex15.lst","Poisson","(ii)","(ii)","(ii)",NA,0.064,1,1,1,NA,0.072,0.952,1,0.781,NA,0.072,0.952,1,0.781,12.074,4,NA,NA,NA,NA,15.003,4,NA,NA,NA,NA,15.003,4,NA,NA,NA,NA
+16,"hake_ex16.lst","Poisson","(iii)","(iii)","(iii)",NA,0.464,0.066,1,1,NA,0.861,0.147,1,1,NA,0.861,0.147,1,1,9.8092,4,NA,NA,NA,NA,11.188,4,NA,NA,NA,NA,11.188,4,NA,NA,NA,NA
+17,"hake_ex17.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,4.7631,4,NA,NA,NA,NA,3.1631,4,NA,NA,NA,NA,3.1631,4,NA,NA,NA,NA
+18,"hake_ex18.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00201,0.08873,0.29767,0.29767,NA,0.00646,0.06863,0.18213,0.18612,NA,0.00646,0.06863,0.18213,0.18612,28.677,4,NA,NA,NA,NA,25.342,4,NA,NA,NA,NA,25.342,4,NA,NA,NA,NA
+19,"hake_ex19.lst","Poisson","(v)","(v)","(v)",NA,0.829,0.829,0.392,0.299,NA,1,0.892,1,0.377,NA,1,0.892,1,0.377,15.348,4,NA,NA,NA,NA,9.44,4,NA,NA,NA,NA,9.44,4,NA,NA,NA,NA
+20,"hake_ex20.lst","Poisson","(ii)","(ii)","(ii)",NA,0.097,1,1,1,NA,0.162,1,1,1,NA,0.162,1,1,1,6.8431,4,NA,NA,NA,NA,4.2954,4,NA,NA,NA,NA,4.2954,4,NA,NA,NA,NA
+21,"hake_ex21.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00202,0.00568,0.5038,0.71928,NA,0.00224,0.01295,0.48591,0.68536,NA,0.00224,0.01295,0.48591,0.68536,27.582,4,NA,NA,NA,NA,26.449,4,NA,NA,NA,NA,26.449,4,NA,NA,NA,NA
+22,"hake_ex22.lst","Poisson","(ii)","(iv)","(iv)",NA,0.19,1,0.34,1,NA,0.17,1,0.15,1,NA,0.17,1,0.15,1,6.88,4,NA,NA,NA,NA,9.6862,4,NA,NA,NA,NA,9.6862,4,NA,NA,NA,NA
+23,"hake_ex23.lst","Poisson","(ii)","(ii)","(ii)",NA,0.29,0.29,0.641,0.525,NA,0.264,0.465,1,0.528,NA,0.264,0.465,1,0.528,8.2338,4,NA,NA,NA,NA,13.268,4,NA,NA,NA,NA,13.268,4,NA,NA,NA,NA
+24,"hake_ex24.lst","Poisson","(iii)","(iii)","(iii)",NA,0.2393,0.0144,0.2869,0.4763,NA,0.3286,0.0089,0.3286,0.4329,NA,0.3286,0.0089,0.3286,0.4329,19.668,4,NA,NA,NA,NA,18.449,4,NA,NA,NA,NA,18.449,4,NA,NA,NA,NA
+25,"hake_ex25.lst","Poisson","(ii)","(ii)","(ii)",NA,0.11,1,0.97,0.21,NA,0.095,1,1,0.216,NA,0.095,1,1,0.216,10.252,4,NA,NA,NA,NA,9.0215,4,NA,NA,NA,NA,9.0215,4,NA,NA,NA,NA
+26,"hake_ex26.lst","Poisson","(ii)","(ii)","(ii)",NA,0.11,1,1,1,NA,0.21,1,1,1,NA,0.21,1,1,1,11.126,4,NA,NA,NA,NA,7.7538,4,NA,NA,NA,NA,7.7538,4,NA,NA,NA,NA
+27,"hake_ex27.lst","Poisson","(ii)","(ii)","(ii)",NA,0.069,1,1,0.212,NA,0.072,1,1,0.202,NA,0.072,1,1,0.202,11.458,4,NA,NA,NA,NA,12.135,4,NA,NA,NA,NA,12.135,4,NA,NA,NA,NA
+28,"hake_ex28.lst","Poisson","(ii)","(ii)","(ii)",NA,0.7,1,1,1,NA,0.59,1,1,0.73,NA,0.59,1,1,0.73,2.5354,4,NA,NA,NA,NA,1.3908,4,NA,NA,NA,NA,1.3908,4,NA,NA,NA,NA
+29,"hake_ex29.lst","Poisson","(iii)","(iii)","(iii)",NA,0.303,0.068,0.485,0.777,NA,0.34,0.13,0.34,0.43,NA,0.34,0.13,0.34,0.43,7.1262,4,NA,NA,NA,NA,5.0215,4,NA,NA,NA,NA,5.0215,4,NA,NA,NA,NA
+30,"hake_ex30.lst","Poisson","(ii)","(ii)","(ii)",NA,0.01,0.076,0.171,0.141,NA,0.0071,0.0433,0.0767,0.0433,NA,0.0071,0.0433,0.0767,0.0433,23.151,4,NA,NA,NA,NA,29.354,4,NA,NA,NA,NA,29.354,4,NA,NA,NA,NA
+31,"hake_ex31.lst","Poisson","(ii)","(ii)","(ii)",NA,0.023,1,1,1,NA,0.03,1,1,1,NA,0.03,1,1,1,9.2923,4,NA,NA,NA,NA,8.8615,4,NA,NA,NA,NA,8.8615,4,NA,NA,NA,NA
+32,"hake_ex32.lst","Poisson","(iii)","(iii)","(iii)",NA,1,0.6166,1,1,NA,1,0.5914,1,1,NA,1,0.5914,1,1,19.003,4,NA,NA,NA,NA,16.702,4,NA,NA,NA,NA,16.702,4,NA,NA,NA,NA
+33,"hake_ex33.lst","Poisson","(ii)","(ii)","(ii)",NA,0.0064,1,1,1,NA,0.0039,1,1,1,NA,0.0039,1,1,1,18.24,4,NA,NA,NA,NA,18.166,4,NA,NA,NA,NA,18.166,4,NA,NA,NA,NA
+34,"hake_ex34.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.2277,4,NA,NA,NA,NA,0.89846,4,NA,NA,NA,NA,0.89846,4,NA,NA,NA,NA
+35,"hake_ex35.lst","Poisson","(iii)","(iii)","(iii)",NA,1,0.033,0.273,0.205,NA,1,0.036,0.269,0.117,NA,1,0.036,0.269,0.117,9.5385,4,NA,NA,NA,NA,9.5385,4,NA,NA,NA,NA,9.5385,4,NA,NA,NA,NA
+36,"hake_ex36.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00098,1,1,1,NA,0.00069,1,1,1,NA,0.00069,1,1,1,24.246,4,NA,NA,NA,NA,25.071,4,NA,NA,NA,NA,25.071,4,NA,NA,NA,NA
+37,"hake_ex37.lst","Poisson","(ii)","(ii)","(ii)",NA,0.85,0.85,1,1,NA,1,1,1,1,NA,1,1,1,1,3.68,4,NA,NA,NA,NA,2.1785,4,NA,NA,NA,NA,2.1785,4,NA,NA,NA,NA
+38,"hake_ex38.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,5.6985,4,NA,NA,NA,NA,5.3662,4,NA,NA,NA,NA,5.3662,4,NA,NA,NA,NA
+39,"hake_ex39.lst","Poisson","(ii)","(ii)","(ii)",NA,0.0066,1,1,0.3774,NA,0.0081,0.9126,0.8083,0.2977,NA,0.0081,0.9126,0.8083,0.2977,17.268,4,NA,NA,NA,NA,19.803,4,NA,NA,NA,NA,19.803,4,NA,NA,NA,NA
+40,"hake_ex40.lst","Poisson","(ii)","(ii)","(ii)",NA,0.27,0.88,0.7,0.88,NA,0.25,1,0.34,0.54,NA,0.25,1,0.34,0.54,6.56,4,NA,NA,NA,NA,9.3292,4,NA,NA,NA,NA,9.3292,4,NA,NA,NA,NA
+41,"hake_ex41.lst","Poisson","(ii)","(ii)","(ii)",NA,0.07,1,1,1,NA,0.107,1,1,1,NA,0.107,1,1,1,11.212,4,NA,NA,NA,NA,6.9169,4,NA,NA,NA,NA,6.9169,4,NA,NA,NA,NA
+42,"hake_ex42.lst","Poisson","(ii)","(ii)","(ii)",NA,0.35,1,1,1,NA,0.44,1,1,1,NA,0.44,1,1,1,7.7046,4,NA,NA,NA,NA,6.2523,4,NA,NA,NA,NA,6.2523,4,NA,NA,NA,NA
+43,"hake_ex43.lst","Poisson","(v)","(v)","(v)",NA,0.107,0.765,0.163,0.072,NA,0.302,0.474,0.319,0.075,NA,0.302,0.474,0.319,0.075,10.671,4,NA,NA,NA,NA,6.4,4,NA,NA,NA,NA,6.4,4,NA,NA,NA,NA
+44,"hake_ex44.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.24,4,NA,NA,NA,NA,2.3877,4,NA,NA,NA,NA,2.3877,4,NA,NA,NA,NA
+45,"hake_ex45.lst","Poisson","(ii)","(ii)","(ii)",NA,0.262,1,1,0.937,NA,0.181,1,1,1,NA,0.181,1,1,1,12.074,4,NA,NA,NA,NA,17.514,4,NA,NA,NA,NA,17.514,4,NA,NA,NA,NA
+46,"hake_ex46.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00069,1,1,1,NA,0.00041,1,1,1,NA,0.00041,1,1,1,24.332,4,NA,NA,NA,NA,24.468,4,NA,NA,NA,NA,24.468,4,NA,NA,NA,NA
+47,"hake_ex47.lst","Poisson","(iv)","(v)","(v)",NA,0.592,0.592,0.029,0.031,NA,0.665,0.665,0.141,0.038,NA,0.665,0.665,0.141,0.038,9.7846,4,NA,NA,NA,NA,8.0123,4,NA,NA,NA,NA,8.0123,4,NA,NA,NA,NA
+48,"hake_ex48.lst","Poisson","(iii)","(iii)","(iii)",NA,0.0112,0.01118,1,1,NA,0.0184,0.0078,0.516,0.9583,NA,0.0184,0.0078,0.516,0.9583,19.963,4,NA,NA,NA,NA,21.046,4,NA,NA,NA,NA,21.046,4,NA,NA,NA,NA
+49,"hake_ex49.lst","Poisson","(ii)","(ii)","(ii)",NA,0.112,1,1,1,NA,0.088,1,1,1,NA,0.088,1,1,1,15.348,4,NA,NA,NA,NA,13.231,4,NA,NA,NA,NA,13.231,4,NA,NA,NA,NA
+50,"hake_ex50.lst","Poisson","(ii)","(ii)","(ii)",NA,0.214,1,1,1,NA,0.28,1,1,1,NA,0.28,1,1,1,6.1169,4,NA,NA,NA,NA,5.0954,4,NA,NA,NA,NA,5.0954,4,NA,NA,NA,NA
+51,"hake_ex51.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00056,0.34133,1,1,NA,0.00096,0.57638,0.76953,0.61463,NA,0.00096,0.57638,0.76953,0.61463,30.929,4,NA,NA,NA,NA,27.582,4,NA,NA,NA,NA,27.582,4,NA,NA,NA,NA
+52,"hake_ex52.lst","Poisson","(ii)","(iv)","(iv)",NA,0.171,0.243,0.203,0.61,NA,0.17,0.22,0.1,0.85,NA,0.17,0.22,0.1,0.85,8.5785,4,NA,NA,NA,NA,14.548,4,NA,NA,NA,NA,14.548,4,NA,NA,NA,NA
+53,"hake_ex53.lst","Poisson","(ii)","(ii)","(ii)",NA,0.26,1,1,1,NA,0.39,1,1,1,NA,0.39,1,1,1,10.597,4,NA,NA,NA,NA,9.12,4,NA,NA,NA,NA,9.12,4,NA,NA,NA,NA
+54,"hake_ex54.lst","Poisson","(iii)","(iii)","(iii)",NA,0.17948,0.00025,0.00437,0.5477,NA,0.2988,3.5e-05,3e-04,0.41028,NA,0.2988,3.5e-05,3e-04,0.41028,30.462,4,NA,NA,NA,NA,40.775,4,NA,NA,NA,NA,40.775,4,NA,NA,NA,NA
+55,"hake_ex55.lst","Poisson","(iii)","(iii)","(iii)",NA,0.493,0.3659,1,1,NA,0.49799,0.36432,1,1,NA,0.49799,0.36432,1,1,14.006,4,NA,NA,NA,NA,12.357,4,NA,NA,NA,NA,12.357,4,NA,NA,NA,NA
+56,"hake_ex56.lst","Poisson","(v)","(v)","(v)",NA,0.01022,0.00091,0.00141,0.00027,NA,0.01196,0.00091,0.00213,0.00031,NA,0.01196,0.00091,0.00213,0.00031,19.114,4,NA,NA,NA,NA,19.36,4,NA,NA,NA,NA,19.36,4,NA,NA,NA,NA
+57,"hake_ex57.lst","Poisson","(iv)","(iv)","(iv)",NA,0.49,1,0.45,1,NA,0.39,1,0.18,1,NA,0.39,1,0.18,1,9.1446,4,NA,NA,NA,NA,12.628,4,NA,NA,NA,NA,12.628,4,NA,NA,NA,NA
+58,"hake_ex58.lst","Poisson","(iii)","(ii)","(ii)",NA,0.52461,0.33819,0.66625,0.54107,NA,0.24104,0.35644,0.8355,0.57365,NA,0.24104,0.35644,0.8355,0.57365,14.055,4,NA,NA,NA,NA,20.886,4,NA,NA,NA,NA,20.886,4,NA,NA,NA,NA
+59,"hake_ex59.lst","Poisson","(iii)","(iii)","(iii)",NA,0.3122,0.0016,0.0016,0.0016,NA,0.26958,0.00084,0.00158,0.00158,NA,0.26958,0.00084,0.00158,0.00158,27.286,4,NA,NA,NA,NA,26.294,4,NA,NA,NA,NA,26.294,4,NA,NA,NA,NA
+60,"hake_ex60.lst","Poisson","(ii)","(ii)","(ii)",NA,0.071,1,1,1,NA,0.049,1,0.86,0.631,NA,0.049,1,0.86,0.631,9.1692,4,NA,NA,NA,NA,11.36,4,NA,NA,NA,NA,11.36,4,NA,NA,NA,NA
+61,"hake_ex61.lst","Poisson","(iii)","(iii)","(iii)",NA,0.87,0.041,0.392,0.561,NA,0.958,0.029,0.264,0.598,NA,0.958,0.029,0.264,0.598,7.6062,4,NA,NA,NA,NA,8.2215,4,NA,NA,NA,NA,8.2215,4,NA,NA,NA,NA
+62,"hake_ex62.lst","Poisson","(iii)","(iv)","(iv)",NA,0.9684,0.00032,5e-04,0.00035,NA,0.98961,0.00031,0.00026,0.00027,NA,0.98961,0.00031,0.00026,0.00027,35.705,4,NA,NA,NA,NA,33.612,4,NA,NA,NA,NA,33.612,4,NA,NA,NA,NA
+63,"hake_ex63.lst","Poisson","(ii)","(ii)","(ii)",NA,0.12,1,1,0.52,NA,0.11,1,1,0.37,NA,0.11,1,1,0.37,12.209,4,NA,NA,NA,NA,11.003,4,NA,NA,NA,NA,11.003,4,NA,NA,NA,NA
+64,"hake_ex64.lst","Poisson","(ii)","(ii)","(ii)",NA,0.02767,0.4404,1,1,NA,0.0174,0.1893,1,1,NA,0.0174,0.1893,1,1,14.289,4,NA,NA,NA,NA,17.957,4,NA,NA,NA,NA,17.957,4,NA,NA,NA,NA
+65,"hake_ex65.lst","Poisson","(v)","(v)","(v)",NA,1,0.3721,0.2732,0.0416,NA,1,0.183,0.192,0.033,NA,1,0.183,0.192,0.033,19.963,4,NA,NA,NA,NA,16.209,4,NA,NA,NA,NA,16.209,4,NA,NA,NA,NA
+66,"hake_ex66.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00012,0.41478,0.9323,0.60074,NA,0.00016,0.33327,0.91673,0.41444,NA,0.00016,0.33327,0.91673,0.41444,34.917,4,NA,NA,NA,NA,35.298,4,NA,NA,NA,NA,35.298,4,NA,NA,NA,NA
+67,"hake_ex67.lst","Poisson","(ii)","(ii)","(ii)",NA,0.277,1,1,0.867,NA,0.155,1,0.917,1,NA,0.155,1,0.917,1,15.151,4,NA,NA,NA,NA,17.637,4,NA,NA,NA,NA,17.637,4,NA,NA,NA,NA
+68,"hake_ex68.lst","Poisson","(v)","(v)","(v)",NA,1,0.923,1,0.377,NA,1,0.665,1,0.256,NA,1,0.665,1,0.256,7.3477,4,NA,NA,NA,NA,5.3292,4,NA,NA,NA,NA,5.3292,4,NA,NA,NA,NA
+69,"hake_ex69.lst","Poisson","(ii)","(ii)","(ii)",NA,0.0042,1,1,1,NA,0.0049,1,1,1,NA,0.0049,1,1,1,13.329,4,NA,NA,NA,NA,15.2,4,NA,NA,NA,NA,15.2,4,NA,NA,NA,NA
+70,"hake_ex70.lst","Poisson","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.1292,4,NA,NA,NA,NA,2.5969,4,NA,NA,NA,NA,2.5969,4,NA,NA,NA,NA
+71,"hake_ex71.lst","Poisson","(iii)","(iii)","(iii)",NA,0.43746,0.07859,0.17116,0.12421,NA,0.49206,0.04775,0.16302,0.14497,NA,0.49206,0.04775,0.16302,0.14497,32.222,4,NA,NA,NA,NA,31.126,4,NA,NA,NA,NA,31.126,4,NA,NA,NA,NA
+72,"hake_ex72.lst","Poisson","(ii)","(ii)","(ii)",NA,5.6e-07,1,1,1,NA,6.1e-07,1,1,1,NA,6.1e-07,1,1,1,48.702,4,NA,NA,NA,NA,49.034,4,NA,NA,NA,NA,49.034,4,NA,NA,NA,NA
+73,"hake_ex73.lst","Poisson","(ii)","(ii)","(ii)",NA,0.51,1,1,1,NA,0.366,1,0.68,1,NA,0.366,1,0.68,1,11.36,4,NA,NA,NA,NA,12.443,4,NA,NA,NA,NA,12.443,4,NA,NA,NA,NA
+74,"hake_ex74.lst","Poisson","(ii)","(ii)","(ii)",NA,0.083,1,1,1,NA,0.12,1,1,1,NA,0.12,1,1,1,11.754,4,NA,NA,NA,NA,9.5015,4,NA,NA,NA,NA,9.5015,4,NA,NA,NA,NA
+75,"hake_ex75.lst","Poisson","(ii)","(ii)","(ii)",NA,0.00302,0.01504,0.32377,0.9531,NA,0.00448,0.00916,0.65038,0.65038,NA,0.00448,0.00916,0.65038,0.65038,34.031,4,NA,NA,NA,NA,34.105,4,NA,NA,NA,NA,34.105,4,NA,NA,NA,NA
+76,"hake_ex76.lst","Poisson","(ii)","(ii)","(ii)",NA,0.0017,0.3282,0.5614,0.6288,NA,0.0013,0.1863,0.3036,0.6558,NA,0.0013,0.1863,0.3036,0.6558,16.283,4,NA,NA,NA,NA,19.065,4,NA,NA,NA,NA,19.065,4,NA,NA,NA,NA
+77,"hake_ex77.lst","Poisson","(ii)","(ii)","(ii)",NA,0.055,0.656,0.705,0.806,NA,0.085,0.767,0.834,0.874,NA,0.085,0.767,0.834,0.874,14.375,4,NA,NA,NA,NA,12.32,4,NA,NA,NA,NA,12.32,4,NA,NA,NA,NA
+78,"hake_ex78.lst","Poisson","(iii)","(iii)","(iii)",NA,0.0541,0.0182,0.1575,0.4484,NA,0.0431,0.0077,0.0984,0.4563,NA,0.0431,0.0077,0.0984,0.4563,19.668,4,NA,NA,NA,NA,24.025,4,NA,NA,NA,NA,24.025,4,NA,NA,NA,NA
+79,"hake_ex79.lst","Poisson","(ii)","(ii)","(ii)",NA,0.022,0.205,0.15,0.205,NA,0.025,0.535,0.535,0.535,NA,0.025,0.535,0.535,0.535,20.431,4,NA,NA,NA,NA,11.705,4,NA,NA,NA,NA,11.705,4,NA,NA,NA,NA
+80,"hake_ex80.lst","Poisson","(ii)","(ii)","(ii)",NA,0.02,1,1,1,NA,0.015,1,1,1,NA,0.015,1,1,1,8.7754,4,NA,NA,NA,NA,9.4277,4,NA,NA,NA,NA,9.4277,4,NA,NA,NA,NA
+81,"hake_ex81.lst","Poisson","(iii)","(iii)","(iii)",NA,0.00244,0.00027,0.00577,0.47627,NA,0.00267,0.00018,0.00501,0.3812,NA,0.00267,0.00018,0.00501,0.3812,34.129,4,NA,NA,NA,NA,37.723,4,NA,NA,NA,NA,37.723,4,NA,NA,NA,NA
+82,"hake_ex82.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.251,4,NA,NA,NA,NA,2.3002,4,NA,NA,NA,NA,2.3002,4,NA,NA,NA,NA
+83,"hake_ex83.lst","Lognormal","(iii)","(ii)","(ii)",NA,1,0.98,1,1,NA,1,1,1,1,NA,1,1,1,1,4.4062,4,NA,NA,NA,NA,3.8769,4,NA,NA,NA,NA,3.8769,4,NA,NA,NA,NA
+84,"hake_ex84.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.07,1,1,1,NA,0.096,1,1,1,NA,0.096,1,1,1,8.7015,4,NA,NA,NA,NA,10.129,4,NA,NA,NA,NA,10.129,4,NA,NA,NA,NA
+85,"hake_ex85.lst","Lognormal","(iii)","(iii)","(iii)",NA,1,0.155,1,1,NA,1,0.061,1,1,NA,1,0.061,1,1,17.083,4,NA,NA,NA,NA,22.363,4,NA,NA,NA,NA,22.363,4,NA,NA,NA,NA
+86,"hake_ex86.lst","Lognormal","(iii)","(ii)","(ii)",NA,1,0.63,1,1,NA,1,1,1,1,NA,1,1,1,1,4.3446,4,NA,NA,NA,NA,4,4,NA,NA,NA,NA,4,4,NA,NA,NA,NA
+87,"hake_ex87.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0029,1,1,1,NA,0.005,1,1,1,NA,0.005,1,1,1,16.689,4,NA,NA,NA,NA,15.852,4,NA,NA,NA,NA,15.852,4,NA,NA,NA,NA
+88,"hake_ex88.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.3138,4,NA,NA,NA,NA,2.1538,4,NA,NA,NA,NA,2.1538,4,NA,NA,NA,NA
+89,"hake_ex89.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.02,1,0.87,1,NA,0.015,0.948,0.314,0.8,NA,0.015,0.948,0.314,0.8,16.972,4,NA,NA,NA,NA,17.809,4,NA,NA,NA,NA,17.809,4,NA,NA,NA,NA
+90,"hake_ex90.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0057,1,0.6798,1,NA,0.0039,1,0.9896,1,NA,0.0039,1,0.9896,1,16.862,4,NA,NA,NA,NA,21.575,4,NA,NA,NA,NA,21.575,4,NA,NA,NA,NA
+91,"hake_ex91.lst","Lognormal","(ii)","(iii)","(iii)",NA,0.2325,0.3513,0.3885,0.6735,NA,0.4653,0.3715,1,1,NA,0.4653,0.3715,1,1,19.188,4,NA,NA,NA,NA,22.474,4,NA,NA,NA,NA,22.474,4,NA,NA,NA,NA
+92,"hake_ex92.lst","Lognormal","(iv)","(ii)","(ii)",NA,0.0379,0.7291,0.031,0.3359,NA,0.0627,0.7787,0.0647,0.4686,NA,0.0627,0.7787,0.0647,0.4686,24.222,4,NA,NA,NA,NA,24.972,4,NA,NA,NA,NA,24.972,4,NA,NA,NA,NA
+93,"hake_ex93.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0038,0.5508,1,1,NA,0.003,0.1893,0.446,0.4948,NA,0.003,0.1893,0.446,0.4948,18.363,4,NA,NA,NA,NA,18.991,4,NA,NA,NA,NA,18.991,4,NA,NA,NA,NA
+94,"hake_ex94.lst","Lognormal","(ii)","(iii)","(iii)",NA,1,1,1,1,NA,1,0.87,1,1,NA,1,0.87,1,1,5.44,4,NA,NA,NA,NA,5.8092,4,NA,NA,NA,NA,5.8092,4,NA,NA,NA,NA
+95,"hake_ex95.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.00027,1,1,1,NA,2e-04,1,0.2648,0.9579,NA,2e-04,1,0.2648,0.9579,24.012,4,NA,NA,NA,NA,27.889,4,NA,NA,NA,NA,27.889,4,NA,NA,NA,NA
+96,"hake_ex96.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.038,0.902,0.902,0.472,NA,0.055,1,1,0.695,NA,0.055,1,1,0.695,16.898,4,NA,NA,NA,NA,14.56,4,NA,NA,NA,NA,14.56,4,NA,NA,NA,NA
+97,"hake_ex97.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.416,1,1,1,NA,0.3,1,0.58,0.58,NA,0.3,1,0.58,0.58,7.2,4,NA,NA,NA,NA,10.326,4,NA,NA,NA,NA,10.326,4,NA,NA,NA,NA
+98,"hake_ex98.lst","Lognormal","(ii)","(iii)","(iii)",NA,1,1,1,1,NA,1,0.68,1,1,NA,1,0.68,1,1,4.9969,4,NA,NA,NA,NA,6.9169,4,NA,NA,NA,NA,6.9169,4,NA,NA,NA,NA
+99,"hake_ex99.lst","Lognormal","(ii)","(ii)","(ii)",NA,7e-07,1,1,1,NA,4e-07,1,1,1,NA,4e-07,1,1,1,42.178,4,NA,NA,NA,NA,40.468,4,NA,NA,NA,NA,40.468,4,NA,NA,NA,NA
+100,"hake_ex100.lst","Lognormal","(iv)","(iv)","(iv)",NA,0.32,0.843,0.181,0.936,NA,0.192,1,0.118,1,NA,0.192,1,0.118,1,15.791,4,NA,NA,NA,NA,18.695,4,NA,NA,NA,NA,18.695,4,NA,NA,NA,NA
+101,"hake_ex101.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.2154,4,NA,NA,NA,NA,2.5231,4,NA,NA,NA,NA,2.5231,4,NA,NA,NA,NA
+102,"hake_ex102.lst","Lognormal","(iv)","(iv)","(iv)",NA,0.5,0.24,0.18,0.47,NA,0.5,0.2,0.16,0.37,NA,0.5,0.2,0.16,0.37,12.271,4,NA,NA,NA,NA,14.794,4,NA,NA,NA,NA,14.794,4,NA,NA,NA,NA
+103,"hake_ex103.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.08714,0.27538,0.19078,0.27538,NA,0.08557,0.2497,0.2497,0.2497,NA,0.08557,0.2497,0.2497,0.2497,27.138,4,NA,NA,NA,NA,29.058,4,NA,NA,NA,NA,29.058,4,NA,NA,NA,NA
+104,"hake_ex104.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.002,0.1453,0.2502,0.4686,NA,0.0029,0.109,0.2652,0.4948,NA,0.0029,0.109,0.2652,0.4948,16.702,4,NA,NA,NA,NA,15.114,4,NA,NA,NA,NA,15.114,4,NA,NA,NA,NA
+105,"hake_ex105.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0082,0.2068,0.073,0.2068,NA,0.0088,0.2138,0.0758,0.2138,NA,0.0088,0.2138,0.0758,0.2138,13.182,4,NA,NA,NA,NA,13.625,4,NA,NA,NA,NA,13.625,4,NA,NA,NA,NA
+106,"hake_ex106.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0128,0.9364,0.2073,0.9364,NA,0.0365,0.9333,0.2904,0.9333,NA,0.0365,0.9333,0.2904,0.9333,27.975,4,NA,NA,NA,NA,26.043,4,NA,NA,NA,NA,26.043,4,NA,NA,NA,NA
+107,"hake_ex107.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.97,1,1,1,NA,1,1,1,1,NA,1,1,1,1,5.28,4,NA,NA,NA,NA,2.5231,4,NA,NA,NA,NA,2.5231,4,NA,NA,NA,NA
+108,"hake_ex108.lst","Lognormal","(ii)","(ii)","(ii)",NA,1.6e-05,0.186,0.108,0.153,NA,1.3e-05,0.332,0.158,0.166,NA,1.3e-05,0.332,0.158,0.166,32.542,4,NA,NA,NA,NA,37.009,4,NA,NA,NA,NA,37.009,4,NA,NA,NA,NA
+109,"hake_ex109.lst","Lognormal","(iii)","(iii)","(iii)",NA,1,0.32,1,1,NA,1,0.559,1,1,NA,1,0.559,1,1,10.88,4,NA,NA,NA,NA,9.76,4,NA,NA,NA,NA,9.76,4,NA,NA,NA,NA
+110,"hake_ex110.lst","Lognormal","(v)","(v)","(v)",NA,1,0.507,0.07,0.036,NA,0.775,0.599,0.05,0.025,NA,0.775,0.599,0.05,0.025,11.545,4,NA,NA,NA,NA,12.394,4,NA,NA,NA,NA,12.394,4,NA,NA,NA,NA
+111,"hake_ex111.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.029,0.177,1,1,NA,0.056,0.138,0.791,0.791,NA,0.056,0.138,0.791,0.791,17.945,4,NA,NA,NA,NA,16.935,4,NA,NA,NA,NA,16.935,4,NA,NA,NA,NA
+112,"hake_ex112.lst","Lognormal","(v)","(v)","(v)",NA,1,0.838,1,0.066,NA,1,0.56,1,0.04,NA,1,0.56,1,0.04,5.6369,4,NA,NA,NA,NA,12.591,4,NA,NA,NA,NA,12.591,4,NA,NA,NA,NA
+113,"hake_ex113.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.29,1,1,1,NA,0.19,1,1,1,NA,0.19,1,1,1,3.4092,4,NA,NA,NA,NA,8.4308,4,NA,NA,NA,NA,8.4308,4,NA,NA,NA,NA
+114,"hake_ex114.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0911,1,1,1,NA,0.113,1,1,1,NA,0.113,1,1,1,11.077,4,NA,NA,NA,NA,13.354,4,NA,NA,NA,NA,13.354,4,NA,NA,NA,NA
+115,"hake_ex115.lst","Lognormal","(iii)","(iii)","(iii)",NA,0.333,0.214,1,1,NA,0.592,0.506,0.958,0.648,NA,0.592,0.506,0.958,0.648,16.135,4,NA,NA,NA,NA,9.7477,4,NA,NA,NA,NA,9.7477,4,NA,NA,NA,NA
+116,"hake_ex116.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.128,0.83,1,0.245,NA,0.158,1,1,0.87,NA,0.158,1,1,0.87,19.508,4,NA,NA,NA,NA,17.883,4,NA,NA,NA,NA,17.883,4,NA,NA,NA,NA
+117,"hake_ex117.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.00795,0.4594,0.4594,0.4594,NA,0.00661,0.2497,0.2497,0.24487,NA,0.00661,0.2497,0.2497,0.24487,37.698,4,NA,NA,NA,NA,37.822,4,NA,NA,NA,NA,37.822,4,NA,NA,NA,NA
+118,"hake_ex118.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.00611,0.53319,0.36904,0.53319,NA,0.011,0.505,0.505,0.505,NA,0.011,0.505,0.505,0.505,24.025,4,NA,NA,NA,NA,20.025,4,NA,NA,NA,NA,20.025,4,NA,NA,NA,NA
+119,"hake_ex119.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.209,0.415,0.209,0.415,NA,0.309,0.457,0.309,0.426,NA,0.309,0.457,0.309,0.426,22.634,4,NA,NA,NA,NA,15.668,4,NA,NA,NA,NA,15.668,4,NA,NA,NA,NA
+120,"hake_ex120.lst","Lognormal","(v)","(iv)","(iv)",NA,0.34,0.35,0.34,0.2,NA,0.28,0.21,0.15,0.15,NA,0.28,0.21,0.15,0.15,7.7908,4,NA,NA,NA,NA,7.6923,4,NA,NA,NA,NA,7.6923,4,NA,NA,NA,NA
+121,"hake_ex121.lst","Lognormal","(ii)","(iii)","(iii)",NA,0.286,0.286,1,1,NA,0.582,0.203,0.86,0.86,NA,0.582,0.203,0.86,0.86,15.889,4,NA,NA,NA,NA,14.338,4,NA,NA,NA,NA,14.338,4,NA,NA,NA,NA
+122,"hake_ex122.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.072,0.933,0.592,0.933,NA,0.098,0.943,0.85,0.943,NA,0.098,0.943,0.85,0.943,11.557,4,NA,NA,NA,NA,8.7631,4,NA,NA,NA,NA,8.7631,4,NA,NA,NA,NA
+123,"hake_ex123.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.095,0.797,0.797,0.797,NA,0.11,0.55,0.55,0.48,NA,0.11,0.55,0.55,0.48,7.8277,4,NA,NA,NA,NA,10.929,4,NA,NA,NA,NA,10.929,4,NA,NA,NA,NA
+124,"hake_ex124.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.707,1,1,1,NA,0.584,1,1,1,NA,0.584,1,1,1,18.228,4,NA,NA,NA,NA,15.668,4,NA,NA,NA,NA,15.668,4,NA,NA,NA,NA
+125,"hake_ex125.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.093,0.838,0.945,0.945,NA,0.074,1,1,1,NA,0.074,1,1,1,14.486,4,NA,NA,NA,NA,13.969,4,NA,NA,NA,NA,13.969,4,NA,NA,NA,NA
+126,"hake_ex126.lst","Lognormal","(v)","(v)","(v)",NA,0.66,1,0.8,0.43,NA,0.76,1,0.84,0.34,NA,0.76,1,0.84,0.34,6.4862,4,NA,NA,NA,NA,6.56,4,NA,NA,NA,NA,6.56,4,NA,NA,NA,NA
+127,"hake_ex127.lst","Lognormal","(iv)","(iv)","(iv)",NA,0.47816,0.23352,0.00154,0.06759,NA,0.41658,0.19246,0.00122,0.17203,NA,0.41658,0.19246,0.00122,0.17203,18.338,4,NA,NA,NA,NA,19.495,4,NA,NA,NA,NA,19.495,4,NA,NA,NA,NA
+128,"hake_ex128.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0334,0.3427,0.309,0.3427,NA,0.0265,0.2502,0.1779,0.261,NA,0.0265,0.2502,0.1779,0.261,13.748,4,NA,NA,NA,NA,16.209,4,NA,NA,NA,NA,16.209,4,NA,NA,NA,NA
+129,"hake_ex129.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0057,1,1,0.6057,NA,0.011,1,0.891,0.473,NA,0.011,1,0.891,0.473,12.492,4,NA,NA,NA,NA,12.948,4,NA,NA,NA,NA,12.948,4,NA,NA,NA,NA
+130,"hake_ex130.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0547,0.3239,0.1109,0.2059,NA,0.046,0.199,0.115,0.139,NA,0.046,0.199,0.115,0.139,11.138,4,NA,NA,NA,NA,11.015,4,NA,NA,NA,NA,11.015,4,NA,NA,NA,NA
+131,"hake_ex131.lst","Lognormal","(ii)","(v)","(v)",NA,0.012,0.025,0.016,0.013,NA,0.0115,0.0244,0.017,0.0071,NA,0.0115,0.0244,0.017,0.0071,16.554,4,NA,NA,NA,NA,17.046,4,NA,NA,NA,NA,17.046,4,NA,NA,NA,NA
+132,"hake_ex132.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0029,0.0569,0.0557,0.1477,NA,0.0043,0.1054,0.1004,0.2255,NA,0.0043,0.1054,0.1004,0.2255,21.058,4,NA,NA,NA,NA,18.314,4,NA,NA,NA,NA,18.314,4,NA,NA,NA,NA
+133,"hake_ex133.lst","Lognormal","(ii)","(ii)","(ii)",NA,2.9e-05,1,0.021,0.0613,NA,4.6e-05,0.94448,0.00492,0.05501,NA,4.6e-05,0.94448,0.00492,0.05501,41.637,4,NA,NA,NA,NA,46.88,4,NA,NA,NA,NA,46.88,4,NA,NA,NA,NA
+134,"hake_ex134.lst","Lognormal","(ii)","(ii)","(ii)",NA,1.2e-05,1,1,1,NA,9.8e-06,1,1,1,NA,9.8e-06,1,1,1,44.775,4,NA,NA,NA,NA,48.406,4,NA,NA,NA,NA,48.406,4,NA,NA,NA,NA
+135,"hake_ex135.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.12,1,1,1,NA,0.075,1,1,1,NA,0.075,1,1,1,2.3138,4,NA,NA,NA,NA,3.8892,4,NA,NA,NA,NA,3.8892,4,NA,NA,NA,NA
+136,"hake_ex136.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,9.76,4,NA,NA,NA,NA,11.508,4,NA,NA,NA,NA,11.508,4,NA,NA,NA,NA
+137,"hake_ex137.lst","Lognormal","(iii)","(iii)","(iii)",NA,1,0.67,1,1,NA,1,0.95,0.95,0.95,NA,1,0.95,0.95,0.95,8.1969,4,NA,NA,NA,NA,8.7508,4,NA,NA,NA,NA,8.7508,4,NA,NA,NA,NA
+138,"hake_ex138.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.016,0.536,0.968,0.673,NA,0.0088,0.5976,1,0.8703,NA,0.0088,0.5976,1,0.8703,12.234,4,NA,NA,NA,NA,14.129,4,NA,NA,NA,NA,14.129,4,NA,NA,NA,NA
+139,"hake_ex139.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,6.1169,4,NA,NA,NA,NA,5.2677,4,NA,NA,NA,NA,5.2677,4,NA,NA,NA,NA
+140,"hake_ex140.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,3.9508,4,NA,NA,NA,NA,4.9969,4,NA,NA,NA,NA,4.9969,4,NA,NA,NA,NA
+141,"hake_ex141.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.083,0.268,0.19,0.19,NA,0.1,0.28,0.22,0.24,NA,0.1,0.28,0.22,0.24,20.148,4,NA,NA,NA,NA,17.834,4,NA,NA,NA,NA,17.834,4,NA,NA,NA,NA
+142,"hake_ex142.lst","Lognormal","(iii)","(iii)","(iii)",NA,1,0.67,1,1,NA,1,0.92,1,1,NA,1,0.92,1,1,8.4923,4,NA,NA,NA,NA,10.178,4,NA,NA,NA,NA,10.178,4,NA,NA,NA,NA
+143,"hake_ex143.lst","Lognormal","(iii)","(iii)","(iii)",NA,1,0.0729,0.1138,0.3316,NA,0.7839,0.0347,0.1024,0.2535,NA,0.7839,0.0347,0.1024,0.2535,15.902,4,NA,NA,NA,NA,17.218,4,NA,NA,NA,NA,17.218,4,NA,NA,NA,NA
+144,"hake_ex144.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.71,1,1,1,NA,0.43,1,1,1,NA,0.43,1,1,1,4.5046,4,NA,NA,NA,NA,7.8523,4,NA,NA,NA,NA,7.8523,4,NA,NA,NA,NA
+145,"hake_ex145.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,4.5662,4,NA,NA,NA,NA,5.2923,4,NA,NA,NA,NA,5.2923,4,NA,NA,NA,NA
+146,"hake_ex146.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0177,0.6577,0.4857,0.6577,NA,0.0174,0.5475,0.3019,0.5475,NA,0.0174,0.5475,0.3019,0.5475,29.723,4,NA,NA,NA,NA,33.428,4,NA,NA,NA,NA,33.428,4,NA,NA,NA,NA
+147,"hake_ex147.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.062,0.595,0.625,0.186,NA,0.07,0.58,0.58,0.32,NA,0.07,0.58,0.58,0.32,4.5292,4,NA,NA,NA,NA,7.5938,4,NA,NA,NA,NA,7.5938,4,NA,NA,NA,NA
+148,"hake_ex148.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.697,1,1,1,NA,0.559,1,1,1,NA,0.559,1,1,1,5.5508,4,NA,NA,NA,NA,6.1908,4,NA,NA,NA,NA,6.1908,4,NA,NA,NA,NA
+149,"hake_ex149.lst","Lognormal","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,9.1077,4,NA,NA,NA,NA,7.3969,4,NA,NA,NA,NA,7.3969,4,NA,NA,NA,NA
+150,"hake_ex150.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0051,0.7665,0.4716,0.4716,NA,0.0048,0.6077,0.4216,0.4216,NA,0.0048,0.6077,0.4216,0.4216,13.009,4,NA,NA,NA,NA,10.868,4,NA,NA,NA,NA,10.868,4,NA,NA,NA,NA
+151,"hake_ex151.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0035,0.3774,0.2488,0.5381,NA,0.0029,0.3475,0.2488,0.4516,NA,0.0029,0.3475,0.2488,0.4516,28.726,4,NA,NA,NA,NA,31.298,4,NA,NA,NA,NA,31.298,4,NA,NA,NA,NA
+152,"hake_ex152.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.02,0.631,0.631,0.631,NA,0.017,0.521,0.521,0.521,NA,0.017,0.521,0.521,0.521,11.606,4,NA,NA,NA,NA,9.1077,4,NA,NA,NA,NA,9.1077,4,NA,NA,NA,NA
+153,"hake_ex153.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.041,0.096,0.046,0.064,NA,0.062,0.175,0.092,0.076,NA,0.062,0.175,0.092,0.076,16.898,4,NA,NA,NA,NA,16.369,4,NA,NA,NA,NA,16.369,4,NA,NA,NA,NA
+154,"hake_ex154.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.015,1,1,1,NA,0.011,1,0.377,1,NA,0.011,1,0.377,1,17.145,4,NA,NA,NA,NA,17.329,4,NA,NA,NA,NA,17.329,4,NA,NA,NA,NA
+155,"hake_ex155.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0011,0.0112,0.0033,0.054,NA,0.0013,0.0236,0.0076,0.0561,NA,0.0013,0.0236,0.0076,0.0561,32.037,4,NA,NA,NA,NA,24.578,4,NA,NA,NA,NA,24.578,4,NA,NA,NA,NA
+156,"hake_ex156.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.052,0.111,0.277,0.299,NA,0.045,0.203,0.406,0.406,NA,0.045,0.203,0.406,0.406,7.6923,4,NA,NA,NA,NA,5.5877,4,NA,NA,NA,NA,5.5877,4,NA,NA,NA,NA
+157,"hake_ex157.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.027,0.625,0.434,0.245,NA,0.011,1,0.576,0.392,NA,0.011,1,0.576,0.392,6.9538,4,NA,NA,NA,NA,12.357,4,NA,NA,NA,NA,12.357,4,NA,NA,NA,NA
+158,"hake_ex158.lst","Lognormal","(iii)","(iii)","(iii)",NA,0.214,0.032,0.05,0.052,NA,0.277,0.045,0.057,0.057,NA,0.277,0.045,0.057,0.057,12.628,4,NA,NA,NA,NA,10.548,4,NA,NA,NA,NA,10.548,4,NA,NA,NA,NA
+159,"hake_ex159.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.025,0.506,0.148,0.348,NA,0.025,0.651,0.221,0.332,NA,0.025,0.651,0.221,0.332,8.2831,4,NA,NA,NA,NA,7.3723,4,NA,NA,NA,NA,7.3723,4,NA,NA,NA,NA
+160,"hake_ex160.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0128,0.4239,0.2028,0.3281,NA,0.0087,0.4948,0.1582,0.2642,NA,0.0087,0.4948,0.1582,0.2642,22.991,4,NA,NA,NA,NA,23.668,4,NA,NA,NA,NA,23.668,4,NA,NA,NA,NA
+161,"hake_ex161.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.017,0.742,0.525,0.791,NA,0.024,0.446,0.383,0.777,NA,0.024,0.446,0.383,0.777,7.5323,4,NA,NA,NA,NA,9.9815,4,NA,NA,NA,NA,9.9815,4,NA,NA,NA,NA
+162,"hake_ex162.lst","Lognormal","(ii)","(ii)","(ii)",NA,0.0018,0.3774,0.3774,0.7137,NA,0.002,0.492,0.492,0.889,NA,0.002,0.492,0.492,0.889,19.409,4,NA,NA,NA,NA,20.985,4,NA,NA,NA,NA,20.985,4,NA,NA,NA,NA
+163,"hake_ex163.lst","Negative binomial","(iv)","(ii)","(ii)",NA,0.34,1,0.25,0.71,NA,0.46,1,0.51,0.55,NA,0.46,1,0.51,0.55,5.1569,4,NA,NA,NA,NA,4.0492,4,NA,NA,NA,NA,4.0492,4,NA,NA,NA,NA
+164,"hake_ex164.lst","Negative binomial","(iv)","(iv)","(iv)",NA,0.9,0.96,0.47,0.73,NA,1,1,0.52,0.52,NA,1,1,0.52,0.52,8.2215,4,NA,NA,NA,NA,6.4862,4,NA,NA,NA,NA,6.4862,4,NA,NA,NA,NA
+165,"hake_ex165.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0156,1,1,1,NA,0.0125,1,1,1,NA,0.0125,1,1,1,13.342,4,NA,NA,NA,NA,14.4,4,NA,NA,NA,NA,14.4,4,NA,NA,NA,NA
+166,"hake_ex166.lst","Negative binomial","(iii)","(iv)","(iv)",NA,1,0.954,1,1,NA,1,1,0.61,1,NA,1,1,0.61,1,11.138,4,NA,NA,NA,NA,5.6246,4,NA,NA,NA,NA,5.6246,4,NA,NA,NA,NA
+167,"hake_ex167.lst","Negative binomial","(iv)","(iv)","(iv)",NA,1,1,0.39,1,NA,0.91,0.92,0.59,0.87,NA,0.91,0.92,0.59,0.87,6.56,4,NA,NA,NA,NA,6.6831,4,NA,NA,NA,NA,6.6831,4,NA,NA,NA,NA
+168,"hake_ex168.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,3.5938,4,NA,NA,NA,NA,2.8923,4,NA,NA,NA,NA,2.8923,4,NA,NA,NA,NA
+169,"hake_ex169.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.027,1,1,0.692,NA,0.0307,1,0.6641,0.6641,NA,0.0307,1,0.6641,0.6641,9.1077,4,NA,NA,NA,NA,9.9323,4,NA,NA,NA,NA,9.9323,4,NA,NA,NA,NA
+170,"hake_ex170.lst","Negative binomial","(iii)","(iii)","(iii)",NA,1,0.55,0.76,0.76,NA,1,0.26,1,0.87,NA,1,0.26,1,0.87,5.2308,4,NA,NA,NA,NA,5.7723,4,NA,NA,NA,NA,5.7723,4,NA,NA,NA,NA
+171,"hake_ex171.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.63,1,1,1,NA,0.72,1,1,1,NA,0.72,1,1,1,12.64,4,NA,NA,NA,NA,10.671,4,NA,NA,NA,NA,10.671,4,NA,NA,NA,NA
+172,"hake_ex172.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0018,1,1,1,NA,0.0012,1,1,1,NA,0.0012,1,1,1,11.865,4,NA,NA,NA,NA,11.877,4,NA,NA,NA,NA,11.877,4,NA,NA,NA,NA
+173,"hake_ex173.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.77,0.16,1,1,NA,0.88,0.1,0.88,0.88,NA,0.88,0.1,0.88,0.88,11.557,4,NA,NA,NA,NA,10.006,4,NA,NA,NA,NA,10.006,4,NA,NA,NA,NA
+174,"hake_ex174.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,3.9754,4,NA,NA,NA,NA,5.9446,4,NA,NA,NA,NA,5.9446,4,NA,NA,NA,NA
+175,"hake_ex175.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.14,1,1,1,NA,0.1305,1,1,1,NA,0.1305,1,1,1,8.8862,4,NA,NA,NA,NA,8.8369,4,NA,NA,NA,NA,8.8369,4,NA,NA,NA,NA
+176,"hake_ex176.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.081,1,0.701,1,NA,0.045,1,0.937,1,NA,0.045,1,0.937,1,11.286,4,NA,NA,NA,NA,12.345,4,NA,NA,NA,NA,12.345,4,NA,NA,NA,NA
+177,"hake_ex177.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.02,1,1,1,NA,0.021,1,1,1,NA,0.021,1,1,1,12.074,4,NA,NA,NA,NA,11.754,4,NA,NA,NA,NA,11.754,4,NA,NA,NA,NA
+178,"hake_ex178.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.093,0.695,0.261,0.695,NA,0.304,1,0.304,1,NA,0.304,1,0.304,1,19.434,4,NA,NA,NA,NA,11.483,4,NA,NA,NA,NA,11.483,4,NA,NA,NA,NA
+179,"hake_ex179.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,7.8031,4,NA,NA,NA,NA,6.3262,4,NA,NA,NA,NA,6.3262,4,NA,NA,NA,NA
+180,"hake_ex180.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.27,1,1,1,NA,0.29,1,1,1,NA,0.29,1,1,1,4.7877,4,NA,NA,NA,NA,5.5754,4,NA,NA,NA,NA,5.5754,4,NA,NA,NA,NA
+181,"hake_ex181.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.095,1,1,1,NA,0.0468,1,1,1,NA,0.0468,1,1,1,7.84,4,NA,NA,NA,NA,10.191,4,NA,NA,NA,NA,10.191,4,NA,NA,NA,NA
+182,"hake_ex182.lst","Negative binomial","(iv)","(iv)","(iv)",NA,0.71,1,0.53,1,NA,1,1,0.7,1,NA,1,1,0.7,1,8.6031,4,NA,NA,NA,NA,7.5077,4,NA,NA,NA,NA,7.5077,4,NA,NA,NA,NA
+183,"hake_ex183.lst","Negative binomial","(ii)","(iii)","(iii)",NA,0.734,0.734,1,1,NA,0.7477,0.4577,0.7477,0.7477,NA,0.7477,0.4577,0.7477,0.7477,7.7415,4,NA,NA,NA,NA,9.5138,4,NA,NA,NA,NA,9.5138,4,NA,NA,NA,NA
+184,"hake_ex184.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.14,0.23,0.35,0.29,NA,0.18,0.3,0.19,0.57,NA,0.18,0.3,0.19,0.57,10.228,4,NA,NA,NA,NA,8.7138,4,NA,NA,NA,NA,8.7138,4,NA,NA,NA,NA
+185,"hake_ex185.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.133,1,1,1,NA,0.13,1,1,1,NA,0.13,1,1,1,7.1138,4,NA,NA,NA,NA,9.9692,4,NA,NA,NA,NA,9.9692,4,NA,NA,NA,NA
+186,"hake_ex186.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.007,1,1,1,NA,0.011,1,1,1,NA,0.011,1,1,1,10.683,4,NA,NA,NA,NA,10.572,4,NA,NA,NA,NA,10.572,4,NA,NA,NA,NA
+187,"hake_ex187.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.031,1,0.5468,1,NA,0.034,1,0.239,1,NA,0.034,1,0.239,1,9.6615,4,NA,NA,NA,NA,15.274,4,NA,NA,NA,NA,15.274,4,NA,NA,NA,NA
+188,"hake_ex188.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.171,1,1,1,NA,0.159,1,1,1,NA,0.159,1,1,1,7.5692,4,NA,NA,NA,NA,7.7415,4,NA,NA,NA,NA,7.7415,4,NA,NA,NA,NA
+189,"hake_ex189.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.22,1,1,1,NA,0.18,1,1,1,NA,0.18,1,1,1,3.9508,4,NA,NA,NA,NA,5.4523,4,NA,NA,NA,NA,5.4523,4,NA,NA,NA,NA
+190,"hake_ex190.lst","Negative binomial","(ii)","(v)","(v)",NA,1,1,1,1,NA,1,1,1,0.57,NA,1,1,1,0.57,4.8985,4,NA,NA,NA,NA,5.4769,4,NA,NA,NA,NA,5.4769,4,NA,NA,NA,NA
+191,"hake_ex191.lst","Negative binomial","(iii)","(iii)","(iii)",NA,1,0.521,1,1,NA,1,0.444,1,1,NA,1,0.444,1,1,8.6646,4,NA,NA,NA,NA,7.5446,4,NA,NA,NA,NA,7.5446,4,NA,NA,NA,NA
+192,"hake_ex192.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0074,1,1,1,NA,0.0109,1,1,1,NA,0.0109,1,1,1,18.917,4,NA,NA,NA,NA,19.102,4,NA,NA,NA,NA,19.102,4,NA,NA,NA,NA
+193,"hake_ex193.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.4,1,0.4,1,NA,0.4,1,0.62,1,NA,0.4,1,0.62,1,7.2,4,NA,NA,NA,NA,6.9292,4,NA,NA,NA,NA,6.9292,4,NA,NA,NA,NA
+194,"hake_ex194.lst","Negative binomial","(iii)","(iii)","(iii)",NA,1,0.1526,1,1,NA,1,0.119,1,1,NA,1,0.119,1,1,11.655,4,NA,NA,NA,NA,10.375,4,NA,NA,NA,NA,10.375,4,NA,NA,NA,NA
+195,"hake_ex195.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.37,1,1,1,NA,0.63,1,1,1,NA,0.63,1,1,1,4.3815,4,NA,NA,NA,NA,2.8554,4,NA,NA,NA,NA,2.8554,4,NA,NA,NA,NA
+196,"hake_ex196.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,1.9446,4,NA,NA,NA,NA,2.4,4,NA,NA,NA,NA,2.4,4,NA,NA,NA,NA
+197,"hake_ex197.lst","Negative binomial","(v)","(iii)","(iii)",NA,1,0.4,0.34,0.33,NA,1,0.25,0.46,0.45,NA,1,0.25,0.46,0.45,8.5046,4,NA,NA,NA,NA,9.4523,4,NA,NA,NA,NA,9.4523,4,NA,NA,NA,NA
+198,"hake_ex198.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.023,0.282,0.767,1,NA,0.017,0.192,0.829,0.829,NA,0.017,0.192,0.829,0.829,18.228,4,NA,NA,NA,NA,20.222,4,NA,NA,NA,NA,20.222,4,NA,NA,NA,NA
+199,"hake_ex199.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0821,0.3195,0.7069,0.7737,NA,0.131,0.2,0.622,0.622,NA,0.131,0.2,0.622,0.622,16.48,4,NA,NA,NA,NA,13.735,4,NA,NA,NA,NA,13.735,4,NA,NA,NA,NA
+200,"hake_ex200.lst","Negative binomial","(ii)","(v)","(v)",NA,0.4005,0.4005,1,0.4005,NA,0.491,0.375,0.838,0.299,NA,0.491,0.375,0.838,0.299,27.938,4,NA,NA,NA,NA,29.846,4,NA,NA,NA,NA,29.846,4,NA,NA,NA,NA
+201,"hake_ex201.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.00015,1,1,1,NA,0.00019,0.97699,0.82538,0.97699,NA,0.00019,0.97699,0.82538,0.97699,30.622,4,NA,NA,NA,NA,30.917,4,NA,NA,NA,NA,30.917,4,NA,NA,NA,NA
+202,"hake_ex202.lst","Negative binomial","(iii)","(ii)","(ii)",NA,1,0.77,1,1,NA,1,1,1,1,NA,1,1,1,1,3.3354,4,NA,NA,NA,NA,2.56,4,NA,NA,NA,NA,2.56,4,NA,NA,NA,NA
+203,"hake_ex203.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,5.1077,4,NA,NA,NA,NA,4.3446,4,NA,NA,NA,NA,4.3446,4,NA,NA,NA,NA
+204,"hake_ex204.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.17,1,1,1,NA,0.2,1,1,1,NA,0.2,1,1,1,14.634,4,NA,NA,NA,NA,14.178,4,NA,NA,NA,NA,14.178,4,NA,NA,NA,NA
+205,"hake_ex205.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.07,1,1,1,NA,0.082,1,1,1,NA,0.082,1,1,1,12.64,4,NA,NA,NA,NA,13.415,4,NA,NA,NA,NA,13.415,4,NA,NA,NA,NA
+206,"hake_ex206.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,0.35692,4,NA,NA,NA,NA,1.6862,4,NA,NA,NA,NA,1.6862,4,NA,NA,NA,NA
+207,"hake_ex207.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0035,1,1,0.5874,NA,0.0039,1,1,1,NA,0.0039,1,1,1,22.142,4,NA,NA,NA,NA,20.111,4,NA,NA,NA,NA,20.111,4,NA,NA,NA,NA
+208,"hake_ex208.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.6338,4,NA,NA,NA,NA,2.9292,4,NA,NA,NA,NA,2.9292,4,NA,NA,NA,NA
+209,"hake_ex209.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.053,0.446,0.127,0.333,NA,0.037,0.58,0.111,0.347,NA,0.037,0.58,0.111,0.347,17.969,4,NA,NA,NA,NA,17.391,4,NA,NA,NA,NA,17.391,4,NA,NA,NA,NA
+210,"hake_ex210.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0046,1,1,1,NA,0.0046,1,1,1,NA,0.0046,1,1,1,21.145,4,NA,NA,NA,NA,20.382,4,NA,NA,NA,NA,20.382,4,NA,NA,NA,NA
+211,"hake_ex211.lst","Negative binomial","(iv)","(iv)","(iv)",NA,0.237,0.985,0.091,0.528,NA,0.25,1,0.036,0.808,NA,0.25,1,0.036,0.808,14.375,4,NA,NA,NA,NA,14.154,4,NA,NA,NA,NA,14.154,4,NA,NA,NA,NA
+212,"hake_ex212.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.021,1,1,1,NA,0.026,1,1,1,NA,0.026,1,1,1,13.132,4,NA,NA,NA,NA,14.462,4,NA,NA,NA,NA,14.462,4,NA,NA,NA,NA
+213,"hake_ex213.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.505,0.138,0.505,0.922,NA,0.3985,0.0513,0.3622,0.9115,NA,0.3985,0.0513,0.3622,0.9115,11.877,4,NA,NA,NA,NA,15.889,4,NA,NA,NA,NA,15.889,4,NA,NA,NA,NA
+214,"hake_ex214.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0268,0.4685,0.4685,0.6998,NA,0.0326,0.2046,0.072,0.7687,NA,0.0326,0.2046,0.072,0.7687,17.637,4,NA,NA,NA,NA,22.929,4,NA,NA,NA,NA,22.929,4,NA,NA,NA,NA
+215,"hake_ex215.lst","Negative binomial","(ii)","(ii)","(ii)",NA,9.4e-05,1,1,1,NA,0.00015,1,1,1,NA,0.00015,1,1,1,33.526,4,NA,NA,NA,NA,30.708,4,NA,NA,NA,NA,30.708,4,NA,NA,NA,NA
+216,"hake_ex216.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.01524,0.10875,0.62166,0.69982,NA,0.01561,0.14841,0.66692,0.95831,NA,0.01561,0.14841,0.66692,0.95831,21.686,4,NA,NA,NA,NA,18.782,4,NA,NA,NA,NA,18.782,4,NA,NA,NA,NA
+217,"hake_ex217.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.7738,0.0271,0.0674,0.1337,NA,0.7747,0.0361,0.1188,0.0625,NA,0.7747,0.0361,0.1188,0.0625,19.877,4,NA,NA,NA,NA,22.154,4,NA,NA,NA,NA,22.154,4,NA,NA,NA,NA
+218,"hake_ex218.lst","Negative binomial","(v)","(v)","(v)",NA,0.665,0.03,0.071,0.016,NA,0.474,0.039,0.064,0.021,NA,0.474,0.039,0.064,0.021,11.655,4,NA,NA,NA,NA,12.074,4,NA,NA,NA,NA,12.074,4,NA,NA,NA,NA
+219,"hake_ex219.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.023,0.278,1,1,NA,0.024,0.158,0.889,0.889,NA,0.024,0.158,0.889,0.889,11.508,4,NA,NA,NA,NA,10.609,4,NA,NA,NA,NA,10.609,4,NA,NA,NA,NA
+220,"hake_ex220.lst","Negative binomial","(iii)","(iii)","(iii)",NA,1,0.015,0.195,0.109,NA,1,0.044,0.169,0.103,NA,1,0.044,0.169,0.103,9.3538,4,NA,NA,NA,NA,4.4923,4,NA,NA,NA,NA,4.4923,4,NA,NA,NA,NA
+221,"hake_ex221.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.01979,0.00069,0.00308,0.01397,NA,0.0221,0.0013,0.0039,0.0102,NA,0.0221,0.0013,0.0039,0.0102,15.597,4,NA,NA,NA,NA,16.188,4,NA,NA,NA,NA,16.188,4,NA,NA,NA,NA
+222,"hake_ex222.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.88,1,1,1,NA,0.57,1,1,1,NA,0.57,1,1,1,3.5569,4,NA,NA,NA,NA,3.8523,4,NA,NA,NA,NA,3.8523,4,NA,NA,NA,NA
+223,"hake_ex223.lst","Negative binomial","(ii)","(ii)","(ii)",NA,1,1,1,1,NA,1,1,1,1,NA,1,1,1,1,2.5231,4,NA,NA,NA,NA,1.6,4,NA,NA,NA,NA,1.6,4,NA,NA,NA,NA
+224,"hake_ex224.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.6774,0.0011,0.0014,0.0048,NA,0.9096,0.0015,0.0019,0.0047,NA,0.9096,0.0015,0.0019,0.0047,17.74,4,NA,NA,NA,NA,20.388,4,NA,NA,NA,NA,20.388,4,NA,NA,NA,NA
+225,"hake_ex225.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.295,1,1,1,NA,0.264,1,1,1,NA,0.264,1,1,1,9.7354,4,NA,NA,NA,NA,12.049,4,NA,NA,NA,NA,12.049,4,NA,NA,NA,NA
+226,"hake_ex226.lst","Negative binomial","(ii)","(iii)","(iii)",NA,1,1,1,1,NA,1,0.97,1,1,NA,1,0.97,1,1,5.3292,4,NA,NA,NA,NA,2.6831,4,NA,NA,NA,NA,2.6831,4,NA,NA,NA,NA
+227,"hake_ex227.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.9168,0.0729,0.0971,0.1,NA,0.8868,0.1093,0.1168,0.1138,NA,0.8868,0.1093,0.1168,0.1138,11.077,4,NA,NA,NA,NA,10.831,4,NA,NA,NA,NA,10.831,4,NA,NA,NA,NA
+228,"hake_ex228.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.009,0.824,0.12,0.12,NA,0.0088,1,0.1849,0.1088,NA,0.0088,1,0.1849,0.1088,26.708,4,NA,NA,NA,NA,32.012,4,NA,NA,NA,NA,32.012,4,NA,NA,NA,NA
+229,"hake_ex229.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0376,1,1,1,NA,0.0424,1,1,1,NA,0.0424,1,1,1,16.394,4,NA,NA,NA,NA,14.708,4,NA,NA,NA,NA,14.708,4,NA,NA,NA,NA
+230,"hake_ex230.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.314,0.314,0.707,0.388,NA,0.37,0.37,0.734,0.42,NA,0.37,0.37,0.734,0.42,41.083,4,NA,NA,NA,NA,40.148,4,NA,NA,NA,NA,40.148,4,NA,NA,NA,NA
+231,"hake_ex231.lst","Negative binomial","(ii)","(ii)","(ii)",NA,6.3e-05,1,1,1,NA,1e-04,0.88071,0.88071,0.88071,NA,1e-04,0.88071,0.88071,0.88071,29.034,4,NA,NA,NA,NA,25.452,4,NA,NA,NA,NA,25.452,4,NA,NA,NA,NA
+232,"hake_ex232.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.05164,1,1,1,NA,0.08157,1,1,1,NA,0.08157,1,1,1,18.4,4,NA,NA,NA,NA,19.262,4,NA,NA,NA,NA,19.262,4,NA,NA,NA,NA
+233,"hake_ex233.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.79,1,1,1,NA,0.85,1,1,1,NA,0.85,1,1,1,38.757,4,NA,NA,NA,NA,36.591,4,NA,NA,NA,NA,36.591,4,NA,NA,NA,NA
+234,"hake_ex234.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.163,0.223,0.398,0.457,NA,0.14,0.19,0.46,0.46,NA,0.14,0.19,0.46,0.46,14.117,4,NA,NA,NA,NA,15.225,4,NA,NA,NA,NA,15.225,4,NA,NA,NA,NA
+235,"hake_ex235.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.004,0.315,0.211,0.937,NA,0.0076,0.4921,0.1855,0.9948,NA,0.0076,0.4921,0.1855,0.9948,18.252,4,NA,NA,NA,NA,17.588,4,NA,NA,NA,NA,17.588,4,NA,NA,NA,NA
+236,"hake_ex236.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.00096,1,1,1,NA,0.0015,1,1,1,NA,0.0015,1,1,1,19.852,4,NA,NA,NA,NA,17.231,4,NA,NA,NA,NA,17.231,4,NA,NA,NA,NA
+237,"hake_ex237.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.00207,0.21879,0.7687,0.21879,NA,0.00274,0.16069,0.61943,0.16069,NA,0.00274,0.16069,0.61943,0.16069,33.391,4,NA,NA,NA,NA,29.255,4,NA,NA,NA,NA,29.255,4,NA,NA,NA,NA
+238,"hake_ex238.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.0029,0.3106,0.4978,1,NA,0.0034,0.6717,0.924,1,NA,0.0034,0.6717,0.924,1,17.982,4,NA,NA,NA,NA,16.406,4,NA,NA,NA,NA,16.406,4,NA,NA,NA,NA
+239,"hake_ex239.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.031,1,0.956,1,NA,0.037,1,0.903,1,NA,0.037,1,0.903,1,13.083,4,NA,NA,NA,NA,16.148,4,NA,NA,NA,NA,16.148,4,NA,NA,NA,NA
+240,"hake_ex240.lst","Negative binomial","(iii)","(iii)","(iii)",NA,0.1271,0.0401,0.3239,0.4445,NA,0.1143,0.0105,0.1366,0.4253,NA,0.1143,0.0105,0.1366,0.4253,17.735,4,NA,NA,NA,NA,22.498,4,NA,NA,NA,NA,22.498,4,NA,NA,NA,NA
+241,"hake_ex241.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.00067,1,1,1,NA,5e-04,1,1,1,NA,5e-04,1,1,1,21.994,4,NA,NA,NA,NA,29.071,4,NA,NA,NA,NA,29.071,4,NA,NA,NA,NA
+242,"hake_ex242.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.031,1,1,1,NA,0.034,1,1,1,NA,0.034,1,1,1,4.9969,4,NA,NA,NA,NA,7.3723,4,NA,NA,NA,NA,7.3723,4,NA,NA,NA,NA
+243,"hake_ex243.lst","Negative binomial","(ii)","(ii)","(ii)",NA,0.12,0.12,0.5604,0.734,NA,0.1553,0.1658,1,1,NA,0.1553,0.1658,1,1,22.314,4,NA,NA,NA,NA,19.889,4,NA,NA,NA,NA,19.889,4,NA,NA,NA,NA

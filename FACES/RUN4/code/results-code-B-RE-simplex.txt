@@ -1,0 +1,299 @@
+Code B: memory-safe simplex random-effects analysis
+===================================================
+Run time: 2026-07-30 22:34:15 HST
+Output file: results-code-B-RE-simplex.txt
+
+Data preparation
+----------------
+Input type: disk-backed Arrow Dataset
+Reducing data in Arrow before collection...
+Original observations represented: 164,189,025
+Reduced simplex-method-metric cells: 32,837,805
+Unique simplex_id values: 2,189,187
+
+Memory safeguard activated
+--------------------------
+The reduced data still contained more than 20000 simplex groups.
+A reproducible random sample of complete simplex groups was used.
+Sampling seed: 20260730
+Simplex groups fitted: 20000
+Cells fitted: 300,000
+Observations represented by fitted cells: 1,500,000
+
+Model specification
+-------------------
+log_accuracy ~ method * metric + method * design_block + method * 
+    G + method * theta_true + method * theta_CV + method * sigma + 
+    method * mean_nsamp + method * p1 + method * p2 + (1 | simplex_id)
+<environment: 0x000001ca148c5a50>
+
+Response: cell mean of log1p(accuracy)
+Prior weight: number of original observations in each cell
+Random effect: simplex_id intercept
+
+Fitting model...
+Model fitting complete.
+
+Model summary
+-------------
+Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+lmerModLmerTest]
+Formula: formula_lmm
+   Data: acc_cells
+Weights: n_obs
+Control: 
+lme4::lmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e+05),  
+    calc.derivs = FALSE, check.nobs.vs.rankZ = "ignore")
+
+REML criterion at convergence: -1078983
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-4.6125 -0.5261 -0.0219  0.4524 16.6950 
+
+Random effects:
+ Groups     Name        Variance  Std.Dev.
+ simplex_id (Intercept) 0.0005307 0.02304 
+ Residual               0.0070457 0.08394 
+Number of obs: 300000, groups:  simplex_id, 20000
+
+Fixed effects:
+                        Estimate Std. Error         df  t value Pr(>|t|)    
+(Intercept)            1.423e-01  4.568e-04  1.999e+04  311.572  < 2e-16 ***
+method1                4.061e-04  3.543e-04  2.799e+05    1.146 0.251676    
+method2                1.366e-02  3.543e-04  2.799e+05   38.566  < 2e-16 ***
+method3               -4.535e-03  3.543e-04  2.799e+05  -12.799  < 2e-16 ***
+method4               -2.393e-03  3.543e-04  2.799e+05   -6.754 1.44e-11 ***
+metric1               -8.116e-02  9.692e-05  2.799e+05 -837.340  < 2e-16 ***
+metric2                1.166e-01  9.692e-05  2.799e+05 1203.407  < 2e-16 ***
+design_block1          1.180e-02  2.494e-04  1.999e+04   47.304  < 2e-16 ***
+design_block2         -5.819e-03  2.509e-04  1.999e+04  -23.193  < 2e-16 ***
+G1                     4.253e-02  2.502e-04  1.999e+04  169.959  < 2e-16 ***
+G2                    -5.154e-03  2.495e-04  1.999e+04  -20.658  < 2e-16 ***
+theta_true1            8.926e-03  2.497e-04  1.999e+04   35.740  < 2e-16 ***
+theta_true2           -1.453e-03  2.507e-04  1.999e+04   -5.797 6.86e-09 ***
+theta_CV1             -1.175e-03  2.500e-04  1.999e+04   -4.700 2.62e-06 ***
+theta_CV2             -9.059e-04  2.496e-04  1.999e+04   -3.630 0.000284 ***
+sigma1                -3.289e-02  2.492e-04  1.999e+04 -131.977  < 2e-16 ***
+sigma2                -9.963e-03  2.499e-04  1.999e+04  -39.876  < 2e-16 ***
+mean_nsamp1            1.754e-02  2.495e-04  1.999e+04   70.309  < 2e-16 ***
+mean_nsamp2           -2.738e-03  2.499e-04  1.999e+04  -10.955  < 2e-16 ***
+p1                     2.130e-03  1.637e-03  1.999e+04    1.301 0.193424    
+p2                     9.004e-04  1.628e-03  1.999e+04    0.553 0.580332    
+method1:metric1        2.340e-04  1.938e-04  2.799e+05    1.207 0.227295    
+method2:metric1       -7.482e-03  1.938e-04  2.799e+05  -38.598  < 2e-16 ***
+method3:metric1        2.383e-03  1.938e-04  2.799e+05   12.295  < 2e-16 ***
+method4:metric1        1.130e-03  1.938e-04  2.799e+05    5.827 5.65e-09 ***
+method1:metric2       -1.319e-03  1.938e-04  2.799e+05   -6.802 1.03e-11 ***
+method2:metric2        1.023e-02  1.938e-04  2.799e+05   52.749  < 2e-16 ***
+method3:metric2       -3.123e-03  1.938e-04  2.799e+05  -16.109  < 2e-16 ***
+method4:metric2       -9.296e-04  1.938e-04  2.799e+05   -4.796 1.62e-06 ***
+method1:design_block1 -3.274e-03  1.934e-04  2.799e+05  -16.923  < 2e-16 ***
+method2:design_block1 -1.698e-03  1.934e-04  2.799e+05   -8.778  < 2e-16 ***
+method3:design_block1  1.724e-03  1.934e-04  2.799e+05    8.915  < 2e-16 ***
+method4:design_block1  2.323e-03  1.934e-04  2.799e+05   12.009  < 2e-16 ***
+method1:design_block2  1.372e-03  1.946e-04  2.799e+05    7.050 1.79e-12 ***
+method2:design_block2  9.577e-04  1.946e-04  2.799e+05    4.922 8.58e-07 ***
+method3:design_block2 -8.013e-04  1.946e-04  2.799e+05   -4.118 3.82e-05 ***
+method4:design_block2 -1.100e-03  1.946e-04  2.799e+05   -5.651 1.60e-08 ***
+method1:G1            -3.229e-03  1.941e-04  2.799e+05  -16.636  < 2e-16 ***
+method2:G1             2.863e-03  1.941e-04  2.799e+05   14.749  < 2e-16 ***
+method3:G1            -1.423e-03  1.941e-04  2.799e+05   -7.333 2.26e-13 ***
+method4:G1             8.991e-04  1.941e-04  2.799e+05    4.633 3.61e-06 ***
+method1:G2            -3.650e-03  1.935e-04  2.799e+05  -18.862  < 2e-16 ***
+method2:G2             1.399e-03  1.935e-04  2.799e+05    7.231 4.81e-13 ***
+method3:G2             1.501e-03  1.935e-04  2.799e+05    7.756 8.78e-15 ***
+method4:G2             7.185e-04  1.935e-04  2.799e+05    3.713 0.000205 ***
+method1:theta_true1   -3.812e-03  1.937e-04  2.799e+05  -19.683  < 2e-16 ***
+method2:theta_true1    2.492e-03  1.937e-04  2.799e+05   12.865  < 2e-16 ***
+method3:theta_true1   -2.652e-04  1.937e-04  2.799e+05   -1.369 0.170985    
+method4:theta_true1    1.267e-03  1.937e-04  2.799e+05    6.542 6.07e-11 ***
+method1:theta_true2    4.226e-04  1.944e-04  2.799e+05    2.174 0.029718 *  
+method2:theta_true2   -5.369e-05  1.944e-04  2.799e+05   -0.276 0.782416    
+method3:theta_true2    1.447e-05  1.944e-04  2.799e+05    0.074 0.940660    
+method4:theta_true2   -3.105e-04  1.944e-04  2.799e+05   -1.597 0.110262    
+method1:theta_CV1      9.388e-04  1.939e-04  2.799e+05    4.842 1.29e-06 ***
+method2:theta_CV1      4.807e-06  1.939e-04  2.799e+05    0.025 0.980222    
+method3:theta_CV1     -4.606e-04  1.939e-04  2.799e+05   -2.376 0.017516 *  
+method4:theta_CV1     -2.264e-04  1.939e-04  2.799e+05   -1.168 0.242959    
+method1:theta_CV2      5.896e-05  1.936e-04  2.799e+05    0.305 0.760673    
+method2:theta_CV2      9.768e-06  1.936e-04  2.799e+05    0.050 0.959752    
+method3:theta_CV2     -8.182e-05  1.936e-04  2.799e+05   -0.423 0.672532    
+method4:theta_CV2     -7.425e-05  1.936e-04  2.799e+05   -0.384 0.701304    
+method1:sigma1         1.286e-02  1.933e-04  2.799e+05   66.531  < 2e-16 ***
+method2:sigma1        -6.605e-03  1.933e-04  2.799e+05  -34.170  < 2e-16 ***
+method3:sigma1        -3.673e-03  1.933e-04  2.799e+05  -19.002  < 2e-16 ***
+method4:sigma1        -3.029e-03  1.933e-04  2.799e+05  -15.668  < 2e-16 ***
+method1:sigma2         1.070e-04  1.938e-04  2.799e+05    0.552 0.580901    
+method2:sigma2        -8.036e-05  1.938e-04  2.799e+05   -0.415 0.678380    
+method3:sigma2        -8.698e-04  1.938e-04  2.799e+05   -4.489 7.17e-06 ***
+method4:sigma2        -6.254e-04  1.938e-04  2.799e+05   -3.227 0.001251 ** 
+method1:mean_nsamp1   -1.833e-03  1.935e-04  2.799e+05   -9.476  < 2e-16 ***
+method2:mean_nsamp1   -2.995e-03  1.935e-04  2.799e+05  -15.478  < 2e-16 ***
+method3:mean_nsamp1    3.574e-04  1.935e-04  2.799e+05    1.847 0.064702 .  
+method4:mean_nsamp1    2.428e-03  1.935e-04  2.799e+05   12.550  < 2e-16 ***
+method1:mean_nsamp2    6.124e-04  1.938e-04  2.799e+05    3.159 0.001581 ** 
+method2:mean_nsamp2   -6.503e-04  1.938e-04  2.799e+05   -3.355 0.000793 ***
+method3:mean_nsamp2    2.112e-04  1.938e-04  2.799e+05    1.089 0.275936    
+method4:mean_nsamp2   -1.182e-04  1.938e-04  2.799e+05   -0.610 0.542007    
+method1:p1            -1.203e-03  1.270e-03  2.799e+05   -0.947 0.343518    
+method2:p1             2.027e-03  1.270e-03  2.799e+05    1.596 0.110416    
+method3:p1            -4.952e-04  1.270e-03  2.799e+05   -0.390 0.696574    
+method4:p1            -5.359e-05  1.270e-03  2.799e+05   -0.042 0.966339    
+method1:p2            -1.555e-03  1.263e-03  2.799e+05   -1.231 0.218242    
+method2:p2             1.769e-03  1.263e-03  2.799e+05    1.400 0.161447    
+method3:p2             1.650e-04  1.263e-03  2.799e+05    0.131 0.896067    
+method4:p2            -2.566e-04  1.263e-03  2.799e+05   -0.203 0.838988    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Type III analysis of variance (Satterthwaite)
+------------------------------------------------
+Type III Analysis of Variance Table with Satterthwaite's method
+                     Sum Sq Mean Sq NumDF  DenDF    F value    Pr(>F)    
+method                 11.9     3.0     4 279930 4.2089e+02 < 2.2e-16 ***
+metric              10725.1  5362.6     2 279930 7.6111e+05 < 2.2e-16 ***
+design_block           15.8     7.9     2  19985 1.1190e+03 < 2.2e-16 ***
+G                     242.0   121.0     2  19985 1.7173e+04 < 2.2e-16 ***
+theta_true             10.4     5.2     2  19985 7.3765e+02 < 2.2e-16 ***
+theta_CV                0.5     0.2     2  19985 3.4652e+01 9.483e-16 ***
+sigma                 225.5   112.8     2  19985 1.6006e+04 < 2.2e-16 ***
+mean_nsamp             40.2    20.1     2  19985 2.8503e+03 < 2.2e-16 ***
+p1                      0.0     0.0     1  19985 1.6915e+00    0.1934    
+p2                      0.0     0.0     1  19985 3.0570e-01    0.5803    
+method:metric          22.8     2.8     8 279930 4.0443e+02 < 2.2e-16 ***
+method:design_block     3.5     0.4     8 279930 6.1341e+01 < 2.2e-16 ***
+method:G               10.9     1.4     8 279930 1.9332e+02 < 2.2e-16 ***
+method:theta_true       4.1     0.5     8 279930 7.3584e+01 < 2.2e-16 ***
+method:theta_CV         0.3     0.0     8 279930 4.6650e+00 1.006e-05 ***
+method:sigma           48.4     6.1     8 279930 8.5909e+02 < 2.2e-16 ***
+method:mean_nsamp       4.8     0.6     8 279930 8.4566e+01 < 2.2e-16 ***
+method:p1               0.0     0.0     4 279930 7.2930e-01    0.5718    
+method:p2               0.0     0.0     4 279930 7.0880e-01    0.5857    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Estimated-marginal-means reference condition
+----------------------------------------------
+Factor covariates are fixed at their most frequent fitted level;
+p1 and p2 are fixed at their fitted-data means.
+design_block   = Lognormal
+G              = 4
+theta_true     = 2
+theta_CV       = 0.2
+sigma          = 0.25
+mean_nsamp     = 25
+p1             = 0.16615
+p2             = 0.16710625
+
+Estimated marginal means: method within metric
+------------------------------------------------
+metric = rmse:
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.0523 0.000832 Inf    0.0507    0.0540
+ ii     0.0391 0.000832 Inf    0.0374    0.0407
+ iii    0.0425 0.000832 Inf    0.0408    0.0441
+ iv     0.0447 0.000832 Inf    0.0431    0.0463
+ v      0.0444 0.000832 Inf    0.0428    0.0460
+
+metric = L1_norm:
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.2486 0.000832 Inf    0.2469    0.2502
+ ii     0.2546 0.000832 Inf    0.2530    0.2562
+ iii    0.2348 0.000832 Inf    0.2331    0.2364
+ iv     0.2404 0.000832 Inf    0.2388    0.2421
+ v      0.2336 0.000832 Inf    0.2320    0.2352
+
+metric = Linf_norm:
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i      0.0989 0.000832 Inf    0.0972    0.1005
+ ii     0.0895 0.000832 Inf    0.0879    0.0911
+ iii    0.0865 0.000832 Inf    0.0849    0.0881
+ iv     0.0890 0.000832 Inf    0.0874    0.0907
+ v      0.0875 0.000832 Inf    0.0858    0.0891
+
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+metric = rmse:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii    0.013246 0.000837 Inf  15.825 <0.0001
+ i - iii   0.009861 0.000837 Inf  11.781 <0.0001
+ i - iv    0.007639 0.000837 Inf   9.126 <0.0001
+ i - v     0.007921 0.000837 Inf   9.463 <0.0001
+ ii - iii -0.003385 0.000837 Inf  -4.044  0.0002
+ ii - iv  -0.005607 0.000837 Inf  -6.699 <0.0001
+ ii - v   -0.005326 0.000837 Inf  -6.362 <0.0001
+ iii - iv -0.002222 0.000837 Inf  -2.655  0.0238
+ iii - v  -0.001940 0.000837 Inf  -2.318  0.0409
+ iv - v    0.000282 0.000837 Inf   0.336  0.7365
+
+metric = L1_norm:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii   -0.006014 0.000837 Inf  -7.185 <0.0001
+ i - iii   0.013815 0.000837 Inf  16.504 <0.0001
+ i - iv    0.008145 0.000837 Inf   9.731 <0.0001
+ i - v     0.014957 0.000837 Inf  17.870 <0.0001
+ ii - iii  0.019829 0.000837 Inf  23.689 <0.0001
+ ii - iv   0.014160 0.000837 Inf  16.916 <0.0001
+ ii - v    0.020971 0.000837 Inf  25.054 <0.0001
+ iii - iv -0.005669 0.000837 Inf  -6.773 <0.0001
+ iii - v   0.001143 0.000837 Inf   1.365  0.1721
+ iv - v    0.006812 0.000837 Inf   8.138 <0.0001
+
+metric = Linf_norm:
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii    0.009357 0.000837 Inf  11.179 <0.0001
+ i - iii   0.012356 0.000837 Inf  14.761 <0.0001
+ i - iv    0.009819 0.000837 Inf  11.731 <0.0001
+ i - v     0.011387 0.000837 Inf  13.604 <0.0001
+ ii - iii  0.002998 0.000837 Inf   3.582  0.0020
+ ii - iv   0.000461 0.000837 Inf   0.551  0.5815
+ ii - v    0.002029 0.000837 Inf   2.425  0.0613
+ iii - iv -0.002537 0.000837 Inf  -3.031  0.0122
+ iii - v  -0.000969 0.000837 Inf  -1.157  0.4941
+ iv - v    0.001568 0.000837 Inf   1.873  0.1831
+
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+Estimated marginal means: method averaged equally over metric
+--------------------------------------------------------------
+ method emmean       SE  df asymp.LCL asymp.UCL
+ i       0.133 0.000804 Inf     0.132     0.135
+ ii      0.128 0.000804 Inf     0.126     0.129
+ iii     0.121 0.000804 Inf     0.120     0.123
+ iv      0.125 0.000804 Inf     0.123     0.126
+ v       0.122 0.000804 Inf     0.120     0.123
+
+Results are averaged over the levels of: metric 
+Degrees-of-freedom method: asymptotic 
+Confidence level used: 0.95 
+ contrast  estimate       SE  df z.ratio p.value
+ i - ii    0.005530 0.000779 Inf   7.100 <0.0001
+ i - iii   0.012010 0.000779 Inf  15.420 <0.0001
+ i - iv    0.008534 0.000779 Inf  10.957 <0.0001
+ i - v     0.011422 0.000779 Inf  14.664 <0.0001
+ ii - iii  0.006481 0.000779 Inf   8.320 <0.0001
+ ii - iv   0.003005 0.000779 Inf   3.857  0.0003
+ ii - v    0.005892 0.000779 Inf   7.564 <0.0001
+ iii - iv -0.003476 0.000779 Inf  -4.463 <0.0001
+ iii - v  -0.000589 0.000779 Inf  -0.756  0.4497
+ iv - v    0.002887 0.000779 Inf   3.707  0.0004
+
+Results are averaged over the levels of: metric 
+Degrees-of-freedom method: asymptotic 
+P value adjustment: holm method for 10 tests 
+
+Saved fitted model: fit-code-B-RE-simplex.rds
+Saved metric-specific EMMs: emmeans-code-B-RE-simplex-by-metric.csv
+Saved overall method EMMs: emmeans-code-B-RE-simplex-method.csv
+Saved EMM reference condition: emmeans-code-B-RE-simplex-reference-condition.csv
+
+Convergence and singularity checks
+----------------------------------
+Singular fit: FALSE
+Optimizer messages: none
+
+Analysis completed successfully.
+NOTE: The fitted model used a reproducible sample of simplex groups because
+the complete reduced model exceeded the configured memory safeguard.

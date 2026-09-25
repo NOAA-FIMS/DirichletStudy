@@ -1,0 +1,655 @@
+# code-F-K9.r
+#
+# source("code-F-K9.r")
+#
+# Revised 31-July-2026
+# Revised to use exactly three accuracy metrics: rmse, L1_norm, and Linf_norm.
+# This removes the previous L1 and Linf alias entries from metric_order so that
+# L1_norm and Linf_norm cannot be counted twice in rank or composite analyses.
+# Purpose:
+#   Rank-based accuracy analysis for compositional likelihood simulations.
+#   This revision avoids the emmeans reference-grid error and removes the
+#   singular mixed-model random-effect structure in the original script.
+#
+# Key changes from the original code-F.R:
+#   1. Converts ordered design factors that are used as covariates to numeric
+#      before modeling. This prevents emmeans from building a large factorial
+#      reference grid over G, theta_true, theta_CV, sigma, and mean_nsamp.
+#   2. Removes random intercepts for example_id and dataset_id. Because ranks
+#      are computed within dataset_id and metric, the average rank is fixed
+#      within each ranking block, which makes random intercepts redundant and
+#      can produce boundary/singular fits.
+#   3. Adds a metric-adjusted composite rank analysis that averages ranks over
+#      exactly three metrics: rmse, L1_norm, and Linf_norm. This reduces
+#      pseudo-replication from highly collinear accuracy metrics without
+#      double-counting alias names.
+#   4. Uses direct paired rank contrasts by dataset_id and method. Lower ranks
+#      indicate better accuracy.
+#   5. Saves plots to PNG files for reproducibility.
+
+library(dplyr)
+library(tidyr)
+library(data.table)
+library(emmeans)
+library(ggplot2)
+
+
+find_acc_long_parts_F <- function() {
+  out_dir <- Sys.getenv(
+    "METADATA_OUTDIR",
+    unset = if (exists("OUT_DIR", inherits = TRUE)) get("OUT_DIR", inherits = TRUE) else file.path(getwd(), "metadata_output")
+  )
+  part_dir <- file.path(out_dir, "acc_long_parts")
+  files <- sort(list.files(part_dir, pattern = "^acc_long_part_[0-9]+\\.rds$", full.names = TRUE))
+  if (!length(files)) stop("No acc_long RDS partitions found in ", part_dir)
+  files
+}
+
+prepare_rank_partition_F <- function(dat, sample_fraction, seed) {
+  required_cols <- c("dataset_id","example_id","method","metric","accuracy","design_block","G","theta_true","theta_CV","sigma","mean_nsamp","p1","p2")
+  miss <- setdiff(required_cols, names(dat))
+  if (length(miss)) stop("Partition missing columns: ", paste(miss, collapse=", "))
+  dt <- data.table::as.data.table(dat)[, ..required_cols]
+  dt[, `:=`(dataset_id=as.character(dataset_id), example_id=as.character(example_id), method=as.character(method), metric=as.character(metric), design_block=as.character(design_block), accuracy=as.numeric(accuracy))]
+  for (nm in c("G","theta_true","theta_CV","sigma","mean_nsamp","p1","p2")) data.table::set(dt, j=nm, value=suppressWarnings(as.numeric(as.character(dt[[nm]]))))
+  methods <- c("i","ii","iii","iv","v"); metrics <- c("rmse","L1_norm","Linf_norm")
+  dt <- dt[method %chin% methods & metric %chin% metrics & is.finite(accuracy)]
+  grp <- c("dataset_id","example_id","method","metric","design_block","G","theta_true","theta_CV","sigma","mean_nsamp","p1","p2")
+  dt <- dt[, .(accuracy=mean(accuracy, na.rm=TRUE)), by=grp]
+  good_blocks <- dt[, .(n_methods=uniqueN(method)), by=.(dataset_id,metric)][n_methods==5L, .(dataset_id,metric)]
+  dt <- dt[good_blocks, on=.(dataset_id,metric), nomatch=0L]
+  good_ids <- dt[, .(n_metrics=uniqueN(metric)), by=dataset_id][n_metrics==3L, dataset_id]
+  dt <- dt[dataset_id %chin% good_ids]
+  ids <- unique(dt$dataset_id)
+  n_units_available <- length(ids)
+  n_units_sampled <- if (n_units_available > 0L) {
+    max(1L, as.integer(ceiling(sample_fraction * n_units_available)))
+  } else {
+    0L
+  }
+  if (n_units_sampled > 0L && n_units_sampled < n_units_available) {
+    set.seed(seed)
+    ids <- sample(ids, n_units_sampled, replace = FALSE)
+  }
+  dt <- dt[dataset_id %chin% ids]
+  dt[, `:=`(rank=rank(accuracy, ties.method="average"), best_accuracy=min(accuracy, na.rm=TRUE)), by=.(dataset_id,metric)]
+  dt[, is_best := accuracy == best_accuracy]
+  list(
+    data = dt[],
+    n_units_available = n_units_available,
+    n_units_sampled = n_units_sampled
+  )
+}
+
+build_rank_sample_F <- function(files, sample_fraction, seed) {
+  pieces <- vector("list", length(files))
+  sampling_counts <- data.table::data.table(
+    partition = basename(files),
+    units_available = integer(length(files)),
+    units_sampled = integer(length(files))
+  )
+  for (i in seq_along(files)) {
+    message("Rank data: partition ", i, " of ", length(files))
+    part <- readRDS(files[[i]])
+    sampled <- prepare_rank_partition_F(part, sample_fraction, seed + i)
+    pieces[[i]] <- sampled$data
+    sampling_counts$units_available[i] <- sampled$n_units_available
+    sampling_counts$units_sampled[i] <- sampled$n_units_sampled
+    rm(part, sampled); invisible(gc())
+  }
+  out <- data.table::rbindlist(pieces, use.names=TRUE, fill=TRUE)
+  rm(pieces); invisible(gc())
+  out <- as.data.frame(out)
+  attr(out, "sampling_counts") <- sampling_counts
+  out
+}
+
+run_code_F <- function(
+  data_name = "acc_long",
+  out_file = "results-code-F-K9.txt",
+  fig_dir = "figures-code-F-K9"
+) {
+
+  if (!dir.exists(fig_dir)) {
+    dir.create(fig_dir, recursive = TRUE)
+  }
+
+  safe_numeric <- function(x) {
+    if (is.factor(x)) x <- as.character(x)
+    suppressWarnings(as.numeric(x))
+  }
+
+  finite_mean <- function(x) {
+    x <- x[is.finite(x)]
+    if (length(x) == 0L) NA_real_ else mean(x)
+  }
+
+  save_plot <- function(plot_obj, filename, width = 10, height = 7, dpi = 300) {
+    ggplot2::ggsave(
+      filename = filename,
+      plot = plot_obj,
+      width = width,
+      height = height,
+      dpi = dpi,
+      bg = "white"
+    )
+  }
+
+  make_paired_contrasts <- function(dat, response, block_vars, group_var = NULL) {
+    # Direct paired rank contrasts. For a contrast A - B, a negative estimate
+    # means method A has a lower, and therefore better, rank than method B.
+
+    if (!response %in% names(dat)) {
+      stop("Response column '", response, "' not found.")
+    }
+
+    method_levels <- levels(dat$method)
+    if (is.null(method_levels)) {
+      method_levels <- sort(unique(as.character(dat$method)))
+    }
+
+    one_group <- function(dd, group_value = NULL) {
+      select_vars <- unique(c(block_vars, "method", response))
+
+      dtw <- unique(data.table::as.data.table(dd)[, ..select_vars])
+      cast_formula <- as.formula(paste(paste(block_vars, collapse = " + "), "~ method"))
+      wide <- data.table::dcast(dtw, formula = cast_formula, value.var = response, fill = NA_real_)
+
+      methods_here <- method_levels[method_levels %in% names(wide)]
+      if (length(methods_here) < 2L) {
+        return(data.frame())
+      }
+
+      out <- lapply(utils::combn(methods_here, 2L, simplify = FALSE), function(mm) {
+        diff_vec <- wide[[mm[1L]]] - wide[[mm[2L]]]
+        diff_vec <- diff_vec[is.finite(diff_vec)]
+        n_used <- length(diff_vec)
+
+        if (n_used == 0L) {
+          mean_diff <- NA_real_
+          se_diff <- NA_real_
+          t_value <- NA_real_
+          p_value <- NA_real_
+        } else {
+          mean_diff <- mean(diff_vec)
+          se_diff <- stats::sd(diff_vec) / sqrt(n_used)
+          if (!is.finite(se_diff) || se_diff == 0) {
+            t_value <- NA_real_
+            p_value <- NA_real_
+          } else {
+            t_value <- mean_diff / se_diff
+            p_value <- 2 * stats::pt(abs(t_value), df = n_used - 1L, lower.tail = FALSE)
+          }
+        }
+
+        data.frame(
+          contrast = paste(mm[1L], "-", mm[2L]),
+          estimate = mean_diff,
+          SE = se_diff,
+          df = ifelse(n_used > 1L, n_used - 1L, NA_integer_),
+          t_value = t_value,
+          p_value = p_value,
+          n_pairs = n_used,
+          interpretation = dplyr::case_when(
+            is.na(mean_diff) ~ "not estimable",
+            mean_diff < 0 ~ paste(mm[1L], "has lower mean rank than", mm[2L]),
+            mean_diff > 0 ~ paste(mm[2L], "has lower mean rank than", mm[1L]),
+            TRUE ~ "equal mean rank"
+          ),
+          stringsAsFactors = FALSE
+        )
+      })
+
+      ans <- dplyr::bind_rows(out)
+      if (nrow(ans) > 0L) {
+        ans$p_value_holm <- stats::p.adjust(ans$p_value, method = "holm")
+        if (!is.null(group_var)) {
+          ans[[group_var]] <- group_value
+          ans <- ans %>% dplyr::relocate(dplyr::all_of(group_var))
+        }
+      }
+      ans
+    }
+
+    if (is.null(group_var)) {
+      one_group(dat)
+    } else {
+      split_dat <- split(dat, dat[[group_var]], drop = TRUE)
+      dplyr::bind_rows(lapply(names(split_dat), function(g) one_group(split_dat[[g]], g)))
+    }
+  }
+
+  con <- file(out_file, open = "wt")
+  sink_start <- sink.number(type = "output")
+  sink(con, type = "output")
+
+  on.exit({
+    while (sink.number(type = "output") > sink_start) {
+      sink(type = "output")
+    }
+    close(con)
+  }, add = TRUE)
+
+  tryCatch({
+    cat("Code F: Revised Rank-Based Accuracy Analysis with Three Canonical Metrics\n")
+    cat("Output file:", out_file, "\n")
+    cat("Figure output directory:", fig_dir, "\n")
+    cat("Run time:", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"), "\n\n")
+
+    if (!exists(data_name, envir = parent.frame(), inherits = TRUE)) {
+      stop("Required data object '", data_name, "' not found.")
+    }
+    acc_long_in <- get(data_name, envir = parent.frame(), inherits = TRUE)
+    sample_fraction <- suppressWarnings(as.numeric(
+      Sys.getenv("CODE_F_SAMPLE_FRACTION", unset = "0.02")
+    ))
+    if (!is.finite(sample_fraction) ||
+        sample_fraction <= 0 || sample_fraction > 1) {
+      stop(
+        "CODE_F_SAMPLE_FRACTION must be greater than 0 and no greater than 1."
+      )
+    }
+    sample_seed <- suppressWarnings(as.integer(
+      Sys.getenv("CODE_F_SEED", unset = "68735")
+    ))
+    if (is.na(sample_seed)) sample_seed <- 68735L
+    cat(
+      "Simplex sampling fraction:", sample_fraction,
+      "(", 100 * sample_fraction, "%)\n",
+      sep = ""
+    )
+    cat("Sampling unit: dataset_id\n")
+    cat("Sampling seed:", sample_seed, "\n\n")
+    is_arrow_input <- inherits(acc_long_in, c("Dataset","FileSystemDataset","UnionDataset","arrow_dplyr_query","RecordBatchReader"))
+    if (is_arrow_input) {
+      files <- find_acc_long_parts_F()
+      cat("Input type: disk-backed Arrow acc_long dataset\n")
+      cat("Processing mode: partition-wise RDS processing\n")
+      cat("Number of partitions:", length(files), "\n")
+      acc_long <- build_rank_sample_F(files, sample_fraction, sample_seed)
+      sampling_counts <- attr(acc_long, "sampling_counts")
+    } else if (is.data.frame(acc_long_in) || data.table::is.data.table(acc_long_in)) {
+      sampled <- prepare_rank_partition_F(
+        acc_long_in,
+        sample_fraction,
+        sample_seed
+      )
+      acc_long <- as.data.frame(sampled$data)
+      sampling_counts <- data.table::data.table(
+        partition = "in_memory",
+        units_available = sampled$n_units_available,
+        units_sampled = sampled$n_units_sampled
+      )
+      rm(sampled)
+    } else {
+      stop("Unsupported acc_long class: ", paste(class(acc_long_in), collapse=", "))
+    }
+
+    total_units_available <- sum(sampling_counts$units_available)
+    total_units_sampled <- sum(sampling_counts$units_sampled)
+    cat("Eligible simplex units available:", total_units_available, "\n")
+    cat("Simplex units sampled:", total_units_sampled, "\n")
+    cat(
+      "Realized simplex sampling percentage:",
+      100 * total_units_sampled / total_units_available,
+      "\n\n"
+    )
+
+    required_cols <- c(
+      "dataset_id", "example_id", "method", "metric", "accuracy",
+      "design_block", "G", "theta_true", "theta_CV", "sigma",
+      "mean_nsamp", "p1", "p2"
+    )
+    missing_cols <- setdiff(required_cols, names(acc_long))
+    if (length(missing_cols) > 0L) {
+      stop("Input data are missing required columns: ", paste(missing_cols, collapse = ", "))
+    }
+
+    method_order <- c("i", "ii", "iii", "iv", "v")
+    observed_methods <- unique(as.character(acc_long$method))
+    method_levels <- c(
+      method_order[method_order %in% observed_methods],
+      sort(setdiff(observed_methods, method_order))
+    )
+
+    # Use exactly the three accuracy metrics produced by the hake output files.
+    # Do not include alias names such as "L1" or "Linf"; including both aliases
+    # and canonical names would double-count the same information in the rank
+    # and composite-rank analyses.
+    metric_order <- c("rmse", "L1_norm", "Linf_norm")
+    expected_n_metrics <- length(metric_order)
+
+    observed_metrics <- sort(unique(as.character(acc_long$metric)))
+    missing_metrics <- setdiff(metric_order, observed_metrics)
+    extra_metrics <- setdiff(observed_metrics, metric_order)
+
+    cat("Expected accuracy metrics:", paste(metric_order, collapse = ", "), "\n")
+    cat("Observed accuracy metrics:", paste(observed_metrics, collapse = ", "), "\n")
+
+    if (length(missing_metrics) > 0L) {
+      stop(
+        "Input data are missing required accuracy metrics: ",
+        paste(missing_metrics, collapse = ", ")
+      )
+    }
+
+    if (length(extra_metrics) > 0L) {
+      cat(
+        "Note: Excluding noncanonical or duplicate metric labels from rank analysis:",
+        paste(extra_metrics, collapse = ", "),
+        "\n"
+      )
+    }
+
+    metric_levels <- metric_order
+
+    acc_long <- acc_long %>%
+      dplyr::mutate(
+        dataset_id = factor(dataset_id),
+        example_id = factor(example_id),
+        method = factor(as.character(method), levels = method_levels),
+        metric = factor(as.character(metric), levels = metric_levels),
+        design_block = factor(design_block),
+        G = safe_numeric(G),
+        theta_true = safe_numeric(theta_true),
+        theta_CV = safe_numeric(theta_CV),
+        sigma = safe_numeric(sigma),
+        mean_nsamp = safe_numeric(mean_nsamp),
+        p1 = safe_numeric(p1),
+        p2 = safe_numeric(p2),
+        accuracy = as.numeric(accuracy)
+      ) %>%
+      dplyr::filter(
+        !is.na(dataset_id), !is.na(method), !is.na(metric),
+        as.character(metric) %in% metric_levels,
+        is.finite(accuracy)
+      )
+
+    retained_metrics <- sort(unique(as.character(acc_long$metric)))
+    if (!identical(retained_metrics, sort(metric_order))) {
+      stop(
+        "After filtering, retained metrics do not match the required three metrics. ",
+        "Retained metrics: ", paste(retained_metrics, collapse = ", ")
+      )
+    }
+
+    cat("Retained accuracy metrics for ranking:", paste(metric_order, collapse = ", "), "\n")
+    cat("Number of retained metrics:", expected_n_metrics, "\n")
+    cat("Computing ranks within dataset_id and metric.\n")
+    rank_dat <- acc_long %>%
+      dplyr::group_by(dataset_id, metric) %>%
+      dplyr::mutate(
+        rank = rank(accuracy, ties.method = "average"),
+        best_accuracy = min(accuracy, na.rm = TRUE),
+        is_best = accuracy == best_accuracy
+      ) %>%
+      dplyr::ungroup()
+
+    cat("\nRank interpretation:\n")
+    cat("  Rank 1 is the lowest accuracy error and therefore the best method.\n")
+    cat("  Pairwise rank contrasts use A - B; negative estimates favor A.\n\n")
+
+    cat("Descriptive Statistics: Mean Rank and Probability of Being Best\n")
+    cat("----------------------------------------------------------------\n")
+    rank_summary <- rank_dat %>%
+      dplyr::group_by(metric, method) %>%
+      dplyr::summarise(
+        mean_rank = mean(rank, na.rm = TRUE),
+        prob_best = mean(is_best, na.rm = TRUE),
+        n = dplyr::n(),
+        .groups = "drop"
+      )
+    print(as.data.frame(rank_summary))
+    cat("\n")
+
+    cat("Checking rank concordance among metrics.\n")
+    metric_rank_dt <- unique(data.table::as.data.table(rank_dat)[, .(dataset_id, method, metric, rank)])
+    metric_rank_wide <- data.table::dcast(metric_rank_dt, dataset_id + method ~ metric, value.var = "rank", fill = NA_real_)
+
+    metric_cols <- setdiff(names(metric_rank_wide), c("dataset_id", "method"))
+    if (length(metric_cols) >= 2L) {
+      metric_rank_cor <- stats::cor(
+        metric_rank_wide[, ..metric_cols],
+        use = "pairwise.complete.obs"
+      )
+      print(round(metric_rank_cor, 4))
+      cat("\n")
+    }
+
+    cat("Metric-specific paired rank contrasts.\n")
+    cat("--------------------------------------\n")
+    paired_by_metric <- make_paired_contrasts(
+      dat = rank_dat,
+      response = "rank",
+      block_vars = c("dataset_id"),
+      group_var = "metric"
+    )
+    print(as.data.frame(paired_by_metric))
+    cat("\n")
+
+    cat("Creating metric-adjusted composite rank by averaging ranks over metrics.\n")
+    composite_dat <- rank_dat %>%
+      dplyr::group_by(
+        dataset_id, example_id, design_block, G, theta_true, theta_CV,
+        sigma, mean_nsamp, p1, p2, method
+      ) %>%
+      dplyr::summarise(
+        mean_rank = mean(rank, na.rm = TRUE),
+        prob_best_across_metrics = mean(is_best, na.rm = TRUE),
+        n_metrics = dplyr::n_distinct(metric),
+        .groups = "drop"
+      )
+
+    n_metric_table <- table(composite_dat$n_metrics)
+    cat("\nNumber of metrics contributing to each composite-rank row:\n")
+    print(n_metric_table)
+    if (any(composite_dat$n_metrics != expected_n_metrics)) {
+      stop(
+        "Composite-rank rows must each contain exactly ",
+        expected_n_metrics,
+        " metrics. Some rows contain a different number of metrics."
+      )
+    }
+
+    cat("\nComposite Rank Summary by Method\n")
+    cat("--------------------------------\n")
+    composite_summary <- composite_dat %>%
+      dplyr::group_by(method) %>%
+      dplyr::summarise(
+        mean_composite_rank = mean(mean_rank, na.rm = TRUE),
+        sd_composite_rank = stats::sd(mean_rank, na.rm = TRUE),
+        mean_probability_best = mean(prob_best_across_metrics, na.rm = TRUE),
+        n = dplyr::n(),
+        .groups = "drop"
+      )
+    print(as.data.frame(composite_summary))
+    cat("\n")
+
+    cat("Composite paired rank contrasts.\n")
+    cat("--------------------------------\n")
+    composite_contrasts <- make_paired_contrasts(
+      dat = composite_dat,
+      response = "mean_rank",
+      block_vars = c("dataset_id"),
+      group_var = NULL
+    )
+    print(as.data.frame(composite_contrasts))
+    cat("\n")
+
+    cat("Fitting metric-adjusted fixed-effect rank model.\n")
+    cat("Random intercepts are intentionally not used because ranks are fixed within ranking blocks.\n")
+    fit_comp <- stats::lm(
+      mean_rank ~ method * (design_block + G + theta_true + theta_CV + sigma + mean_nsamp + p1 + p2),
+      data = composite_dat
+    )
+
+    cat("\nComposite Rank Model ANOVA Table\n")
+    cat("--------------------------------\n")
+    print(stats::anova(fit_comp))
+    cat("\n")
+
+    at_comp <- list(
+      design_block = names(sort(table(composite_dat$design_block), decreasing = TRUE))[1],
+      G = finite_mean(composite_dat$G),
+      theta_true = finite_mean(composite_dat$theta_true),
+      theta_CV = finite_mean(composite_dat$theta_CV),
+      sigma = finite_mean(composite_dat$sigma),
+      mean_nsamp = finite_mean(composite_dat$mean_nsamp),
+      p1 = finite_mean(composite_dat$p1),
+      p2 = finite_mean(composite_dat$p2)
+    )
+
+    cat("Estimated marginal mean composite ranks by method.\n")
+    emm_comp <- emmeans::emmeans(
+      fit_comp,
+      specs = ~ method,
+      at = at_comp,
+      weights = "proportional",
+      rg.limit = 10000
+    )
+    print(emm_comp)
+    cat("\nPairwise EMM contrasts for composite ranks.\n")
+    print(emmeans::contrast(emm_comp, method = "pairwise", adjust = "holm"))
+    cat("\n")
+
+    cat("Metric-specific fixed-effect rank models and EMM contrasts.\n")
+    cat("----------------------------------------------------------\n")
+    metric_model_results <- list()
+    for (mm in levels(rank_dat$metric)) {
+      dd <- rank_dat %>% dplyr::filter(metric == mm)
+      if (nrow(dd) == 0L) next
+
+      cat("\nMetric:", mm, "\n")
+      fit_metric <- stats::lm(
+        rank ~ method * (design_block + G + theta_true + theta_CV + sigma + mean_nsamp + p1 + p2),
+        data = dd
+      )
+      print(stats::anova(fit_metric))
+
+      at_metric <- list(
+        design_block = names(sort(table(dd$design_block), decreasing = TRUE))[1],
+        G = finite_mean(dd$G),
+        theta_true = finite_mean(dd$theta_true),
+        theta_CV = finite_mean(dd$theta_CV),
+        sigma = finite_mean(dd$sigma),
+        mean_nsamp = finite_mean(dd$mean_nsamp),
+        p1 = finite_mean(dd$p1),
+        p2 = finite_mean(dd$p2)
+      )
+
+      emm_metric <- emmeans::emmeans(
+        fit_metric,
+        specs = ~ method,
+        at = at_metric,
+        weights = "proportional",
+        rg.limit = 10000
+      )
+      print(emm_metric)
+      print(emmeans::contrast(emm_metric, method = "pairwise", adjust = "holm"))
+
+      metric_model_results[[as.character(mm)]] <- list(
+        fit = fit_metric,
+        emmeans = emm_metric
+      )
+    }
+
+    cat("\nGenerating visualization plots.\n")
+
+    p_best <- ggplot(rank_summary, aes(x = method, y = prob_best, fill = method)) +
+      geom_col(color = "black", alpha = 0.8) +
+      facet_wrap(~ metric) +
+      theme_minimal() +
+      labs(
+        title = "Probability of Method Being Best",
+        subtitle = "Rank 1 is assigned to the lowest accuracy error within each dataset and metric",
+        y = "Probability of best rank",
+        x = "Estimation method"
+      ) +
+      guides(fill = "none")
+    best_file <- file.path(fig_dir, "code_F_K9_probability_best_by_metric.png")
+    save_plot(p_best, best_file)
+    cat("Saved plot:", best_file, "\n")
+
+    p_comp <- ggplot(composite_summary, aes(x = method, y = mean_composite_rank)) +
+      geom_point(size = 3) +
+      geom_errorbar(
+        aes(
+          ymin = mean_composite_rank - 1.96 * sd_composite_rank / sqrt(n),
+          ymax = mean_composite_rank + 1.96 * sd_composite_rank / sqrt(n)
+        ),
+        width = 0.15
+      ) +
+      theme_minimal() +
+      labs(
+        title = "Mean Composite Rank by Method",
+        subtitle = "Ranks are averaged over rmse, L1_norm, and Linf_norm; lower values are better",
+        y = "Mean composite rank",
+        x = "Estimation method"
+      )
+    comp_file <- file.path(fig_dir, "code_F_K9_composite_mean_rank.png")
+    save_plot(p_comp, comp_file)
+    cat("Saved plot:", comp_file, "\n")
+
+    rank_dist_dat <- rank_dat %>%
+      dplyr::group_by(method, metric, rank) %>%
+      dplyr::tally(name = "n") %>%
+      dplyr::group_by(method, metric) %>%
+      dplyr::mutate(percentage = n / sum(n)) %>%
+      dplyr::ungroup()
+
+    p_dist <- ggplot(rank_dist_dat, aes(x = method, y = percentage, fill = factor(rank))) +
+      geom_col(color = "white", linewidth = 0.2) +
+      facet_wrap(~ metric) +
+      theme_minimal() +
+      labs(
+        title = "Complete Rank Distribution Profile",
+        subtitle = "Lower ranks indicate lower error",
+        y = "Proportion of datasets",
+        x = "Estimation method",
+        fill = "Rank"
+      )
+    dist_file <- file.path(fig_dir, "code_F_K9_rank_distribution_by_metric.png")
+    save_plot(p_dist, dist_file)
+    cat("Saved plot:", dist_file, "\n")
+
+    diag_dat <- data.frame(
+      fitted = stats::fitted(fit_comp),
+      resid = stats::resid(fit_comp)
+    )
+    p_res <- ggplot(diag_dat, aes(x = fitted, y = resid)) +
+      geom_point(alpha = 0.15) +
+      geom_hline(yintercept = 0, linetype = "dashed") +
+      theme_minimal() +
+      labs(
+        title = "Composite Rank Model Diagnostics",
+        x = "Fitted composite rank",
+        y = "Residual"
+      )
+    res_file <- file.path(fig_dir, "code_F_K9_composite_rank_residuals.png")
+    save_plot(p_res, res_file)
+    cat("Saved plot:", res_file, "\n")
+
+    saveRDS(list(rank_summary=rank_summary, paired_by_metric=paired_by_metric, composite_summary=composite_summary, composite_contrasts=composite_contrasts, fit_comp=fit_comp, emm_comp=emm_comp, metric_model_results=metric_model_results, sample_fraction=sample_fraction, sampling_counts=sampling_counts, seed=sample_seed, figure_directory=fig_dir), "code-F-K9-model-results.rds", compress="gzip")
+    cat("\nAnalysis completed successfully.\n")
+    cat("Saved model results: code-F-K9-model-results.rds\n")
+
+    invisible(list(
+      rank_summary = rank_summary,
+      paired_by_metric = paired_by_metric,
+      composite_summary = composite_summary,
+      composite_contrasts = composite_contrasts,
+      fit_comp = fit_comp,
+      emm_comp = emm_comp,
+      metric_model_results = metric_model_results,
+      sample_fraction = sample_fraction,
+      sampling_counts = sampling_counts,
+      figure_directory = fig_dir
+    ))
+
+  }, error = function(e) {
+    cat("ERROR\n-----\n", conditionMessage(e), "\n")
+    stop(e)
+  })
+}
+
+run_code_F()

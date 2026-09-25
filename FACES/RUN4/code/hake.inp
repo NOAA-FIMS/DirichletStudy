@@ -1,0 +1,21 @@
+# file = hake_ex509.inp
+# example_id = 509
+# design_block = Negative binomial
+
+K = 3
+G = 2
+h = 0.100000000000000
+theta_true = 2
+theta_CV = 0.200000000000000
+Nmin = 50
+Nmax = 100
+nsims = 5
+random.seed = 666215114
+od_mult = 1
+sigma = 0.250000000000000
+dist_code = 3
+mean_nsamp = 25
+ln_sd = 1
+nb_size = 25
+p_lbound = 0.0, 0.0, 0.0
+p_ubound = 1.0, 1.0, 1.0

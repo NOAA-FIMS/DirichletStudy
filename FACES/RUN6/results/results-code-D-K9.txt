@@ -1,0 +1,1274 @@
+Code D: Factorial MANOVA on Pairwise Differences
+Output file: results-code-D-K9.txt 
+Run time: 2026-09-22 17:47:06 HST 
+Simplex sampling fraction:0.02(2%)
+Sampling unit: example_id x mesh_id x sim_id
+Sampling seed: 65436 
+
+Input type: disk-backed Arrow acc_long dataset
+Processing mode: partition-wise RDS processing
+Number of acc_long partitions: 61 
+
+==================================================================
+Factorial Analysis of Difference: ii_vs_i 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82cd8>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82cd8>
+
+MANOVA Table (Pillai):
+                 Df             Pillai         approx F
+design_block      2 0.0016119652114844  171.53878687644
+G                 2 0.0606701590955476 6652.88389035889
+theta_true        2 0.0088064745344828  940.53530510390
+theta_CV          2 0.0001709974951373   18.18374684511
+sigma             2 0.0526200435914766 5746.28283163373
+mean_nsamp        2 0.0090634782208638  968.10836434197
+p1                1 0.0000014540613564    0.30922113769
+p2                1 0.0000005888485336    0.12522460290
+Residuals    637982                                    
+             num Df  den Df  Pr(>F)    
+design_block      6 1275962 < 2e-16 ***
+G                 6 1275962 < 2e-16 ***
+theta_true        6 1275962 < 2e-16 ***
+theta_CV          6 1275962 < 2e-16 ***
+sigma             6 1275962 < 2e-16 ***
+mean_nsamp        6 1275962 < 2e-16 ***
+p1                3  637980 0.81875    
+p2                3  637980 0.94522    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq          Mean Sq
+design_block      2    1.795153081700  0.8975765408502
+G                 2   86.415539345336 43.2077696726678
+theta_true        2   11.059425520914  5.5297127604572
+theta_CV          2    0.196440734258  0.0982203671291
+sigma             2   65.671947594989 32.8359737974947
+mean_nsamp        2    9.064629185914  4.5323145929572
+p1                1    0.000452213200  0.0004522131997
+p2                1    0.000067547566  0.0000675475661
+Residuals    637982 1389.294897164879  0.0021776396468
+                 F value  Pr(>F)    
+design_block   412.17864 < 2e-16 ***
+G            19841.56090 < 2e-16 ***
+theta_true    2539.31488 < 2e-16 ***
+theta_CV        45.10405 < 2e-16 ***
+sigma        15078.69947 < 2e-16 ***
+mean_nsamp    2081.29688 < 2e-16 ***
+p1               0.20766 0.64861    
+p2               0.03102 0.86020    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq           Mean Sq
+design_block      2    51.8038716415   25.901935820744
+G                 2  2744.9243395136 1372.462169756814
+theta_true        2   366.9439345085  183.471967254242
+theta_CV          2     6.3665061446    3.183253072279
+sigma             2  2214.1455933734 1107.072796686722
+mean_nsamp        2   248.3170999004  124.158549950208
+p1                1     0.0150399878    0.015039987797
+p2                1     0.0041521567    0.004152156723
+Residuals    637982 42744.2028498624    0.066999073406
+                 F value  Pr(>F)    
+design_block   386.60140 < 2e-16 ***
+G            20484.79330 < 2e-16 ***
+theta_true    2738.42544 < 2e-16 ***
+theta_CV        47.51190 < 2e-16 ***
+sigma        16523.70310 < 2e-16 ***
+mean_nsamp    1853.13831 < 2e-16 ***
+p1               0.22448 0.63565    
+p2               0.06197 0.80340    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq          Mean Sq
+design_block      2    16.01598448519   8.007992242596
+G                 2   666.36885675726 333.184428378630
+theta_true        2    82.52376684859  41.261883424293
+theta_CV          2     1.58749818185   0.793749090924
+sigma             2   466.46061455191 233.230307275955
+mean_nsamp        2    81.01710610520  40.508553052602
+p1                1     0.00224071228   0.002240712275
+p2                1     0.00015557764   0.000155577638
+Residuals    637982 11246.94509576879   0.017628937957
+                 F value  Pr(>F)    
+design_block   454.25268 < 2e-16 ***
+G            18899.85824 < 2e-16 ***
+theta_true    2340.57681 < 2e-16 ***
+theta_CV        45.02535 < 2e-16 ***
+sigma        13229.96926 < 2e-16 ***
+mean_nsamp    2297.84421 < 2e-16 ***
+p1               0.12710 0.72145    
+p2               0.00883 0.92516    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: iii_vs_i 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d824f8>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d824f8>
+
+MANOVA Table (Pillai):
+                 Df             Pillai         approx F
+design_block      2 0.0021555502767780  229.44731279749
+G                 2 0.0520071684936300 5677.56801190366
+theta_true        2 0.0054295736011299  578.89905344623
+theta_CV          2 0.0004243860785679   45.13461971727
+sigma             2 0.0632132440433529 6940.85164925699
+mean_nsamp        2 0.0102107234969626 1091.27930684938
+p1                1 0.0000029278158064    0.62263113233
+p2                1 0.0000162179675275    3.44896890967
+Residuals    637982                                    
+             num Df  den Df   Pr(>F)    
+design_block      6 1275962  < 2e-16 ***
+G                 6 1275962  < 2e-16 ***
+theta_true        6 1275962  < 2e-16 ***
+theta_CV          6 1275962  < 2e-16 ***
+sigma             6 1275962  < 2e-16 ***
+mean_nsamp        6 1275962  < 2e-16 ***
+p1                3  637980 0.600273    
+p2                3  637980 0.015837 *  
+Residuals                               
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq           Mean Sq
+design_block      2    2.351081694371  1.17554084718543
+G                 2   59.405954933827 29.70297746691342
+theta_true        2    5.542510808291  2.77125540414572
+theta_CV          2    0.343954952162  0.17197747608123
+sigma             2   59.647433964884 29.82371698244189
+mean_nsamp        2    9.843722619472  4.92186130973584
+p1                1    0.000630350676  0.00063035067605
+p2                1    0.000076902441  0.00007690244091
+Residuals    637982 1147.414236686325  0.00179850565798
+                 F value  Pr(>F)    
+design_block   653.62088 < 2e-16 ***
+G            16515.36504 < 2e-16 ***
+theta_true    1540.86555 < 2e-16 ***
+theta_CV        95.62243 < 2e-16 ***
+sigma        16582.49828 < 2e-16 ***
+mean_nsamp    2736.63932 < 2e-16 ***
+p1               0.35049 0.55384    
+p2               0.04276 0.83618    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq          Mean Sq
+design_block      2    73.6717689728  36.835884486403
+G                 2  1765.7370012286 882.868500614293
+theta_true        2   154.9526512618  77.476325630885
+theta_CV          2    11.6640306117   5.832015305829
+sigma             2  1979.2890320315 989.644516015768
+mean_nsamp        2   276.3812631739 138.190631586945
+p1                1     0.0154321423   0.015432142290
+p2                1     0.0008762733   0.000876273309
+Residuals    637982 34830.2853790004   0.054594464074
+                 F value  Pr(>F)    
+design_block   674.71831 < 2e-16 ***
+G            16171.39239 < 2e-16 ***
+theta_true    1419.12421 < 2e-16 ***
+theta_CV       106.82430 < 2e-16 ***
+sigma        18127.19536 < 2e-16 ***
+mean_nsamp    2531.22059 < 2e-16 ***
+p1               0.28267 0.59496    
+p2               0.01605 0.89919    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df           Sum Sq           Mean Sq
+design_block      2   18.17228065381   9.0861403269048
+G                 2  489.27161063321 244.6358053166035
+theta_true        2   47.15151355090  23.5757567754489
+theta_CV          2    2.55855202733   1.2792760136663
+sigma             2  440.01181129964 220.0059056498176
+mean_nsamp        2   83.69103601397  41.8455180069828
+p1                1    0.00444120291   0.0044412029131
+p2                1    0.00314555436   0.0031455543578
+Residuals    637982 9314.88168038032   0.0146005399531
+                 F value  Pr(>F)    
+design_block   622.31536 < 2e-16 ***
+G            16755.25742 < 2e-16 ***
+theta_true    1614.71814 < 2e-16 ***
+theta_CV        87.61840 < 2e-16 ***
+sigma        15068.34037 < 2e-16 ***
+mean_nsamp    2866.02538 < 2e-16 ***
+p1               0.30418 0.58127    
+p2               0.21544 0.64254    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: iv_vs_i 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82680>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82680>
+
+MANOVA Table (Pillai):
+                 Df             Pillai         approx F
+design_block      2 0.0027079993636885  288.33242568687
+G                 2 0.0571229038730250 6252.46743750359
+theta_true        2 0.0095139312741311 1016.45313064775
+theta_CV          2 0.0004698041320111   49.96608879491
+sigma             2 0.0652806048006481 7175.50835100662
+mean_nsamp        2 0.0123344652383459 1319.66442200730
+p1                1 0.0000065544684907    1.39388240539
+p2                1 0.0000165038269413    3.50976176184
+Residuals    637982                                    
+             num Df  den Df   Pr(>F)    
+design_block      6 1275962  < 2e-16 ***
+G                 6 1275962  < 2e-16 ***
+theta_true        6 1275962  < 2e-16 ***
+theta_CV          6 1275962  < 2e-16 ***
+sigma             6 1275962  < 2e-16 ***
+mean_nsamp        6 1275962  < 2e-16 ***
+p1                3  637980 0.242507    
+p2                3  637980 0.014564 *  
+Residuals                               
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq          Mean Sq
+design_block      2    3.055336405212  1.5276682026058
+G                 2   67.067126364641 33.5335631823205
+theta_true        2    8.859415957503  4.4297079787513
+theta_CV          2    0.330692233120  0.1653461165598
+sigma             2   58.625443073755 29.3127215368775
+mean_nsamp        2   13.698700940763  6.8493504703817
+p1                1    0.000441553914  0.0004415539136
+p2                1    0.000087165013  0.0000871650126
+Residuals    637982 1151.828741302517  0.0018054251394
+                 F value  Pr(>F)    
+design_block   846.15428 < 2e-16 ***
+G            18573.77659 < 2e-16 ***
+theta_true    2453.55395 < 2e-16 ***
+theta_CV        91.58293 < 2e-16 ***
+sigma        16235.91081 < 2e-16 ***
+mean_nsamp    3793.76044 < 2e-16 ***
+p1               0.24457 0.62092    
+p2               0.04828 0.82608    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq           Mean Sq
+design_block      2    89.0563928431   44.528196421567
+G                 2  2062.9854618036 1031.492730901824
+theta_true        2   299.1216192640  149.560809632018
+theta_CV          2    11.8905360223    5.945268011162
+sigma             2  2009.6385329187 1004.819266459326
+mean_nsamp        2   423.8100209024  211.905010451216
+p1                1     0.0073467752    0.007346775169
+p2                1     0.0027581791    0.002758179080
+Residuals    637982 35191.6512124725    0.055160884182
+                 F value  Pr(>F)    
+design_block   807.24225 < 2e-16 ***
+G            18699.71351 < 2e-16 ***
+theta_true    2711.35628 < 2e-16 ***
+theta_CV       107.78051 < 2e-16 ***
+sigma        18216.15591 < 2e-16 ***
+mean_nsamp    3841.58111 < 2e-16 ***
+p1               0.13319 0.71515    
+p2               0.05000 0.82306    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df           Sum Sq           Mean Sq
+design_block      2   25.23418245656  12.6170912282800
+G                 2  542.67851836592 271.3392591829612
+theta_true        2   66.20099625142  33.1004981257096
+theta_CV          2    2.36126525120   1.1806326255975
+sigma             2  421.61737215329 210.8086860766430
+mean_nsamp        2  109.80109919777  54.9005495988866
+p1                1    0.00289786859   0.0028978685871
+p2                1    0.00311260790   0.0031126079032
+Residuals    637982 9342.09768395443   0.0146431994695
+                 F value  Pr(>F)    
+design_block   861.63487 < 2e-16 ***
+G            18530.05279 < 2e-16 ***
+theta_true    2260.46898 < 2e-16 ***
+theta_CV        80.62668 < 2e-16 ***
+sigma        14396.35419 < 2e-16 ***
+mean_nsamp    3749.21818 < 2e-16 ***
+p1               0.19790 0.65642    
+p2               0.21256 0.64477    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: v_vs_i 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82798>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82798>
+
+MANOVA Table (Pillai):
+                 Df             Pillai         approx F
+design_block      2 0.0025829421090855  274.99981925599
+G                 2 0.0547734853482971 5988.06748944759
+theta_true        2 0.0060630403641521  646.64440800050
+theta_CV          2 0.0001890228440457   20.10073025978
+sigma             2 0.0340522353803292 3683.49549110573
+mean_nsamp        2 0.0115673335427531 1237.11154442182
+p1                1 0.0000035864803155    0.76270363931
+p2                1 0.0000041829483278    0.88954951232
+Residuals    637982                                    
+             num Df  den Df  Pr(>F)    
+design_block      6 1275962 < 2e-16 ***
+G                 6 1275962 < 2e-16 ***
+theta_true        6 1275962 < 2e-16 ***
+theta_CV          6 1275962 < 2e-16 ***
+sigma             6 1275962 < 2e-16 ***
+mean_nsamp        6 1275962 < 2e-16 ***
+p1                3  637980 0.51480    
+p2                3  637980 0.44558    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq          Mean Sq
+design_block      2    2.285167659323  1.1425838296615
+G                 2   63.838406157583 31.9192030787915
+theta_true        2    6.707544712455  3.3537723562276
+theta_CV          2    0.202212233361  0.1011061166806
+sigma             2   37.385793799871 18.6928968999356
+mean_nsamp        2   12.697827744952  6.3489138724760
+p1                1    0.000855373648  0.0008553736476
+p2                1    0.000054053658  0.0000540536583
+Residuals    637982 1117.717603708770  0.0017519578980
+                 F value  Pr(>F)    
+design_block   652.17539 < 2e-16 ***
+G            18219.16104 < 2e-16 ***
+theta_true    1914.29963 < 2e-16 ***
+theta_CV        57.71036 < 2e-16 ***
+sigma        10669.71810 < 2e-16 ***
+mean_nsamp    3623.89637 < 2e-16 ***
+p1               0.48824 0.48471    
+p2               0.03085 0.86057    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq          Mean Sq
+design_block      2    72.9009239732  36.450461986595
+G                 2  1930.8967498759 965.448374937970
+theta_true        2   201.8727244335 100.936362216726
+theta_CV          2     6.2481375305   3.124068765229
+sigma             2  1153.5559287521 576.777964376062
+mean_nsamp        2   382.6948137229 191.347406861465
+p1                1     0.0197319974   0.019731997370
+p2                1     0.0013764933   0.001376493285
+Residuals    637982 33679.3907261401   0.052790503065
+                 F value  Pr(>F)    
+design_block   690.47385 < 2e-16 ***
+G            18288.29655 < 2e-16 ***
+theta_true    1912.01743 < 2e-16 ***
+theta_CV        59.17861 < 2e-16 ***
+sigma        10925.79026 < 2e-16 ***
+mean_nsamp    3624.65587 < 2e-16 ***
+p1               0.37378 0.54095    
+p2               0.02607 0.87172    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df           Sum Sq           Mean Sq
+design_block      2   17.20518179685   8.6025908984235
+G                 2  516.38055389558 258.1902769477923
+theta_true        2   54.59851969803  27.2992598490162
+theta_CV          2    1.60640353152   0.8032017657583
+sigma             2  292.95462384609 146.4773119230454
+mean_nsamp        2  103.12564071499  51.5628203574962
+p1                1    0.00730106844   0.0073010684413
+p2                1    0.00096592466   0.0009659246614
+Residuals    637982 9056.89909232764   0.0141961671212
+                 F value  Pr(>F)    
+design_block   605.97983 < 2e-16 ***
+G            18187.32301 < 2e-16 ***
+theta_true    1923.00215 < 2e-16 ***
+theta_CV        56.57878 < 2e-16 ***
+sigma        10318.08873 < 2e-16 ***
+mean_nsamp    3632.16493 < 2e-16 ***
+p1               0.51430 0.47328    
+p2               0.06804 0.79421    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: iii_vs_ii 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d828b0>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d828b0>
+
+MANOVA Table (Pillai):
+                 Df              Pillai          approx F
+design_block      2 0.00048950012244525   52.061371626850
+G                 2 0.01853015776019183 1988.740601546199
+theta_true        2 0.00549800309374801  586.215091485369
+theta_CV          2 0.00009116288530175    9.693806645641
+sigma             2 0.00172894067922860  183.997611056476
+mean_nsamp        2 0.00139621106677351  148.563068131791
+p1                1 0.00000053238978635    0.113218072242
+p2                1 0.00000995920756893    2.117946174675
+Residuals    637982                                      
+             num Df  den Df     Pr(>F)    
+design_block      6 1275962 < 2.22e-16 ***
+G                 6 1275962 < 2.22e-16 ***
+theta_true        6 1275962 < 2.22e-16 ***
+theta_CV          6 1275962 1.0627e-10 ***
+sigma             6 1275962 < 2.22e-16 ***
+mean_nsamp        6 1275962 < 2.22e-16 ***
+p1                3  637980    0.95241    
+p2                3  637980    0.09561 .  
+Residuals                                 
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq           Mean Sq
+design_block      2   0.0374432813261 0.018721640663042
+G                 2   4.2518916954367 2.125945847718345
+theta_true        2   0.9547837006888 0.477391850344394
+theta_CV          2   0.0211134332835 0.010556716641761
+sigma             2   0.2059797255614 0.102989862780679
+mean_nsamp        2   0.2377922510312 0.118896125515578
+p1                1   0.0000147569716 0.000014756971582
+p2                1   0.0000003032386 0.000000303238600
+Residuals    637982 292.4430820521566 0.000458387669326
+                F value     Pr(>F)    
+design_block   40.84237 < 2.22e-16 ***
+G            4637.87748 < 2.22e-16 ***
+theta_true   1041.45875 < 2.22e-16 ***
+theta_CV       23.03011 9.9658e-11 ***
+sigma         224.67852 < 2.22e-16 ***
+mean_nsamp    259.37898 < 2.22e-16 ***
+p1              0.03219    0.85760    
+p2              0.00066    0.97948    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq          Mean Sq
+design_block      2    1.92042164711  0.9602108235536
+G                 2  172.11242055671 86.0562102783546
+theta_true        2   45.36302494109 22.6815124705441
+theta_CV          2    0.82661544617  0.4133077230863
+sigma             2    9.35181249526  4.6759062476313
+mean_nsamp        2    9.35274917435  4.6763745871734
+p1                1    0.00000252348  0.0000025234782
+p2                1    0.00121349931  0.0012134993059
+Residuals    637982 9682.78090610816  0.0151772007770
+                F value     Pr(>F)    
+design_block   63.26666 < 2.22e-16 ***
+G            5670.09764 < 2.22e-16 ***
+theta_true   1494.44636 < 2.22e-16 ***
+theta_CV       27.23214 1.4919e-12 ***
+sigma         308.08753 < 2.22e-16 ***
+mean_nsamp    308.11838 < 2.22e-16 ***
+p1              0.00017    0.98971    
+p2              0.07996    0.77736    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq           Mean Sq
+design_block      2    0.068248540916  0.03412427045823
+G                 2   25.507553471930 12.75377673596503
+theta_true        2    5.014636826523  2.50731841326140
+theta_CV          2    0.118600523743  0.05930026187144
+sigma             2    0.680864817404  0.34043240870177
+mean_nsamp        2    1.114127764323  0.55706388216146
+p1                1    0.000372728907  0.00037272890662
+p2                1    0.001902020967  0.00190202096712
+Residuals    637982 2406.288760987594  0.00377171889017
+                F value     Pr(>F)    
+design_block    9.04741 0.00011771 ***
+G            3381.42293 < 2.22e-16 ***
+theta_true    664.76810 < 2.22e-16 ***
+theta_CV       15.72234 1.4861e-07 ***
+sigma          90.25922 < 2.22e-16 ***
+mean_nsamp    147.69496 < 2.22e-16 ***
+p1              0.09882 0.75324796    
+p2              0.50428 0.47762365    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: iv_vs_ii 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82a00>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82a00>
+
+MANOVA Table (Pillai):
+                 Df              Pillai         approx F
+design_block      2 0.00065125460911793  69.270567518130
+G                 2 0.00684605772981969 730.442786162549
+theta_true        2 0.00043230373854907  45.976866556195
+theta_CV          2 0.00010541186629908  11.209052095776
+sigma             2 0.00193163738766087 205.589887926567
+mean_nsamp        2 0.00671396988036697 716.302151910987
+p1                1 0.00000170844051887   0.363317581450
+p2                1 0.00001142498152087   2.429664329097
+Residuals    637982                                     
+             num Df  den Df     Pr(>F)    
+design_block      6 1275962 < 2.22e-16 ***
+G                 6 1275962 < 2.22e-16 ***
+theta_true        6 1275962 < 2.22e-16 ***
+theta_CV          6 1275962 1.4942e-12 ***
+sigma             6 1275962 < 2.22e-16 ***
+mean_nsamp        6 1275962 < 2.22e-16 ***
+p1                3  637980   0.779500    
+p2                3  637980   0.063236 .  
+Residuals                                 
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq           Mean Sq
+design_block      2   0.1666675865362 0.083333793268106
+G                 2   1.7078638752085 0.853931937604261
+theta_true        2   0.1222881941508 0.061144097075412
+theta_CV          2   0.0177595282144 0.008879764107178
+sigma             2   0.2578979806281 0.128948990314067
+mean_nsamp        2   1.2804349027620 0.640217451381021
+p1                1   0.0000000635649 0.000000063564893
+p2                1   0.0000012487791 0.000001248779053
+Residuals    637982 298.5310501866994 0.000467930208355
+                F value     Pr(>F)    
+design_block  178.09022 < 2.22e-16 ***
+G            1824.91304 < 2.22e-16 ***
+theta_true    130.66927 < 2.22e-16 ***
+theta_CV       18.97668 5.7382e-09 ***
+sigma         275.57313 < 2.22e-16 ***
+mean_nsamp   1368.19004 < 2.22e-16 ***
+p1              0.00014     0.9907    
+p2              0.00267     0.9588    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df            Sum Sq          Mean Sq
+design_block      2     5.01654541890  2.5082727094498
+G                 2    64.22383842752 32.1119192137621
+theta_true        2     3.46232079774  1.7311603988677
+theta_CV          2     0.87661022206  0.4383051110290
+sigma             2     8.96260489428  4.4813024471399
+mean_nsamp        2    59.87355921866 29.9367796093313
+p1                1     0.00136340368  0.0013634036825
+p2                1     0.00014205927  0.0001420592690
+Residuals    637982 10069.25236584674  0.0157829725068
+                F value     Pr(>F)    
+design_block  158.92271 < 2.22e-16 ***
+G            2034.59261 < 2.22e-16 ***
+theta_true    109.68532 < 2.22e-16 ***
+theta_CV       27.77076 8.7064e-13 ***
+sigma         283.93273 < 2.22e-16 ***
+mean_nsamp   1896.77702 < 2.22e-16 ***
+p1              0.08638    0.76882    
+p2              0.00900    0.92442    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq          Mean Sq
+design_block      2    1.044049567638 0.52202478381913
+G                 2    9.762609931543 4.88130496577132
+theta_true        2    0.908627955066 0.45431397753279
+theta_CV          2    0.078941714724 0.03947085736194
+sigma             2    1.282209235058 0.64110461752921
+mean_nsamp        2    6.118941873626 3.05947093681279
+p1                1    0.000042194019 0.00004219401863
+p2                1    0.001876420926 0.00187642092597
+Residuals    637982 2437.385640857796 0.00382046145637
+                F value     Pr(>F)    
+design_block  136.63920 < 2.22e-16 ***
+G            1277.67418 < 2.22e-16 ***
+theta_true    118.91600 < 2.22e-16 ***
+theta_CV       10.33144 3.2598e-05 ***
+sigma         167.80816 < 2.22e-16 ***
+mean_nsamp    800.81188 < 2.22e-16 ***
+p1              0.01104    0.91630    
+p2              0.49115    0.48341    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: v_vs_ii 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82bc0>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82bc0>
+
+MANOVA Table (Pillai):
+                 Df              Pillai          approx F
+design_block      2 0.00065708076556961   69.890469157968
+G                 2 0.00894563657508346  955.464647717464
+theta_true        2 0.00283516842879772  301.891888738063
+theta_CV          2 0.00001642841083117    1.746850010732
+sigma             2 0.02016729345773174 2166.235225319944
+mean_nsamp        2 0.00534161429731962  569.495751828158
+p1                1 0.00000159967535103    0.340187504340
+p2                1 0.00000245006980994    0.521033122350
+Residuals    637982                                      
+             num Df  den Df  Pr(>F)    
+design_block      6 1275962 < 2e-16 ***
+G                 6 1275962 < 2e-16 ***
+theta_true        6 1275962 < 2e-16 ***
+theta_CV          6 1275962 0.10580    
+sigma             6 1275962 < 2e-16 ***
+mean_nsamp        6 1275962 < 2e-16 ***
+p1                3  637980 0.79628    
+p2                3  637980 0.66779    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq           Mean Sq
+design_block      2   0.0300646270830 0.015032313541506
+G                 2   2.0564338458844 1.028216922942222
+theta_true        2   0.5490707649545 0.274535382477262
+theta_CV          2   0.0000838653505 0.000041932675252
+sigma             2   4.2913267515726 2.145663375786297
+mean_nsamp        2   1.0000561108611 0.500028055430558
+p1                1   0.0000637038076 0.000063703807591
+p2                1   0.0000007510187 0.000000751018656
+Residuals    637982 294.1637267056883 0.000461084680611
+                F value     Pr(>F)    
+design_block   32.60207 6.9475e-15 ***
+G            2229.99585 < 2.22e-16 ***
+theta_true    595.41207 < 2.22e-16 ***
+theta_CV        0.09094    0.91307    
+sigma        4653.51261 < 2.22e-16 ***
+mean_nsamp   1084.46035 < 2.22e-16 ***
+p1              0.13816    0.71012    
+p2              0.00163    0.96781    
+Residuals                             
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq          Mean Sq
+design_block      2    1.81561941283  0.9078097064143
+G                 2   81.71354760804 40.8567738040212
+theta_true        2   24.77474586387 12.3873729319340
+theta_CV          2    0.00093106351  0.0004655317563
+sigma             2  184.03075819392 92.0153790969597
+mean_nsamp        2   44.70200322091 22.3510016104562
+p1                1    0.00031801589  0.0003180158946
+p2                1    0.00074726283  0.0007472628253
+Residuals    637982 9806.34557855830  0.0153708812765
+                F value  Pr(>F)    
+design_block   59.06036 < 2e-16 ***
+G            2658.06320 < 2e-16 ***
+theta_true    805.89868 < 2e-16 ***
+theta_CV        0.03029 0.97017    
+sigma        5986.34375 < 2e-16 ***
+mean_nsamp   1454.11322 < 2e-16 ***
+p1              0.02069 0.88563    
+p2              0.04862 0.82549    
+Residuals                          
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq           Mean Sq
+design_block      2    0.024278188502  0.01213909425118
+G                 2   12.545430683767  6.27271534188368
+theta_true        2    2.927688849419  1.46384442470934
+theta_CV          2    0.000660835776  0.00033041788779
+sigma             2   22.263893827576 11.13194691378819
+mean_nsamp        2    4.732014705423  2.36600735271142
+p1                1    0.001452381807  0.00145238180708
+p2                1    0.000346192613  0.00034619261308
+Residuals    637982 2382.938469934661  0.00373511865528
+                F value   Pr(>F)    
+design_block    3.24999 0.038775 *  
+G            1679.38851  < 2e-16 ***
+theta_true    391.91377  < 2e-16 ***
+theta_CV        0.08846 0.915337    
+sigma        2980.34626  < 2e-16 ***
+mean_nsamp    633.44905  < 2e-16 ***
+p1              0.38884 0.532907    
+p2              0.09269 0.760790    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: iv_vs_iii 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82db8>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82db8>
+
+MANOVA Table (Pillai):
+                 Df             Pillai         approx F
+design_block      2 0.0051473330638521  548.72902810296
+G                 2 0.0464758460937977 5059.35332434608
+theta_true        2 0.0349939817173315 3787.18016506236
+theta_CV          2 0.0000738931450235    7.85736072842
+sigma             2 0.0043306298489652  461.47583412302
+mean_nsamp        2 0.0378600276642130 4103.33932165718
+p1                1 0.0000038597872018    0.82082551455
+p2                1 0.0000026204771907    0.55727213969
+Residuals    637982                                    
+             num Df  den Df     Pr(>F)    
+design_block      6 1275962 < 2.22e-16 ***
+G                 6 1275962 < 2.22e-16 ***
+theta_true        6 1275962 < 2.22e-16 ***
+theta_CV          6 1275962 1.7519e-08 ***
+sigma             6 1275962 < 2.22e-16 ***
+mean_nsamp        6 1275962 < 2.22e-16 ***
+p1                3  637980    0.48211    
+p2                3  637980    0.64322    
+Residuals                                 
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq            Mean Sq
+design_block      2  0.04624817239654 0.0231240861982702
+G                 2  0.59451510024440 0.2972575501221981
+theta_true        2  0.39411971745791 0.1970598587289539
+theta_CV          2  0.00015874262836 0.0000793713141792
+sigma             2  0.00444191415969 0.0022209570798435
+mean_nsamp        2  0.47389752373458 0.2369487618672924
+p1                1  0.00001675757061 0.0000167575706127
+p2                1  0.00000032128127 0.0000003212812685
+Residuals    637982 12.92710570659597 0.0000202624928393
+                 F value   Pr(>F)    
+design_block  1141.22613  < 2e-16 ***
+G            14670.33462  < 2e-16 ***
+theta_true    9725.35118  < 2e-16 ***
+theta_CV         3.91715 0.019898 *  
+sigma          109.60927  < 2e-16 ***
+mean_nsamp   11693.95907  < 2e-16 ***
+p1               0.82702 0.363135    
+p2               0.01586 0.899795    
+Residuals                            
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq           Mean Sq
+design_block      2   0.731741601992  0.36587080099599
+G                 2  27.145381831184 13.57269091559180
+theta_true        2  23.811402332806 11.90570116640290
+theta_CV          2   0.002477465902  0.00123873295103
+sigma             2   0.219415861731  0.10970793086556
+mean_nsamp        2  23.992403956612 11.99620197830617
+p1                1   0.001483239045  0.00148323904453
+p2                1   0.000525163911  0.00052516391125
+Residuals    637982 670.113534355605  0.00105036432745
+                 F value  Pr(>F)    
+design_block   348.32752 < 2e-16 ***
+G            12921.88868 < 2e-16 ***
+theta_true   11334.83007 < 2e-16 ***
+theta_CV         1.17934 0.30748    
+sigma          104.44750 < 2e-16 ***
+mean_nsamp   11420.99143 < 2e-16 ***
+p1               1.41212 0.23471    
+p2               0.49998 0.47951    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq           Mean Sq
+design_block      2   0.5803670588454 0.290183529422698
+G                 2   3.8216481983306 1.910824099165304
+theta_true        2   1.6550279249105 0.827513962455259
+theta_CV          2   0.0040241696376 0.002012084818812
+sigma             2   0.2184847366867 0.109242368343361
+mean_nsamp        2   2.5350838432011 1.267541921600543
+p1                1   0.0001641088074 0.000164108807395
+p2                1   0.0000000867249 0.000000086724852
+Residuals    637982 118.4505737035867 0.000185664444614
+                 F value     Pr(>F)    
+design_block  1562.94615 < 2.22e-16 ***
+G            10291.81491 < 2.22e-16 ***
+theta_true    4457.04057 < 2.22e-16 ***
+theta_CV        10.83721 1.9658e-05 ***
+sigma          588.38605 < 2.22e-16 ***
+mean_nsamp    6827.05794 < 2.22e-16 ***
+p1               0.88390    0.34714    
+p2               0.00047    0.98276    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: v_vs_iii 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82ed0>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d82ed0>
+
+MANOVA Table (Pillai):
+                 Df             Pillai          approx F
+design_block      2 0.0001422540203164    15.12696962537
+G                 2 0.0274572456820064  2960.17260278324
+theta_true        2 0.0036045723870449   383.96680074029
+theta_CV          2 0.0010057514654074   106.99552639575
+sigma             2 0.1381404664086293 15778.31039520767
+mean_nsamp        2 0.0162316393522961  1740.03472566661
+p1                1 0.0000023576480348     0.50137861315
+p2                1 0.0000132996502670     2.82834124172
+Residuals    637982                                     
+             num Df  den Df   Pr(>F)    
+design_block      6 1275962  < 2e-16 ***
+G                 6 1275962  < 2e-16 ***
+theta_true        6 1275962  < 2e-16 ***
+theta_CV          6 1275962  < 2e-16 ***
+sigma             6 1275962  < 2e-16 ***
+mean_nsamp        6 1275962  < 2e-16 ***
+p1                3  637980 0.681316    
+p2                3  637980 0.036983 *  
+Residuals                               
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df            Sum Sq           Mean Sq
+design_block      2  0.00119927589973 0.000599637949865
+G                 2  0.54312283576300 0.271561417881499
+theta_true        2  0.05590145593668 0.027950727968339
+theta_CV          2  0.01900241805755 0.009501209028774
+sigma             2  3.19377669385509 1.596888346927546
+mean_nsamp        2  0.29714207828292 0.148571039141458
+p1                1  0.00001713948505 0.000017139485048
+p2                1  0.00000200869499 0.000002008694988
+Residuals    637982 21.41340668682107 0.000033564280320
+                 F value     Pr(>F)    
+design_block    17.86536 1.7434e-08 ***
+G             8090.78626 < 2.22e-16 ***
+theta_true     832.75219 < 2.22e-16 ***
+theta_CV       283.07501 < 2.22e-16 ***
+sigma        47577.01734 < 2.22e-16 ***
+mean_nsamp    4426.46283 < 2.22e-16 ***
+p1               0.51065    0.47486    
+p2               0.05985    0.80674    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df           Sum Sq          Mean Sq
+design_block      2   0.027847384412  0.0139236922061
+G                 2  23.838947560930 11.9194737804652
+theta_true        2   3.105386976453  1.5526934882266
+theta_CV          2   0.861558079001  0.4307790395007
+sigma             2 134.519826297484 67.2599131487420
+mean_nsamp        2  14.373945641139  7.1869728205695
+p1                1   0.000263882292  0.0002638822925
+p2                1   0.000056238128  0.0000562381279
+Residuals    637982 877.059233783812  0.0013747397792
+                 F value     Pr(>F)    
+design_block    10.12824 3.9942e-05 ***
+G             8670.34908 < 2.22e-16 ***
+theta_true    1129.44538 < 2.22e-16 ***
+theta_CV       313.35315 < 2.22e-16 ***
+sigma        48925.55971 < 2.22e-16 ***
+mean_nsamp    5227.87871 < 2.22e-16 ***
+p1               0.19195    0.66130    
+p2               0.04091    0.83972    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq          Mean Sq
+design_block      2   0.0181334869909 0.00906674349543
+G                 2   3.0238073011425 1.51190365057126
+theta_true        2   0.2790998578335 0.13954992891675
+theta_CV          2   0.1111798732036 0.05558993660180
+sigma             2  18.6566841750739 9.32834208753696
+mean_nsamp        2   1.5774188780234 0.78870943901168
+p1                1   0.0003535881241 0.00035358812407
+p2                1   0.0006252957034 0.00062529570336
+Residuals    637982 195.6641049535268 0.00030669220284
+                 F value     Pr(>F)    
+design_block    29.56301 1.4506e-13 ***
+G             4929.71010 < 2.22e-16 ***
+theta_true     455.01623 < 2.22e-16 ***
+theta_CV       181.25644 < 2.22e-16 ***
+sigma        30415.97406 < 2.22e-16 ***
+mean_nsamp    2571.66446 < 2.22e-16 ***
+p1               1.15291    0.28294    
+p2               2.03884    0.15333    
+Residuals                              
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+==================================================================
+Factorial Analysis of Difference: v_vs_iv 
+==================================================================
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+Rows analyzed: 637997 
+Full multivariate formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d7f0c8>
+
+Residual response rank: 3 of 3 
+Responses used for the joint MANOVA: rmse, L1, Linf 
+
+Joint MANOVA formula:
+cbind(rmse, L1, Linf) ~ design_block + G + theta_true + theta_CV + 
+    sigma + mean_nsamp + p1 + p2
+<environment: 0x00000186c2d7f0c8>
+
+MANOVA Table (Pillai):
+                 Df             Pillai          approx F
+design_block      2 0.0031460244887512   335.04433707096
+G                 2 0.0025898444665515   275.73564999285
+theta_true        2 0.0064051056650114   683.24407813600
+theta_CV          2 0.0006079288170833    64.66082703198
+sigma             2 0.0900265980548500 10023.74500697901
+mean_nsamp        2 0.0009019328566484    95.94593936716
+p1                1 0.0000060921924128     1.29557353139
+p2                1 0.0000112055287420     2.38299444498
+Residuals    637982                                     
+             num Df  den Df   Pr(>F)    
+design_block      6 1275962  < 2e-16 ***
+G                 6 1275962  < 2e-16 ***
+theta_true        6 1275962  < 2e-16 ***
+theta_CV          6 1275962  < 2e-16 ***
+sigma             6 1275962  < 2e-16 ***
+mean_nsamp        6 1275962  < 2e-16 ***
+p1                3  637980 0.273960    
+p2                3  637980 0.067299 .  
+Residuals                               
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Univariate Breakdown for each Error Metric:
+ Response rmse :
+                 Df           Sum Sq           Mean Sq
+design_block      2  0.0560640951445 0.028032047572263
+G                 2  0.0477360027095 0.023868001354746
+theta_true        2  0.1537634038435 0.076881701921768
+theta_CV          2  0.0158679239272 0.007933961963606
+sigma             2  2.9721303816111 1.486065190805554
+mean_nsamp        2  0.0216546664896 0.010827333244817
+p1                1  0.0000677919598 0.000067791959760
+p2                1  0.0000039366574 0.000003936657400
+Residuals    637982 32.1552478089252 0.000050401496921
+                 F value  Pr(>F)    
+design_block   556.17490 < 2e-16 ***
+G              473.55739 < 2e-16 ***
+theta_true    1525.38529 < 2e-16 ***
+theta_CV       157.41520 < 2e-16 ***
+sigma        29484.54474 < 2e-16 ***
+mean_nsamp     214.82166 < 2e-16 ***
+p1               1.34504 0.24615    
+p2               0.07811 0.77988    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response L1 :
+                 Df            Sum Sq          Mean Sq
+design_block      2    0.821031831059  0.4105159155295
+G                 2    2.581510972263  1.2907554861315
+theta_true        2    9.781099048109  4.8905495240546
+theta_CV          2    0.914572995175  0.4572864975874
+sigma             2  144.798376975549 72.3991884877746
+mean_nsamp        2    1.259184987973  0.6295924939863
+p1                1    0.002998361553  0.0029983615528
+p2                1    0.000237691491  0.0002376914912
+Residuals    637982 1525.512672862216  0.0023911531561
+                 F value  Pr(>F)    
+design_block   171.68115 < 2e-16 ***
+G              539.80461 < 2e-16 ***
+theta_true    2045.26821 < 2e-16 ***
+theta_CV       191.24099 < 2e-16 ***
+sigma        30277.93862 < 2e-16 ***
+mean_nsamp     263.30078 < 2e-16 ***
+p1               1.25394 0.26280    
+p2               0.09940 0.75255    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+ Response Linf :
+                 Df            Sum Sq          Mean Sq
+design_block      2   0.7673974283677 0.38369871418385
+G                 2   0.3347389093408 0.16736945467038
+theta_true        2   0.5751280642001 0.28756403210003
+theta_CV          2   0.0729473355703 0.03647366778517
+sigma             2  14.8559669185380 7.42798345926898
+mean_nsamp        2   0.1186441550386 0.05932207751928
+p1                1   0.0009994725031 0.00099947250307
+p2                1   0.0006106544036 0.00061065440359
+Residuals    637982 264.4053994688836 0.00041444021848
+                 F value  Pr(>F)    
+design_block   925.82403 < 2e-16 ***
+G              403.84463 < 2e-16 ***
+theta_true     693.86131 < 2e-16 ***
+theta_CV        88.00707 < 2e-16 ***
+sigma        17922.93105 < 2e-16 ***
+mean_nsamp     143.13784 < 2e-16 ***
+p1               2.41162 0.12044    
+p2               1.47344 0.22480    
+Residuals                           
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+
+Analysis completed successfully.
+Saved detailed results: code-D-K9-model-results.rds
+Saved MANOVA summary: results-code-D-K9-summary.csv

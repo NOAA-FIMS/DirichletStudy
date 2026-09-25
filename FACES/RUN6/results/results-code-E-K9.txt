@@ -1,0 +1,298 @@
+Code E: Generalized Additive Model Analysis
+Simplex sampling fraction:0.02(2%)
+Sampling unit: example_id x mesh_id x sim_id
+Sampling seed: 20731 
+
+Input type: disk-backed Arrow dataset
+Number of partitions: 61 
+
+Simplex units available: 31899582 
+Simplex units sampled: 637997 
+Realized simplex sampling percentage: 2.0000168027280107 
+
+Global GAM rows analyzed: 9569955 
+Difference GAM rows analyzed: 1913991 
+
+Global GAM Summary:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(accuracy) ~ metric * method + s(p1, p2, by = method, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                          Estimate
+(Intercept)                    3.7999222927873e-01
+metricLinf                    -1.9648439908493e-01
+metricrmse                    -2.5168238406830e-01
+methodii                       1.6401197151581e-02
+methodiii                     -1.4506382769755e-02
+methodiv                      -6.0959684124124e-03
+methodv                       -1.7598710350244e-02
+design_blockNegative binomial -1.7818893394268e-02
+design_blockPoisson           -1.8660445283716e-02
+G                             -3.9624194067145e-02
+theta_true                    -8.6778658794731e-03
+theta_CV                       1.8188058812081e-03
+sigma                          3.1862506053683e-02
+mean_nsamp                    -1.8849374311053e-02
+metricLinf:methodii           -1.0982364336820e-02
+metricrmse:methodii           -9.7030081697367e-03
+metricLinf:methodiii           4.1687832320413e-03
+metricrmse:methodiii           1.1187039095792e-02
+metricLinf:methodiv           -1.7182925157058e-03
+metricrmse:methodiv            4.2614066456651e-03
+metricLinf:methodv             6.9126971508508e-03
+metricrmse:methodv             1.5202693755141e-02
+                                        Std. Error
+(Intercept)                    1.0275253190150e-03
+metricLinf                     1.3818765927048e-04
+metricrmse                     1.3818765927048e-04
+methodii                       1.1712520586027e-03
+methodiii                      1.1601435541697e-03
+methodiv                       1.1662189199779e-03
+methodv                        1.0569557051573e-03
+design_blockNegative binomial  6.1797492571123e-05
+design_blockPoisson            6.1799236751474e-05
+G                              3.0912868739182e-05
+theta_true                     3.0885698263930e-05
+theta_CV                       3.0859139220497e-05
+sigma                          3.0900584728089e-05
+mean_nsamp                     3.0893005290693e-05
+metricLinf:methodii            1.9542686189291e-04
+metricrmse:methodii            1.9542686189291e-04
+metricLinf:methodiii           1.9542686189291e-04
+metricrmse:methodiii           1.9542686189291e-04
+metricLinf:methodiv            1.9542686189291e-04
+metricrmse:methodiv            1.9542686189291e-04
+metricLinf:methodv             1.9542686189291e-04
+metricrmse:methodv             1.9542686189291e-04
+                                  t value   Pr(>|t|)    
+(Intercept)                     369.81301 < 2.22e-16 ***
+metricLinf                    -1421.86647 < 2.22e-16 ***
+metricrmse                    -1821.30869 < 2.22e-16 ***
+methodii                         14.00313 < 2.22e-16 ***
+methodiii                       -12.50395 < 2.22e-16 ***
+methodiv                         -5.22712 1.7217e-07 ***
+methodv                         -16.65038 < 2.22e-16 ***
+design_blockNegative binomial  -288.34331 < 2.22e-16 ***
+design_blockPoisson            -301.95268 < 2.22e-16 ***
+G                             -1281.80255 < 2.22e-16 ***
+theta_true                     -280.96713 < 2.22e-16 ***
+theta_CV                         58.93897 < 2.22e-16 ***
+sigma                          1031.12955 < 2.22e-16 ***
+mean_nsamp                     -610.15023 < 2.22e-16 ***
+metricLinf:methodii             -56.19680 < 2.22e-16 ***
+metricrmse:methodii             -49.65033 < 2.22e-16 ***
+metricLinf:methodiii             21.33168 < 2.22e-16 ***
+metricrmse:methodiii             57.24412 < 2.22e-16 ***
+metricLinf:methodiv              -8.79251 < 2.22e-16 ***
+metricrmse:methodiv              21.80563 < 2.22e-16 ***
+metricLinf:methodv               35.37230 < 2.22e-16 ***
+metricrmse:methodv               77.79224 < 2.22e-16 ***
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                edf          Ref.df
+s(p1,p2):methodi   17.2912637756035 19.365842048960
+s(p1,p2):methodii  12.5094413969063 14.786738316737
+s(p1,p2):methodiii 12.1585137388067 14.427133780165
+s(p1,p2):methodiv  12.3535903831978 14.627200242148
+s(p1,p2):methodv    6.0311407147513  7.840328753958
+                           F p-value    
+s(p1,p2):methodi   190.47431 < 2e-16 ***
+s(p1,p2):methodii    5.38876 < 2e-16 ***
+s(p1,p2):methodiii  13.43366 < 2e-16 ***
+s(p1,p2):methodiv   14.20899 < 2e-16 ***
+s(p1,p2):methodv     1.06183 0.38516    
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+R-sq.(adj) =   0.69   Deviance explained =   69%
+fREML = -1.0828e+07  Scale est. = 0.0060915  n = 9569955
+
+GAM ANOVA Table:
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(accuracy) ~ metric * method + s(p1, p2, by = method, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric Terms:
+              df             F    p-value
+metric         2 1832807.88909 < 2.22e-16
+method         4     746.73220 < 2.22e-16
+design_block   2   58170.65207 < 2.22e-16
+G              1 1643017.78460 < 2.22e-16
+theta_true     1   78942.52596 < 2.22e-16
+theta_CV       1    3473.80219 < 2.22e-16
+sigma          1 1063228.15077 < 2.22e-16
+mean_nsamp     1  372283.30426 < 2.22e-16
+metric:method  8    2716.72036 < 2.22e-16
+
+Approximate significance of smooth terms:
+                                edf           Ref.df
+s(p1,p2):methodi   17.2912637756035 19.3658420489602
+s(p1,p2):methodii  12.5094413969063 14.7867383167370
+s(p1,p2):methodiii 12.1585137388067 14.4271337801652
+s(p1,p2):methodiv  12.3535903831978 14.6272002421485
+s(p1,p2):methodv    6.0311407147513  7.8403287539580
+                           F p-value
+s(p1,p2):methodi   190.47431 < 2e-16
+s(p1,p2):methodii    5.38876 < 2e-16
+s(p1,p2):methodiii  13.43366 < 2e-16
+s(p1,p2):methodiv   14.20899 < 2e-16
+s(p1,p2):methodv     1.06183 0.38516
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  3.6053865969662979e-03 -2.6111290907238072e-10
+[3]  2.7736124508237481e-10  4.7476689246650494e-11
+[5] -8.2281736979439302e-11 -5.2540041506290436e-03
+
+$hess
+                     [,1]                    [,2]
+   5.4901220112418576e+00  6.9071381519096648e-07
+   6.9071372765649409e-07  1.7152097689192796e+00
+   1.3543559925201758e-06 -2.5820885574356893e-06
+   1.0800546872366137e-06 -2.7262270660700602e-06
+   7.9252950380451911e-07 -8.7823369127512143e-07
+d -7.6492372743993933e+00 -5.2547206981920391e+00
+                     [,3]                    [,4]
+   1.3543559762604489e-06  1.0800546824871009e-06
+  -2.5820885574775471e-06 -2.7262270660849993e-06
+   3.4914016349773820e+00 -4.9439693481847716e-06
+  -4.9439693481838830e-06  3.5139139624027709e+00
+  -2.5331664163524626e-06 -2.2544752918122258e-06
+d -5.0792568696810934e+00 -5.1767951916458568e+00
+                     [,5]                    [,6]
+   7.9252947781115223e-07 -7.6492372743993933e+00
+  -8.7823369129163635e-07 -5.2547206981920391e+00
+  -2.5331664163641665e-06 -5.0792568696810934e+00
+  -2.2544752918161675e-06 -5.1767951916458568e+00
+   1.8663349256430550e-01 -2.0155703572933961e+00
+d -2.0155703572933961e+00  4.7849615052540042e+06
+
+Model rank =  167 / 167 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                      k'   edf k-index p-value  
+s(p1,p2):methodi   29.00 17.29    0.96   0.075 .
+s(p1,p2):methodii  29.00 12.51    0.96   0.060 .
+s(p1,p2):methodiii 29.00 12.16    0.96   0.100 .
+s(p1,p2):methodiv  29.00 12.35    0.96   0.085 .
+s(p1,p2):methodv   29.00  6.03    0.96   0.050 *
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+Difference GAM Summary (Method v - iii):
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+log1p(abs(diff)) ~ metric + s(p1, p2, by = metric, k = 30) + 
+    design_block + G + theta_true + theta_CV + sigma + mean_nsamp
+
+Parametric coefficients:
+                                          Estimate
+(Intercept)                    1.2203479864444e-02
+metricLinf                    -1.2770732960675e-02
+metricrmse                    -1.9029541430838e-02
+design_blockNegative binomial -1.8434049144963e-03
+design_blockPoisson           -2.0406465679939e-03
+G                             -1.4322523490871e-03
+theta_true                    -1.1897146644923e-03
+theta_CV                       4.1166247675577e-04
+sigma                          8.3839088373363e-03
+mean_nsamp                    -4.2809754842794e-04
+                                        Std. Error
+(Intercept)                    2.5103842831851e-04
+metricLinf                     2.8902176865084e-04
+metricrmse                     2.4660485856592e-04
+design_blockNegative binomial  3.3935478767031e-05
+design_blockPoisson            3.3936494379503e-05
+G                              1.6975488052001e-05
+theta_true                     1.6960577016398e-05
+theta_CV                       1.6945973371406e-05
+sigma                          1.6968756205508e-05
+mean_nsamp                     1.6964578821071e-05
+                                t value   Pr(>|t|)    
+(Intercept)                    48.61200 < 2.22e-16 ***
+metricLinf                    -44.18606 < 2.22e-16 ***
+metricrmse                    -77.16613 < 2.22e-16 ***
+design_blockNegative binomial -54.32088 < 2.22e-16 ***
+design_blockPoisson           -60.13133 < 2.22e-16 ***
+G                             -84.37179 < 2.22e-16 ***
+theta_true                    -70.14588 < 2.22e-16 ***
+theta_CV                       24.29264 < 2.22e-16 ***
+sigma                         494.07916 < 2.22e-16 ***
+mean_nsamp                    -25.23479 < 2.22e-16 ***
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Approximate significance of smooth terms:
+                                 edf           Ref.df
+s(p1,p2):metricL1   13.1758220134111 15.5770275449731
+s(p1,p2):metricLinf  9.6236869975864 11.9079517624149
+s(p1,p2):metricrmse  2.0507226783290  2.1008811760219
+                           F p-value    
+s(p1,p2):metricL1   21.23483 < 2e-16 ***
+s(p1,p2):metricLinf  5.47621 < 2e-16 ***
+s(p1,p2):metricrmse  0.08821 0.93346    
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+R-sq.(adj) =  0.237   Deviance explained = 23.7%
+fREML = -4.853e+06  Scale est. = 0.00036739  n = 1913991
+
+
+Method: fREML   Optimizer: perf chol
+$grad
+[1]  1.3472428429750494e-05 -1.6947776515507940e-11
+[3] -5.3773328505871826e-03 -1.5922705642879009e-05
+
+$hess
+                     [,1]                    [,2]
+   2.4986729462018120e+00 -1.1230090606567141e-06
+  -1.1230090494866073e-06  2.9545320249849159e+00
+  -1.0262345697838444e-09  1.6326969889235879e-08
+d -5.5879244791339602e+00 -3.8118434987762329e+00
+                     [,3]                    [,4]
+  -1.0262346510962938e-09 -5.5879244791339602e+00
+   1.6326969889041865e-08 -3.8118434987762329e+00
+   5.6400635101492187e-03 -1.9984006313905053e-02
+d -1.9984006313905053e-02  9.5698750001592271e+05
+
+Model rank =  97 / 97 
+
+Basis dimension (k) checking results. Low p-value (k-index<1) may
+indicate that k is too low, especially if edf is close to k'.
+
+                       k'   edf k-index p-value  
+s(p1,p2):metricL1   29.00 13.18    0.96   0.095 .
+s(p1,p2):metricLinf 29.00  9.62    0.96   0.095 .
+s(p1,p2):metricrmse 29.00  2.05    0.96   0.085 .
+---
+Signif. codes:  
+  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.050000000000000003 ‘.’
+  0.10000000000000001 ‘ ’ 1
+
+Analysis completed successfully.

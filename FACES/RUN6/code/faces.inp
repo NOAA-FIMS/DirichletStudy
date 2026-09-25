@@ -1,0 +1,24 @@
+# file = faces_ex682.inp
+# example_id = 682
+# design_block = Negative binomial
+# dist_code = 3
+# factor5 = G
+# random.seed = 1122221659
+
+K = 9
+G = 2
+h = 0.100000000000000
+theta_true = 0.500000000000000
+theta_CV = 0.600000000000000
+Nmin = 50
+Nmax = 100
+nsims = 1
+random.seed = 1122221659
+od_mult = 1
+sigma = 0.500000000000000
+dist_code = 3
+mean_nsamp = 100
+ln_sd = 1
+nb_size = 25
+p_lbound = 0.0, 0.0, 0.0
+p_ubound = 1.0, 1.0, 1.0
