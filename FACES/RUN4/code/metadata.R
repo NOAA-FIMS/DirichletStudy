@@ -1,39 +1,40 @@
 # file = metadata.R
-# Revised metadata preparation for the Dirichlet Study hake simulation outputs.
+# Write metadata for analyzing the FACES simulation outputs.
 #
 # Goal:
 #   Avoid the large allocation created by building all 972 experiments in memory
 #   and then expanding all_wide to acc_long in one step.
 #
 # Default behavior when sourced:
-#   1. Reads hake_factorial_design_matrix.csv.
+#   1. Reads design_matrix.csv.
 #   2. Processes experiment CSV files in small example_id blocks.
 #   3. Writes partitioned all_wide and acc_long tables to metadata_output/.
 #   4. Does NOT combine the full tables in memory unless requested.
 #
-# Before source(), optional controls can be set in R:
-#   Sys.setenv(HAKE_METADATA_CHUNK_N = "12")          # lower this if memory is tight
-#   Sys.setenv(HAKE_COMBINE_IN_MEMORY = "true")       # only if you have enough RAM
-#   Sys.setenv(HAKE_KEEP_ONLY_ANALYSIS_COLUMNS = "true")
-#   Sys.setenv(HAKE_WRITE_CSV = "true")
-#   Sys.setenv(HAKE_WRITE_PARQUET = "auto")           # auto/true/false; uses arrow if installed
-#   Sys.setenv(HAKE_OVERWRITE_METADATA = "true")
-#
-# Run these options in R to set up metadata.R under approach 1
-#   Sys.setenv(HAKE_METADATA_CHUNK_N = "12")          
-#   Sys.setenv(HAKE_COMBINE_IN_MEMORY = "false")       
-#   Sys.setenv(HAKE_KEEP_ONLY_ANALYSIS_COLUMNS = "true")
-#   Sys.setenv(HAKE_WRITE_PARQUET = "false")
-#   Sys.setenv(HAKE_WRITE_CSV = "false")  
+# Before source(), these optional controls can be set in R:
+
+# Sys.setenv(
+#  METADATA_CHUNK_N = "12",
+#  COMBINE_IN_MEMORY = "false",
+#  KEEP_ONLY_ANALYSIS_COLUMNS = "true",
+#  WRITE_PARQUET = "true",
+#  WRITE_CSV = "false",
+#  OVERWRITE_METADATA = "true",
+#  SETUP_DISK_BACKED_OBJECTS = "true"
+# )
+
+# source("metadata.R")
+
 #
 # After source("metadata.R"), useful objects/functions include:
 #   metadata_result
 #   metadata_manifest
-#   load_metadata_table("all_wide")
-#   load_metadata_table("acc_long")
-#   open_metadata_dataset("all_wide")     # requires arrow and parquet output
-#   open_metadata_dataset("acc_long")     # requires arrow and parquet output
-#   make_acc_mv_from_long(acc_long)
+#   acc_long                         # disk-backed Dataset when parquet is available
+#   all_wide                         # disk-backed Arrow Dataset when parquet is available
+#   load_metadata_table("acc_long", part_ids = 1:2)  # load only selected RDS parts
+#   open_metadata_dataset("acc_long")                 # disk-backed full table
+#   collect_metadata_table("acc_long", filter_expr = example_id <= 24)
+#   make_acc_mv_partitioned()        # writes acc_mv parts without loading full acc_long
 #
 # For analyses A-H:
 #   Analyses F and H use all_wide.
@@ -54,15 +55,16 @@ suppressPackageStartupMessages({
 truthy <- function(x) tolower(as.character(x)) %in% c("true", "t", "yes", "y", "1")
 
 PROJECT_DIR <- normalizePath(getwd(), winslash = "/", mustWork = TRUE)
-OUT_DIR <- Sys.getenv("HAKE_METADATA_OUTDIR", unset = file.path(PROJECT_DIR, "metadata_output"))
-CHUNK_N <- as.integer(Sys.getenv("HAKE_METADATA_CHUNK_N", unset = "24"))
+OUT_DIR <- Sys.getenv("METADATA_OUTDIR", unset = file.path(PROJECT_DIR, "metadata_output"))
+CHUNK_N <- as.integer(Sys.getenv("METADATA_CHUNK_N", unset = "24"))
 if (is.na(CHUNK_N) || CHUNK_N < 1L) CHUNK_N <- 24L
 
-COMBINE_IN_MEMORY <- truthy(Sys.getenv("HAKE_COMBINE_IN_MEMORY", unset = "false"))
-KEEP_ONLY_ANALYSIS_COLUMNS <- truthy(Sys.getenv("HAKE_KEEP_ONLY_ANALYSIS_COLUMNS", unset = "true"))
-WRITE_CSV <- truthy(Sys.getenv("HAKE_WRITE_CSV", unset = "true"))
-OVERWRITE_METADATA <- truthy(Sys.getenv("HAKE_OVERWRITE_METADATA", unset = "true"))
-WRITE_PARQUET_SETTING <- tolower(Sys.getenv("HAKE_WRITE_PARQUET", unset = "auto"))
+COMBINE_IN_MEMORY <- truthy(Sys.getenv("COMBINE_IN_MEMORY", unset = "false"))
+KEEP_ONLY_ANALYSIS_COLUMNS <- truthy(Sys.getenv("KEEP_ONLY_ANALYSIS_COLUMNS", unset = "true"))
+WRITE_CSV <- truthy(Sys.getenv("WRITE_CSV", unset = "true"))
+OVERWRITE_METADATA <- truthy(Sys.getenv("OVERWRITE_METADATA", unset = "true"))
+WRITE_PARQUET_SETTING <- tolower(Sys.getenv("WRITE_PARQUET", unset = "auto"))
+SETUP_DISK_BACKED_OBJECTS <- truthy(Sys.getenv("SETUP_DISK_BACKED_OBJECTS", unset = "true"))
 
 ACCURACY_COL_REGEX    <- "^(rmse|L1_norm|Linf_norm)_(i|ii|iii|iv|v)$"
 ACCURACY_NAME_PATTERN <- "^(rmse|L1_norm|Linf_norm)_(i|ii|iii|iv|v)$"
@@ -134,7 +136,7 @@ thin_experiment_columns <- function(dat) {
 }
 
 read_one_experiment <- function(example_id, base_dir = PROJECT_DIR) {
-  ex_stem <- paste0("hake_ex", example_id)
+  ex_stem <- paste0("faces_ex", example_id)
   ex_dir  <- file.path(base_dir, paste0("ex", example_id))
   f <- file.path(ex_dir, paste0(ex_stem, ".csv"))
 
@@ -279,7 +281,10 @@ write_one_chunk <- function(chunk_id, ids, design, out_dir = OUT_DIR) {
 # -----------------------------
 load_metadata_table <- function(table_name = c("all_wide", "acc_long"),
                                 out_dir = OUT_DIR,
-                                part_ids = NULL) {
+                                part_ids = NULL,
+                                columns = NULL,
+                                max_parts_in_memory = 4L,
+                                force = FALSE) {
   table_name <- match.arg(table_name)
   files <- rds_part_files(table_name, out_dir)
   if (!length(files)) stop("No RDS partitions found for ", table_name, " in ", out_dir)
@@ -289,16 +294,40 @@ load_metadata_table <- function(table_name = c("all_wide", "acc_long"),
     files <- files[part_ids]
   }
 
-  total_rds_bytes <- sum(file.info(files)$size, na.rm = TRUE)
-  message("Reading ", length(files), " ", table_name, " partition(s); compressed input size = ",
-          format_gb(total_rds_bytes), ".")
-
-  pieces <- lapply(files, readRDS)
-  if (requireNamespace("data.table", quietly = TRUE)) {
-    as.data.frame(data.table::rbindlist(pieces, use.names = TRUE, fill = TRUE))
-  } else {
-    dplyr::bind_rows(pieces)
+  if (length(files) > max_parts_in_memory && !force) {
+    stop(
+      "Refusing to combine ", length(files), " ", table_name,
+      " partitions in memory. This previously caused the allocation failure.\n",
+      "Use open_metadata_dataset('", table_name, "') for the full disk-backed table,\n",
+      "or load selected parts, for example part_ids = 1:4.\n",
+      "Set force = TRUE only when sufficient RAM is available."
+    )
   }
+
+  total_rds_bytes <- sum(file.info(files)$size, na.rm = TRUE)
+  message("Reading ", length(files), " ", table_name,
+          " partition(s); compressed input size = ", format_gb(total_rds_bytes), ".")
+
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    pieces <- lapply(files, function(f) {
+      x <- readRDS(f)
+      if (!is.null(columns)) x <- dplyr::select(x, dplyr::any_of(columns))
+      x
+    })
+    return(dplyr::bind_rows(pieces))
+  }
+
+  # Keep the result as a data.table. Avoid as.data.frame(), which makes another
+  # full-size copy and raises peak memory substantially.
+  pieces <- lapply(files, function(f) {
+    x <- data.table::as.data.table(readRDS(f))
+    if (!is.null(columns)) {
+      keep <- intersect(columns, names(x))
+      x <- x[, ..keep]
+    }
+    x
+  })
+  data.table::rbindlist(pieces, use.names = TRUE, fill = TRUE)
 }
 
 open_metadata_dataset <- function(table_name = c("all_wide", "acc_long"), out_dir = OUT_DIR) {
@@ -309,9 +338,68 @@ open_metadata_dataset <- function(table_name = c("all_wide", "acc_long"), out_di
   ds_dir <- file.path(out_dir, "parquet", table_name)
   if (!dir.exists(ds_dir) || !length(list.files(ds_dir, pattern = "\\.parquet$"))) {
     stop("No parquet dataset found at ", ds_dir,
-         ". Re-run with Sys.setenv(HAKE_WRITE_PARQUET = 'true') and arrow installed.")
+         ". Re-run with Sys.setenv(WRITE_PARQUET = 'true') and arrow installed.")
   }
   arrow::open_dataset(ds_dir)
+}
+
+
+collect_metadata_table <- function(table_name = c("all_wide", "acc_long"),
+                                   out_dir = OUT_DIR,
+                                   columns = NULL,
+                                   filter_expr = NULL) {
+  table_name <- match.arg(table_name)
+  ds <- open_metadata_dataset(table_name, out_dir)
+  qry <- ds
+  filter_quo <- rlang::enquo(filter_expr)
+  if (!rlang::quo_is_null(filter_quo)) {
+    qry <- dplyr::filter(qry, !!filter_quo)
+  }
+  if (!is.null(columns)) {
+    qry <- dplyr::select(qry, dplyr::any_of(columns))
+  }
+  dplyr::collect(qry)
+}
+
+make_acc_mv_partitioned <- function(out_dir = OUT_DIR,
+                                    overwrite = TRUE) {
+  files <- rds_part_files("acc_long", out_dir)
+  if (!length(files)) stop("No acc_long RDS partitions found in ", out_dir)
+
+  target_dir <- file.path(out_dir, "acc_mv_parts")
+  if (overwrite && dir.exists(target_dir)) unlink(target_dir, recursive = TRUE, force = TRUE)
+  ensure_dir(target_dir)
+
+  out_files <- character(length(files))
+  for (i in seq_along(files)) {
+    message("Creating acc_mv partition ", i, " of ", length(files), ".")
+    x <- readRDS(files[[i]])
+    y <- make_acc_mv_from_long(x)
+    out_files[[i]] <- file.path(target_dir, sprintf("acc_mv_part_%03d.rds", i))
+    saveRDS(y, out_files[[i]], compress = "gzip")
+    rm(x, y)
+    invisible(gc())
+  }
+  invisible(out_files)
+}
+
+setup_metadata_objects <- function(out_dir = OUT_DIR, envir = .GlobalEnv) {
+  parquet_root <- file.path(out_dir, "parquet")
+  have_arrow <- requireNamespace("arrow", quietly = TRUE)
+
+  for (nm in c("all_wide", "acc_long")) {
+    ds_dir <- file.path(parquet_root, nm)
+    if (have_arrow && dir.exists(ds_dir) &&
+        length(list.files(ds_dir, pattern = "\\.parquet$"))) {
+      assign(nm, arrow::open_dataset(ds_dir), envir = envir)
+      message("Created disk-backed object `", nm, "` from ", ds_dir, ".")
+    } else {
+      assign(paste0(nm, "_parts"), rds_part_files(nm, out_dir), envir = envir)
+      message("Parquet not available for `", nm, "`; created `", nm,
+              "_parts` as the RDS partition file list.")
+    }
+  }
+  invisible(TRUE)
 }
 
 combine_partitioned_metadata <- function(table_name = c("all_wide", "acc_long"),
@@ -329,7 +417,7 @@ combine_partitioned_metadata <- function(table_name = c("all_wide", "acc_long"),
             "Consider using open_metadata_dataset() with arrow or load selected partitions.")
   }
 
-  combined <- load_metadata_table(table_name, out_dir)
+  combined <- load_metadata_table(table_name, out_dir, force = TRUE)
   if (is.null(combined_file)) {
     combined_file <- file.path(out_dir, paste0(table_name, "_combined.rds"))
   }
@@ -348,9 +436,9 @@ run_metadata_prep <- function(project_dir = PROJECT_DIR,
                               overwrite = OVERWRITE_METADATA) {
 
   design_file <- find_first_existing(
-    c(Sys.getenv("HAKE_DESIGN_FILE", unset = ""),
-      file.path(project_dir, "hake_factorial_design_matrix.csv"),
-      file.path(project_dir, "hake_factorial_design_matrix(1).csv")),
+    c(Sys.getenv("DESIGN_FILE", unset = ""),
+      file.path(project_dir, "design_matrix.csv"),
+      file.path(project_dir, "design_matrix(1).csv")),
     label = "design matrix CSV"
   )
 
@@ -385,15 +473,15 @@ run_metadata_prep <- function(project_dir = PROJECT_DIR,
   message("Peak acc_long chunk object size: ", sprintf("%.3f GB", max(manifest$acc_long_object_gb)))
 
   if (combine_in_memory) {
-    message("Combining partitions in memory because HAKE_COMBINE_IN_MEMORY=true.")
-    assign("all_wide", load_metadata_table("all_wide", out_dir), envir = .GlobalEnv)
-    assign("acc_long", load_metadata_table("acc_long", out_dir), envir = .GlobalEnv)
+    message("Combining partitions in memory because COMBINE_IN_MEMORY=true.")
+    assign("all_wide", load_metadata_table("all_wide", out_dir, force = TRUE), envir = .GlobalEnv)
+    assign("acc_long", load_metadata_table("acc_long", out_dir, force = TRUE), envir = .GlobalEnv)
     assign("acc_mv", make_acc_mv_from_long(get("acc_long", envir = .GlobalEnv)), envir = .GlobalEnv)
   } else {
-    message("Full tables were not combined in memory. To load later, run:")
-    message("  all_wide <- load_metadata_table('all_wide')")
-    message("  acc_long <- load_metadata_table('acc_long')")
-    message("  acc_mv <- make_acc_mv_from_long(acc_long)")
+    message("Full tables were not combined in memory.")
+    message("Use the disk-backed objects created by setup_metadata_objects(),")
+    message("or load a small subset, e.g. load_metadata_table('acc_long', part_ids = 1:4).")
+    message("To create acc_mv safely, run make_acc_mv_partitioned().")
   }
 
   invisible(list(
@@ -407,8 +495,11 @@ run_metadata_prep <- function(project_dir = PROJECT_DIR,
 }
 
 # Run automatically when sourced, unless disabled.
-RUN_ON_SOURCE <- truthy(Sys.getenv("HAKE_RUN_ON_SOURCE", unset = "true"))
+RUN_ON_SOURCE <- truthy(Sys.getenv("RUN_ON_SOURCE", unset = "true"))
 if (RUN_ON_SOURCE) {
   metadata_result <- run_metadata_prep()
   metadata_manifest <- metadata_result$manifest
+  if (!COMBINE_IN_MEMORY && SETUP_DISK_BACKED_OBJECTS) {
+    setup_metadata_objects(metadata_result$out_dir, envir = .GlobalEnv)
+  }
 }
